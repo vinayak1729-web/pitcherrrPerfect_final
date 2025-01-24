@@ -1,0 +1,213 @@
+<!-- templates/chat.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with {{ friend }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        .messages-container {
+            scrollbar-width: thin;
+            scrollbar-color: #CBD5E0 #F3F4F6;
+        }
+        .messages-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .messages-container::-webkit-scrollbar-track {
+            background: #F3F4F6;
+        }
+        .messages-container::-webkit-scrollbar-thumb {
+            background-color: #CBD5E0;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4 h-screen flex flex-col">
+        <div class="max-w-4xl mx-auto w-full flex-grow flex flex-col bg-white rounded-lg shadow-lg overflow-hidden">
+            <!-- Chat Header -->
+            <div class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="h-10 w-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold">
+                        {{ friend[0].upper() }}
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">{{ friend }}</h2>
+                        <p class="text-sm text-gray-500" id="typingIndicator"></p>
+                    </div>
+                </div>
+                <a href="Chat_dashboard" class="text-indigo-600 hover:text-indigo-700 font-medium">
+                    Back to Dashboard
+                </a>
+            </div>
+
+            <!-- Messages Container -->
+            <div id="messages" class="flex-grow overflow-y-auto p-6 space-y-4 messages-container bg-gray-50">
+                {% for message in messages %}
+                <div class="flex {% if message.from == session.username %}justify-end{% endif %}">
+                    <div class="max-w-sm {% if message.from == session.username %}bg-indigo-500 text-white{% else %}bg-white border border-gray-200{% endif %} rounded-lg px-4 py-2 shadow">
+                        <div class="text-sm">{{ message.message }}</div>
+                        <div class="text-xs mt-1 {% if message.from == session.username %}text-indigo-200{% else %}text-gray-500{% endif %}">
+                            {{ message.timestamp }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Message Input -->
+            <div class="bg-white border-t border-gray-200 p-4">
+                <form id="messageForm" class="flex items-center space-x-4">
+                    <div class="flex-grow relative">
+                        <input type="text" 
+                               id="messageInput"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                               placeholder="Type your message..."
+                               autocomplete="off">
+                        <div id="sendingIndicator" class="absolute right-3 top-1/2 transform -translate-y-1/2 hidden">
+                            <div class="animate-spin rounded-full h-4 w-4 border-2 border-indigo-500 border-t-transparent"></div>
+                        </div>
+                    </div>
+                    <button type="submit"
+                            class="px-6 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            id="sendButton">
+                        Send
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const messageForm = document.getElementById('messageForm');
+        const messageInput = document.getElementById('messageInput');
+        const messagesContainer = document.getElementById('messages');
+        const sendButton = document.getElementById('sendButton');
+        const sendingIndicator = document.getElementById('sendingIndicator');
+        let lastMessageTime = '{{ messages[-1].timestamp if messages else "" }}';
+        let isTyping = false;
+        let typingTimeout;
+
+        // Function to format timestamp
+        function formatTimestamp(date) {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Function to create message element
+        function createMessageElement(message, timestamp, isOwn = true) {
+            const div = document.createElement('div');
+            div.className = `flex ${isOwn ? 'justify-end' : 'justify-start'}`;
+            div.innerHTML = `
+                <div class="max-w-sm ${isOwn ? 'bg-indigo-500 text-white' : 'bg-white border border-gray-200'} rounded-lg px-4 py-2 shadow">
+                    <div class="text-sm">${message}</div>
+                    <div class="text-xs mt-1 ${isOwn ? 'text-indigo-200' : 'text-gray-500'}">${timestamp}</div>
+                </div>
+            `;
+            return div;
+        }
+
+        // Function to scroll to bottom
+        function scrollToBottom() {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Initial scroll
+        scrollToBottom();
+
+        // Handle message submission
+        messageForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // Disable input and button while sending
+            messageInput.disabled = true;
+            sendButton.disabled = true;
+            sendingIndicator.classList.remove('hidden');
+
+            try {
+                const response = await axios.post('/send_message', {
+                    friend: '{{ friend }}',
+                    message: message
+                });
+
+                if (response.data.success) {
+                    // Add message to UI
+                    const messageElement = createMessageElement(
+                        message,
+                        formatTimestamp(new Date()),
+                        true
+                    );
+                    messagesContainer.appendChild(messageElement);
+                    scrollToBottom();
+                    
+                    // Clear input
+                    messageInput.value = '';
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('Failed to send message. Please try again.');
+            } finally {
+                // Re-enable input and button
+                messageInput.disabled = false;
+                sendButton.disabled = false;
+                sendingIndicator.classList.add('hidden');
+                messageInput.focus();
+            }
+        });
+
+        // Handle typing indicator
+        messageInput.addEventListener('input', () => {
+            if (!isTyping) {
+                axios.post('/typing_status', {
+                    friend: '{{ friend }}',
+                    status: 'typing'
+                });
+                isTyping = true;
+            }
+
+            clearTimeout(typingTimeout);
+            typingTimeout = setTimeout(() => {
+                axios.post('/typing_status', {
+                    friend: '{{ friend }}',
+                    status: 'idle'
+                });
+                isTyping = false;
+            }, 1000);
+        });
+
+        // Fetch new messages periodically
+        async function fetchNewMessages() {
+            try {
+                const response = await axios.get(`/get_new_messages/${encodeURIComponent('{{ friend }}')}`, {
+                    params: { last_timestamp: lastMessageTime }
+                });
+
+                if (response.data.messages && response.data.messages.length > 0) {
+                    response.data.messages.forEach(msg => {
+                        const messageElement = createMessageElement(
+                            msg.message,
+                            msg.timestamp,
+                            msg.from === '{{ session.username }}'
+                        );
+                        messagesContainer.appendChild(messageElement);
+                        lastMessageTime = msg.timestamp;
+                    });
+                    scrollToBottom();
+                }
+
+                // Update typing status
+                if (response.data.typing_status) {
+                    document.getElementById('typingIndicator').textContent = 'typing...';
+                } else {
+                    document.getElementById('typingIndicator').textContent = '';
+                }
+            } catch (error) {
+                console.error('Error fetching messages:', error);
+            }
+        }
+
+    </script>
+</body>
+</html>

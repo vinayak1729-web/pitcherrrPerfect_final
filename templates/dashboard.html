@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <div class="container mx-auto px-4 py-8">
+                <!-- Search Section -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-semibold mb-4 text-blue-900">Search Users & Groups</h2>
+                    <div class="relative">
+                        <input type="text" id="searchInput"
+                            class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                            placeholder="Search for users or groups...">
+                        <div id="searchResults"
+                            class="absolute z-10 w-full mt-2 bg-white rounded-lg shadow-xl max-h-96 overflow-y-auto">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Friend Requests Section -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-semibold mb-4 text-blue-900">Friend Requests</h2>
+                    <div id="friendRequests" class="grid gap-4">
+                        {% for request in pending_requests %}
+                        <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow">
+                            <span class="font-medium">{{ request }}</span>
+                            <div class="space-x-2">
+                                <button onclick="acceptRequest('{{ request }}')"
+                                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                                    Accept
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Friends List Section -->
+                <div>
+                    <h2 class="text-2xl font-semibold mb-4 text-blue-900">My Friends</h2>
+                    <div id="friendsList" class="grid gap-4">
+                        {% for friend in friends %}
+                        <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow">
+                            <div>
+                                <span class="font-medium">{{ friend }}</span>
+                            </div>
+                            <a href="/chat/{{ friend }}"
+                                class="bg-indigo-500 text-white px-4 py-1 rounded hover:bg-indigo-600">
+                                Chat
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Group Chat -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-4">Create Group Chat</h2>
+                <div class="mb-4">
+                    <input type="text" id="groupName"
+                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        placeholder="Group Name">
+                </div>
+                <div class="mb-4">
+                    <textarea id="groupDescription"
+                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        placeholder="Group Description"></textarea>
+                </div>
+                <button onclick="createGroup()" class="bg-indigo-500 text-white px-4 py-1 rounded hover:bg-indigo-600">
+                    Create Group
+                </button>
+            </div>
+
+            <!-- Available Groups -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-4">Available Groups</h2>
+                <div class="space-y-2">
+                    {% for group in available_groups %}
+                    <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                        <div>
+                            <span class="font-medium">{{ group.name }}</span>
+                            <p class="text-sm text-gray-500">{{ group.description }}</p>
+                        </div>
+                        <button onclick="joinGroup('{{ group.id }}')"
+                            class="bg-indigo-500 text-white px-4 py-1 rounded hover:bg-indigo-600">
+                            Join
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- My Groups -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-4">My Groups</h2>
+                <div class="space-y-2">
+                    {% for group in my_groups %}
+                    <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                        <div>
+                            <span class="font-medium">{{ group.name }}</span>
+                            <p class="text-sm text-gray-500">{{ group.description }}</p>
+                        </div>
+                        <div class="space-x-2">
+                            <a href="/group_chat/{{ group.id }}"
+                                class="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600">
+                                Chat
+                            </a>
+                            <button onclick="leaveGroup('{{ group.id }}')"
+                                class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600">
+                                Leave
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            let searchTimeout;
+
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                if (searchInput.value.length < 2) {
+                    searchResults.innerHTML = '';
+                    searchResults.classList.add('hidden');
+                    return;
+                }
+
+                // Add debounce to prevent too many requests
+                searchTimeout = setTimeout(async () => {
+                    try {
+                        const response = await fetch(`/search_users?query=${encodeURIComponent(searchInput.value)}`);
+                        const data = await response.json();
+
+                        if (!data.success && data.error) {
+                            throw new Error(data.error);
+                        }
+
+                        let resultsHTML = '';
+
+                        // Add users results
+                        if (data.users && data.users.length > 0) {
+                            resultsHTML += '<div class="p-2 bg-gray-100 font-semibold">Users</div>';
+                            data.users.forEach(user => {
+                                resultsHTML += `
+                            <div class="flex items-center justify-between p-4 hover:bg-gray-50">
+                                <span>${user}</span>
+                                <button 
+                                    onclick="sendRequest('${user}')"
+                                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                                >
+                                    Add Friend
+                                </button>
+                            </div>
+                        `;
+                            });
+                        }
+
+                        // Add groups results
+                        if (data.groups && data.groups.length > 0) {
+                            resultsHTML += '<div class="p-2 bg-gray-100 font-semibold">Groups</div>';
+                            data.groups.forEach(group => {
+                                resultsHTML += `
+                            <div class="flex items-center justify-between p-4 hover:bg-gray-50">
+                                <div>
+                                    <div class="font-medium">${group.group_name}</div>
+                                    <div class="text-sm text-gray-600">${group.description}</div>
+                                </div>
+                                <button 
+                                    onclick="joinGroup('${group.group_id}')"
+                                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
+                                >
+                                    Join Group
+                                </button>
+                            </div>
+                        `;
+                            });
+                        }
+
+                        if (!resultsHTML) {
+                            resultsHTML = '<div class="p-4 text-gray-500">No results found</div>';
+                        }
+
+                        searchResults.innerHTML = resultsHTML;
+                        searchResults.classList.remove('hidden');
+                    } catch (error) {
+                        console.error('Search error:', error);
+                        searchResults.innerHTML = '<div class="p-4 text-red-500">Error performing search</div>';
+                    }
+                }, 300);
+            });
+
+            // Close search results when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.classList.add('hidden');
+                }
+            });
+
+            // Friend request functions
+            window.sendRequest = async function (toUser) {
+                try {
+                    const formData = new FormData();
+                    formData.append('to_user', toUser);
+
+                    const response = await fetch('/send_request', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Show success message
+                        const toast = document.createElement('div');
+                        toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg';
+                        toast.textContent = `Friend request sent to ${toUser}`;
+                        document.body.appendChild(toast);
+
+                        // Remove toast after 3 seconds
+                        setTimeout(() => toast.remove(), 3000);
+                    } else {
+                        throw new Error('Failed to send request');
+                    }
+                } catch (error) {
+                    console.error('Error sending friend request:', error);
+                    alert('Failed to send friend request. Please try again.');
+                }
+            };
+
+            window.acceptRequest = async function (fromUser) {
+                try {
+                    const formData = new FormData();
+                    formData.append('from_user', fromUser);
+
+                    const response = await fetch('/accept_request', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        throw new Error('Failed to accept request');
+                    }
+                } catch (error) {
+                    console.error('Error accepting friend request:', error);
+                    alert('Failed to accept friend request. Please try again.');
+                }
+            };
+
+            window.startChat = function (friendName) {
+                // Implement chat functionality or redirect to chat page
+                alert('Chat functionality coming soon!');
+            };
+
+            window.joinGroup = function (groupId) {
+                // Implement group join functionality
+                fetch(`/join_group/${groupId}`, {
+                    method: 'POST'
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            throw new Error(data.error || 'Failed to join group');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error joining group:', error);
+                        alert('Failed to join group. Please try again.');
+                    });
+            };
+        });
+        
+        async function createGroup() {
+            const groupName = document.getElementById('groupName').value;
+            const groupDescription = document.getElementById('groupDescription').value;
+
+            if (!groupName) {
+                alert("Group name is required!");
+                return;
+            }
+
+            const response = await axios.post('/create_group', {
+                group_name: groupName,
+                description: groupDescription
+            });
+
+            if (response.data.success) {
+                alert('Group created successfully');
+                window.location.href = `/group_chat/${response.data.group_id}`;
+            } else {
+                alert('Failed to create group: ' + response.data.error);
+            }
+        }
+
+        async function joinGroup(groupId) {
+            try {
+                const response = await axios.post(`/join_group/${groupId}`);
+                if (response.data.success) {
+                    alert('Joined group successfully!');
+                    location.reload();
+                } else {
+                    alert('Failed to join group: ' + response.data.error);
+                }
+            } catch (error) {
+                console.error('Error joining group:', error);
+                alert('Failed to join group');
+            }
+        }
+
+        async function leaveGroup(groupId) {
+            if (!confirm('Are you sure you want to leave this group?')) {
+                return;
+            }
+
+            try {
+                const response = await axios.post(`/leave_group/${groupId}`);
+                if (response.data.success) {
+                    alert('Left group successfully!');
+                    location.reload();
+                } else {
+                    alert('Failed to leave group: ' + response.data.error);
+                }
+            } catch (error) {
+                console.error('Error leaving group:', error);
+                alert('Failed to leave group');
+            }
+        }
+    </script>
+</body>
+
+</html>

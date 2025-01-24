@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="profile-container">
+        <h1 class="profile-header">Welcome, {{ user.name }}!</h1>
+        
+        <div class="profile-info">
+            <div class="corner top-left"></div>
+            <div class="corner top-right"></div>
+            <div class="corner bottom-left"></div>
+            <div class="corner bottom-right"></div>
+            
+            <div class="profile-section">
+                <h3 class="section-title">Basic Information</h3>
+                <div class="info-label">Name:</div>
+                <div class="info-value">{{ user.name }}</div>
+                <div class="info-label">Email:</div>
+                <div class="info-value">{{ user.email }}</div>
+                <div class="info-label">Fan Since:</div>
+                <div class="info-value">{{ user.fan_duration }}</div>
+            </div>
+    
+            <div class="profile-section">
+                <h3 class="section-title">MLB Preferences</h3>
+                <div class="info-label">Favorite Teams:</div>
+                <div class="info-value">{{ user.favorite_teams|join(', ') }}</div>
+                <div class="info-label">Favorite Players:</div>
+                <div class="info-value">{{ user.favorite_players|join(', ') }}</div>
+                <div class="info-label">Selected Team:</div>
+                <div class="info-value">{{ user.selected_team }}</div>
+                <div class="info-label">Favorite Match:</div>
+                <div class="info-value">{{ user.favorite_match }}</div>
+            </div>
+    
+            <div class="profile-section">
+                <h3 class="section-title">Account Details</h3>
+                <div class="info-label">Member Since:</div>
+                <div class="info-value">{{ user.signup_date }}</div>
+                <div class="info-label">Notification Frequency:</div>
+                <div class="info-value">{{ user.notification_frequency }}</div>
+            </div>
+    
+            <div class="profile-actions">
+                <a href="{{ url_for('edit_profile') }}" class="edit-button">Edit Profile</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

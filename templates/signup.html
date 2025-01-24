@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+
+    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold text-center mb-6">Signup</h2>
+
+        <!-- Signup Form -->
+        <form id="signupForm" class="space-y-4">
+            <!-- Username -->
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                <input type="text" id="username" name="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required placeholder="Enter your username">
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" name="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required placeholder="Enter your email">
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="password" name="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required placeholder="Enter your password">
+            </div>
+
+            <!-- Confirm Password -->
+            <div>
+                <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required placeholder="Confirm your password">
+            </div>
+
+            <!-- Question 1: How long have you been a fan of MLB? -->
+            <div>
+                <label for="fan_duration" class="block text-sm font-medium text-gray-700">How long have you been a fan of MLB?</label>
+                <input type="text" id="fan_duration" name="fan_duration" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required placeholder="e.g., 5 years">
+            </div>
+
+            <!-- Question 2: Name 5 teams you like -->
+            <div>
+                <label for="favorite_teams" class="block text-sm font-medium text-gray-700">Name 5 teams you like</label>
+                <textarea id="favorite_teams" name="favorite_teams" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required placeholder="Enter teams separated by commas"></textarea>
+            </div>
+
+            <!-- Question 3: Name 5 favorite players -->
+            <div>
+                <label for="favorite_players" class="block text-sm font-medium text-gray-700">Name 5 favorite players</label>
+                <textarea id="favorite_players" name="favorite_players" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required placeholder="Enter players separated by commas"></textarea>
+            </div>
+
+            <!-- Question 4: Which team do you want to select? -->
+            <div>
+                <label for="selected_team" class="block text-sm font-medium text-gray-700">Which team do you want to select?</label>
+                <input type="text" id="selected_team" name="selected_team" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required placeholder="Enter team name">
+            </div>
+
+            <!-- Question 5: Which match did you like the most? -->
+            <div>
+                <label for="favorite_match" class="block text-sm font-medium text-gray-700">Which match did you like the most?</label>
+                <input type="text" id="favorite_match" name="favorite_match" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required placeholder="e.g., Yankees vs Red Sox 2004 ALCS">
+            </div>
+
+            <!-- Question 6: Select notification frequency -->
+            <div>
+                <label for="notification_frequency" class="block text-sm font-medium text-gray-700">Select notification frequency</label>
+                <select id="notification_frequency" name="notification_frequency" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button type="submit" class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">Sign Up</button>
+            </div>
+        </form>
+    </div>
+        <script>
+            // Form submission handling
+            document.getElementById('signupForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+
+                if (formData.get('password') !== formData.get('confirm_password')) {
+                    alert("Passwords don't match!");
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/signup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            username: formData.get('username'),
+                            email: formData.get('email'),
+                            password: formData.get('password')
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        window.location.href = '/login';
+                    } else {
+                        alert(data.error || 'Signup failed');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred during signup');
+                }
+            });
+        </script>
+</body>
+
+</html>

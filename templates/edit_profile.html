@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="profile-container">
+        <h1 class="profile-header">Edit Profile</h1>
+        
+        <form method="POST" action="{{ url_for('edit_profile') }}" class="profile-form">
+            <div class="form-section">
+                <h3>Basic Information</h3>
+                <label for="email">Email:</label>
+                <input type="email" name="email" value="{{ user.email }}" required>
+            </div>
+    
+            <div class="form-section">
+                <h3>MLB Fan Information</h3>
+                <label for="fan_duration">How long have you been a fan of MLB?</label>
+                <input type="text" name="fan_duration" value="{{ user.fan_duration }}">
+                
+                <label for="favorite_teams">Favorite Teams (comma-separated):</label>
+                <input type="text" name="favorite_teams" value="{{ user.favorite_teams|join(', ') }}">
+                
+                <label for="favorite_players">Favorite Players (comma-separated):</label>
+                <input type="text" name="favorite_players" value="{{ user.favorite_players|join(', ') }}">
+                
+                <label for="selected_team">Selected Team:</label>
+                <input type="text" name="selected_team" value="{{ user.selected_team }}">
+                
+                <label for="favorite_match">Favorite Match:</label>
+                <input type="text" name="favorite_match" value="{{ user.favorite_match }}">
+            </div>
+            
+            <div class="form-section">
+                <h3>Preferences</h3>
+                <label for="notification_frequency">Notification Frequency:</label>
+                <select name="notification_frequency">
+                    <option value="daily" {% if user.notification_frequency == 'daily' %}selected{% endif %}>Daily</option>
+                    <option value="weekly" {% if user.notification_frequency == 'weekly' %}selected{% endif %}>Weekly</option>
+                    <option value="monthly" {% if user.notification_frequency == 'monthly' %}selected{% endif %}>Monthly</option>
+                </select>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="save-button">Save Changes</button>
+                <a href="{{ url_for('view_profile') }}" class="cancel-button">Cancel</a>
+            </div>
+        </form>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,72 @@
+[
+    {
+        "username": "Vinayak123",
+        "email": "vs8879785320@gmail.com",
+        "password": "123",
+        "fan_duration": "",
+        "favorite_teams": [],
+        "favorite_players": [],
+        "selected_team": "",
+        "favorite_match": "",
+        "notification_frequency": "",
+        "signup_date": "2025-01-22 15:50:44",
+        "questions": {
+            "question0": {
+                "text": "Basic Information",
+                "answers": {
+                    "name": "Vinayak123",
+                    "email": "vs8879785320@gmail.com",
+                    "password": "123"
+                }
+            },
+            "question1": {
+                "text": "For how long have you been a fan of MLB?",
+                "answer": ""
+            },
+            "question2": {
+                "text": "Name 5 teams you like",
+                "answer": []
+            },
+            "question3": {
+                "text": "Name 5 favorite players",
+                "answer": []
+            },
+            "question4": {
+                "text": "Which team do you want to select?",
+                "answer": ""
+            },
+            "question5": {
+                "text": "Which match did you like the most?",
+                "answer": ""
+            },
+            "question6": {
+                "text": "Select notification frequency",
+                "answer": ""
+            }
+        }
+    },
+    {
+        "username": "baseball@gmail.com",
+        "email": "baseball@gmail.com",
+        "password": "123",
+        "signup_date": "2025-01-22 16:03:55",
+        "questionnaire_file": "database/details/baseball@gmail.com.csv",
+        "questions": {
+            "question0": {
+                "text": "Basic Information",
+                "answers": {
+                    "name": "baseball@gmail.com",
+                    "email": "baseball@gmail.com",
+                    "password": "123"
+                }
+            }
+        }
+    },
+    {
+        "username": "VinayakShinde",
+        "email": "V@123.com",
+        "password": "123",
+        "signup_date": "2025-01-22 16:19:55",
+        "questionnaire_file": "database/details/VinayakShinde.csv"
+    }
+]
