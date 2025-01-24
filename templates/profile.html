@@ -3,50 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Baseball Chat - Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        baseball: {
+                            DEFAULT: '#C41E3A',
+                            dark: '#8B0000',
+                            light: '#FF4500'
+                        },
+                        field: {
+                            DEFAULT: '#2E7D32',
+                            dark: '#1B5E20'
+                        },
+                        bat: '#8B4513',
+                        glove: '#D2691E'
+                    },
+                    fontFamily: {
+                        'baseball': ['Bungee', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="profile-container">
-        <h1 class="profile-header">Welcome, {{ user.name }}!</h1>
-        
-        <div class="profile-info">
-            <div class="corner top-left"></div>
-            <div class="corner top-right"></div>
-            <div class="corner bottom-left"></div>
-            <div class="corner bottom-right"></div>
-            
-            <div class="profile-section">
-                <h3 class="section-title">Basic Information</h3>
-                <div class="info-label">Name:</div>
-                <div class="info-value">{{ user.name }}</div>
-                <div class="info-label">Email:</div>
-                <div class="info-value">{{ user.email }}</div>
-                <div class="info-label">Fan Since:</div>
-                <div class="info-value">{{ user.fan_duration }}</div>
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-4 border-baseball-dark overflow-hidden">
+            <div class="bg-baseball p-6 text-white text-center relative">
+                <div class="absolute inset-0 bg-[url('/static/baseball-stitching.svg')] opacity-10"></div>
+                <h1 class="text-4xl font-baseball relative z-10">Player Profile ⚾</h1>
             </div>
-    
-            <div class="profile-section">
-                <h3 class="section-title">MLB Preferences</h3>
-                <div class="info-label">Favorite Teams:</div>
-                <div class="info-value">{{ user.favorite_teams|join(', ') }}</div>
-                <div class="info-label">Favorite Players:</div>
-                <div class="info-value">{{ user.favorite_players|join(', ') }}</div>
-                <div class="info-label">Selected Team:</div>
-                <div class="info-value">{{ user.selected_team }}</div>
-                <div class="info-label">Favorite Match:</div>
-                <div class="info-value">{{ user.favorite_match }}</div>
-            </div>
-    
-            <div class="profile-section">
-                <h3 class="section-title">Account Details</h3>
-                <div class="info-label">Member Since:</div>
-                <div class="info-value">{{ user.signup_date }}</div>
-                <div class="info-label">Notification Frequency:</div>
-                <div class="info-value">{{ user.notification_frequency }}</div>
-            </div>
-    
-            <div class="profile-actions">
-                <a href="{{ url_for('edit_profile') }}" class="edit-button">Edit Profile</a>
+
+            <div class="p-6 space-y-6">
+                <!-- Basic Information -->
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-md">
+                    <h3 class="text-xl font-baseball text-baseball mb-4">Basic Information</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <strong class="text-gray-600 dark:text-gray-300">Username:</strong>
+                            <p class="text-lg font-semibold">{{ user.name }}</p>
+                        </div>
+                        <div>
+                            <strong class="text-gray-600 dark:text-gray-300">Email:</strong>
+                            <p class="text-lg">{{ user.email }}</p>
+                        </div>
+                        <div>
+                            <strong class="text-gray-600 dark:text-gray-300">Fan Since:</strong>
+                            <p class="text-lg">{{ user.fan_duration or 'Not specified' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MLB Preferences -->
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-md">
+                    <h3 class="text-xl font-baseball text-baseball mb-4">MLB Playbook</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <strong class="text-gray-600 dark:text-gray-300">Favorite Teams:</strong>
+                            <p class="text-lg">{{ user.favorite_teams|join(', ') or 'No teams selected' }}</p>
+                        </div>
+                        <div>
+                            <strong class="text-gray-600 dark:text-gray-300">Favorite Players:</strong>
+                            <p class="text-lg">{{ user.favorite_players|join(', ') or 'No players selected' }}</p>
+                        </div>
+                        <div>
+                            <strong class="text-gray-600 dark:text-gray-300">Selected Team:</strong>
+                            <p class="text-lg font-semibold text-baseball">{{ user.selected_team or 'Not chosen' }}</p>
+                        </div>
+                        <div>
+                            <strong class="text-gray-600 dark:text-gray-300">Favorite Match:</strong>
+                            <p class="text-lg">{{ user.favorite_match or 'Not specified' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Details -->
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-md">
+                    <h3 class="text-xl font-baseball text-baseball mb-4">Account Stats</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <strong class="text-gray-600 dark:text-gray-300">Member Since:</strong>
+                            <p class="text-lg">{{ user.signup_date or 'Unknown' }}</p>
+                        </div>
+                        <div>
+                            <strong class="text-gray-600 dark:text-gray-300">Notification Frequency:</strong>
+                            <p class="text-lg">{{ user.notification_frequency or 'Not set' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Actions -->
+                <div class="flex justify-center space-x-4 mt-6">
+                    <a href="{{ url_for('edit_profile') }}" 
+                       class="px-6 py-3 bg-baseball text-white font-baseball rounded-lg hover:bg-baseball-dark transition-colors duration-300 flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        <span>Edit Profile</span>
+                    </a>
+                    <a href="{{ url_for('logout') }}" 
+                       class="px-6 py-3 bg-gray-200 text-gray-700 font-baseball rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        <span>Logout</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

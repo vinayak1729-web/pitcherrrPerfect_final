@@ -1,0 +1,40 @@
+{
+    "shinde9271": {
+        "M": {
+            "selected_players": [
+                {
+                    "bat_side": "Left",
+                    "dob": "1993-08-10",
+                    "headshot_url": "https://securea.mlb.com/mlb/images/players/head_shot/607455.jpg",
+                    "height": "6' 2\"",
+                    "id": 607455,
+                    "jersey_number": "43",
+                    "name": "Anthony Banda",
+                    "pitch_side": "Left",
+                    "position": "Pitcher",
+                    "status": "Active",
+                    "strike_zone_bottom": 1.589,
+                    "strike_zone_top": 3.467,
+                    "type": "Pitcher",
+                    "weight": 221
+                },
+                {
+                    "bat_side": "Right",
+                    "dob": "1992-10-07",
+                    "headshot_url": "https://securea.mlb.com/mlb/images/players/head_shot/605141.jpg",
+                    "height": "5' 9\"",
+                    "id": 605141,
+                    "jersey_number": "50",
+                    "name": "Mookie Betts",
+                    "pitch_side": "Right",
+                    "position": "Shortstop",
+                    "status": "Active",
+                    "strike_zone_bottom": 1.46,
+                    "strike_zone_top": 3.14,
+                    "type": "Infielder",
+                    "weight": 180
+                }
+            ]
+        }
+    }
+}

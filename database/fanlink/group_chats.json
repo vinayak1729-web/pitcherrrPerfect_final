@@ -71,6 +71,17 @@
             "from": "surya",
             "message": "hii",
             "timestamp": "12:17 PM"
+        },
+        {
+            "type": "system",
+            "message": "VinayakShinde joined the group",
+            "timestamp": "04:29 PM"
+        },
+        {
+            "type": "message",
+            "from": "VinayakShinde",
+            "message": "hii",
+            "timestamp": "04:30 PM"
         }
     ],
     "f4c61ee5-0ed3-4cbf-ac18-c632817806ef": [

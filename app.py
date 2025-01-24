@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from concurrent.futures import ThreadPoolExecutor
 import json
 import os
 from datetime import datetime, timedelta
@@ -9,6 +10,8 @@ from bs4 import BeautifulSoup
 from googletrans import Translator
 import requests
 import csv 
+from features.sendemail import send_email_function
+
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
@@ -38,23 +41,67 @@ def save_json(data, filename, base_path='database/fanlink'):
     filepath = f'{base_path}/{filename}'
     with open(filepath, 'w') as f:
         json.dump(data, f, indent=4)
-def save_questionnaire_csv(username, data):
-    csv_path = f'database/details/{username}.csv'
-    questions = [
-        ['Question', 'Text', 'Answer'],
-        ['Fan Duration', 'For how long have you been a fan of MLB?', data.get('fan_duration', '')],
-        ['Favorite Teams', 'Name 5 teams you like', ','.join(data.get('favorite_teams', []))],
-        ['Favorite Players', 'Name 5 favorite players', ','.join(data.get('favorite_players', []))],
-        ['Selected Team', 'Which team do you want to select?', data.get('selected_team', '')],
-        ['Favorite Match', 'Which match did you like the most?', data.get('favorite_match', '')],
-        ['Notifications', 'Select notification frequency', data.get('notification_frequency', '')]
-    ]
+
+import json
+from datetime import datetime
+from pathlib import Path
+
+def save_questionnaire_json(username, data):
+    """
+    Save questionnaire data to a JSON file with user details and questions/answers.
+    Returns the path to the saved JSON file.
+    """
+    json_path = f'database/details/{username}.json'
     
-    with open(csv_path, 'w', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerows(questions)
+    # Create the questionnaire structure
+    questionnaire_data = {
+        "user_id": str(hash(username + str(datetime.now()))),  # Simple unique ID generation
+        "username": username,
+        "email": data.get('email', ''),
+        "submission_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "questions": [
+            {
+                "id": "fan_duration",
+                "question": "For how long have you been a fan of MLB?",
+                "answer": data.get('fan_duration', '')
+            },
+            {
+                "id": "favorite_teams",
+                "question": "Name 5 teams you like",
+                "answer": data.get('favorite_teams', [])
+            },
+            {
+                "id": "favorite_players",
+                "question": "Name 5 favorite players",
+                "answer": data.get('favorite_players', [])
+            },
+            {
+                "id": "selected_team",
+                "question": "Which team do you want to select?",
+                "answer": data.get('selected_team', '')
+            },
+            {
+                "id": "favorite_match",
+                "question": "Which match did you like the most?",
+                "answer": data.get('favorite_match', '')
+            },
+            {
+                "id": "notifications",
+                "question": "Select notification frequency",
+                "answer": data.get('notification_frequency', '')
+            }
+        ]
+    }
     
-    return csv_path
+    # Ensure directory exists
+    Path('database/details').mkdir(parents=True, exist_ok=True)
+    
+    # Save to JSON file
+    with open(json_path, 'w') as f:
+        json.dump(questionnaire_data, f, indent=4)
+    
+    return json_path
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'GET':
@@ -62,169 +109,253 @@ def signup():
     
     if request.method == 'POST':
         try:
-            # Get JSON data from request
             data = request.get_json()
-            
             username = data.get('username')
             email = data.get('email')
             password = data.get('password')
-            
-            # Validate required fields
+
             if not all([username, email, password]):
-                return jsonify({
-                    'success': False,
-                    'error': 'All fields are required'
-                }), 400
-            
-            # Load existing users from both directories
+                return jsonify({'success': False, 'error': 'All fields are required'}), 400
+
             fanlink_users = load_json('users.json', 'database/fanlink')
             database_users = load_json('users.json', 'database')
-            
-            if not isinstance(database_users, list):
-                database_users = []
-            
-            # Check if username already exists in fanlink
+
             if username in fanlink_users:
-                return jsonify({
-                    'success': False,
-                    'error': 'Username already exists'
-                }), 400
-            
-            # Create new user data for fanlink/users.json
+                return jsonify({'success': False, 'error': 'Username already exists'}), 400
+
+            user_id = str(uuid.uuid4())
             fanlink_users[username] = {
+                'user_id': user_id,
                 'email': email,
-                'password': password,  # In production, this should be hashed
+                'password': password,
                 'friends': [],
                 'profile_pic': '/static/default.png'
             }
-            
-            # Create new user data for database/users.json
+
             database_user = {
+                'user_id': user_id,
                 'username': username,
                 'email': email,
                 'password': password,
                 'signup_date': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                'questionnaire_file': save_questionnaire_csv(username, data),
-
             }
-            
-            # Save to both locations
+
             save_json(fanlink_users, 'users.json', 'database/fanlink')
             database_users.append(database_user)
             save_json(database_users, 'users.json', 'database')
-            
-            # Initialize session data for questionnaire
+
             session['user_data'] = {
                 'username': username,
                 'email': email,
-                'password': password
+                'user_id': user_id
             }
-            
-            return jsonify({
-                'success': True,
-                'message': 'Signup successful'
-            })
-            
+
+            return jsonify({'success': True, 'redirect': '/questionnaire'})
         except Exception as e:
             print(f"Error during signup: {str(e)}")
-            return jsonify({
-                'success': False,
-                'error': 'An error occurred during signup'
-            }), 500
-        
-def get_user_profile(username):
-    # Get basic info from users.json
-    with open('database/users.json', 'r') as f:
-        users = json.load(f)
-        user_data = next((user for user in users if user['username'] == username), None)
-    
-    # Get detailed info from CSV
-    csv_path = f'database/details/{username}.csv'
-    questionnaire_data = {}
-    try:
-        with open(csv_path, 'r') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                questionnaire_data[row['Question']] = row['Answer']
-    except FileNotFoundError:
-        questionnaire_data = {}
-    
-    # Combine all data
-    profile_data = {
-        'name': user_data['username'],
-        'email': user_data['email'],
-        'signup_date': user_data['signup_date'],
-        'fan_duration': questionnaire_data.get('Fan Duration', ''),
-        'favorite_team': questionnaire_data.get('Selected Team', ''),
-        'notification_frequency': questionnaire_data.get('Notifications', '')
-    }
-    
-    return profile_data
+            return jsonify({'success': False, 'error': 'An error occurred during signup'}), 500
+            
+            
+@app.route('/questionnaire', methods=['GET', 'POST'])
+def questionnaire():
+    if request.method == 'GET':
+        return render_template('questionnaire.html')
 
-def update_user_profile(username, updated_data):
-    # Update users.json
-    with open('database/users.json', 'r+') as f:
-        users = json.load(f)
-        user_index = next((index for (index, user) in enumerate(users) 
-                          if user['username'] == username), None)
-        if user_index is not None:
-            users[user_index].update({
-                'email': updated_data.get('email', users[user_index]['email'])
-            })
-        f.seek(0)
-        json.dump(users, f, indent=4)
-        f.truncate()
-    
-    # Update CSV
-    csv_path = f'database/details/{username}.csv'
-    rows = []
-    with open(csv_path, 'r') as f:
-        reader = csv.reader(f)
-        rows = list(reader)
-        
-    for row in rows:
-        if row[0] == 'Fan Duration':
-            row[2] = updated_data.get('fan_duration', row[2])
-        elif row[0] == 'Selected Team':
-            row[2] = updated_data.get('favorite_team', row[2])
-        elif row[0] == 'Notifications':
-            row[2] = updated_data.get('notification_frequency', row[2])
-    
-    with open(csv_path, 'w', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerows(rows)
+    if request.method == 'POST':
+        try:
+            user_data = session.get('user_data')
+            if not user_data:
+                return jsonify({'success': False, 'error': 'User not logged in'}), 403
 
+            data = request.get_json()
+            username = user_data['username']
+            email = user_data['email']
+
+            save_questionnaire_json(username, data)
+
+            # Send a confirmation email after questionnaire completion
+            subject = "Registration Successful"
+            body = f"""
+            Hi {username},
+            
+            Congratulations on successfully completing your registration process with us! 
+            We are excited to have you onboard.
+            
+            Click the link below to visit our website:
+            [Visit Our Website](https://yourwebsite.com)
+            
+            Best regards,
+            The Team
+            """
+            send_email_function(email, subject, body)
+
+            return jsonify({'success': True, 'redirect': '/login'})
+        except Exception as e:
+            print(f"Error during questionnaire: {str(e)}")
+            return jsonify({'success': False, 'error': 'An error occurred'}), 500
+
+            
+            
 @app.route('/profile')
 def view_profile():
+    # Check if user is logged in
     if 'username' not in session:
         return redirect(url_for('login'))
     
-    user_data = get_user_profile(session['username'])
-    return render_template('profile.html', user=user_data)
+    try:
+        # Print debug information
+        print("Current session username:", session['username'])
+        
+        # Load users from users.json to verify username
+        users_path = 'database/users.json'
+        print("Attempting to load users from:", users_path)
+        
+        with open(users_path, 'r') as f:
+            users = json.load(f)
+        
+        # Get current username from session
+        username = session['username']
+        
+        print("Username to search:", username)
+        
+        # Verify username exists in users database
+        user_exists = any(user['username'] == username for user in users)
+        if not user_exists:
+            print(f"User {username} not found in users database")
+            return "User not found", 404
+        
+        # Load user details from specific user's JSON file
+        details_path = f'database/details/{username}.json'
+        print("Attempting to load user details from:", details_path)
+        
+        with open(details_path, 'r') as f:
+            user_details = json.load(f)
+        
+        
+        # Helper function to get the email associated with a username
+        def get_user_email(username):
+            users_path = 'database/users.json'
+            try:
+                with open(users_path, 'r') as f:
+                    users = json.load(f)
 
-@app.route('/profile/edit', methods=['GET', 'POST'])
+                for user in users:
+                    if user['username'] == username:
+                        return user['email']
+            except FileNotFoundError:
+                print(f"File {users_path} not found.")
+            except json.JSONDecodeError:
+                print(f"Error decoding JSON from {users_path}.")
+            return 'Email not found'
+        
+        # Prepare user data dictionary for template
+        user_data = {
+            'name': username,
+            'email': get_user_email(f'{username}'),
+            'fan_duration': next((q['answer'] for q in user_details.get('questions', []) if q['id'] == 'fan_duration'), 'Not specified'),
+            'favorite_teams': next((q['answer'] for q in user_details.get('questions', []) if q['id'] == 'favorite_teams'), []),
+            'favorite_players': next((q['answer'] for q in user_details.get('questions', []) if q['id'] == 'favorite_players'), []),
+            'selected_team': next((q['answer'] for q in user_details.get('questions', []) if q['id'] == 'selected_team'), 'Not chosen'),
+            'favorite_match': next((q['answer'] for q in user_details.get('questions', []) if q['id'] == 'favorite_match'), 'Not specified'),
+            'notification_frequency': next((q['answer'] for q in user_details.get('questions', []) if q['id'] == 'notifications'), 'Not set'),
+            'signup_date': next((user['signup_date'] for user in users if user['username'] == username), 'Unknown')
+        }
+        
+        return render_template('profile.html', user=user_data)
+    
+    except FileNotFoundError as e:
+        print(f"File not found error: {e}")
+        return f"File not found: {e}", 404
+    except json.JSONDecodeError as e:
+        print(f"JSON decoding error: {e}")
+        return f"Invalid JSON file: {e}", 500
+    except Exception as e:
+        print(f"Unexpected error loading profile: {e}")
+        return f"An error occurred while loading profile: {e}", 500
+    
+@app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
     if 'username' not in session:
         return redirect(url_for('login'))
-    
+
+    username = session['username']
+    details_path = f'database/details/{username}.json'
+    users_path = 'database/users.json'
+
+    if request.method == 'GET':
+        try:
+            with open(details_path, 'r') as f:
+                user_details = json.load(f)
+            
+            # Get email from users.json
+            with open(users_path, 'r') as f:
+                users = json.load(f)
+                email = next((user['email'] for user in users if user['username'] == username), '')
+
+            edit_data = {
+                'email': email,  # Use email from users.json
+                'fan_duration': next((q['answer'] for q in user_details.get('questions', []) if q['id'] == 'fan_duration'), ''),
+                'favorite_teams': next((q['answer'] for q in user_details.get('questions', []) if q['id'] == 'favorite_teams'), []),
+                'favorite_players': next((q['answer'] for q in user_details.get('questions', []) if q['id'] == 'favorite_players'), []),
+                'selected_team': next((q['answer'] for q in user_details.get('questions', []) if q['id'] == 'selected_team'), ''),
+                'favorite_match': next((q['answer'] for q in user_details.get('questions', []) if q['id'] == 'favorite_match'), ''),
+                'notification_frequency': next((q['answer'] for q in user_details.get('questions', []) if q['id'] == 'notifications'), '')
+            }
+
+            return render_template('edit_profile.html', user=edit_data)
+
+        except Exception as e:
+            return f"Error loading edit profile: {e}", 500
+
     if request.method == 'POST':
-        updated_data = {
-            'email': request.form.get('email'),
-            'fan_duration': request.form.get('fan_duration'),
-            'favorite_teams': [team.strip() for team in request.form.get('favorite_teams', '').split(',') if team.strip()],
-            'favorite_players': [player.strip() for player in request.form.get('favorite_players', '').split(',') if player.strip()],
-            'selected_team': request.form.get('selected_team'),
-            'favorite_match': request.form.get('favorite_match'),
-            'notification_frequency': request.form.get('notification_frequency')
-        }
-        
-        update_user_profile(session['username'], updated_data)
-        return redirect(url_for('view_profile'))
-    
-    user_data = get_user_profile(session['username'])
-    return render_template('edit_profile.html', user=user_data)
+        try:
+            # Update details file
+            with open(details_path, 'r') as f:
+                user_details = json.load(f)
 
+            # Get new email from the form
+            new_email = request.form.get('email')
+            if not new_email:
+                return "Email is required", 400
 
+            # Update questions in user details
+            for question in user_details['questions']:
+                if question['id'] == 'fan_duration':
+                    question['answer'] = request.form.get('fan_duration', question['answer'])
+                elif question['id'] == 'favorite_teams':
+                    question['answer'] = request.form.getlist('favorite_teams')
+                elif question['id'] == 'favorite_players':
+                    question['answer'] = request.form.getlist('favorite_players')
+                elif question['id'] == 'selected_team':
+                    question['answer'] = request.form.get('selected_team', question['answer'])
+                elif question['id'] == 'favorite_match':
+                    question['answer'] = request.form.get('favorite_match', question['answer'])
+                elif question['id'] == 'notifications':
+                    question['answer'] = request.form.get('notification_frequency', question['answer'])
+
+            # Save updated user details
+            with open(details_path, 'w') as f:
+                json.dump(user_details, f, indent=4)
+
+            # Update email in users.json
+            with open(users_path, 'r') as f:
+                users = json.load(f)
+
+            for user in users:
+                if user['username'] == username:
+                    user['email'] = new_email
+                    break
+
+            with open(users_path, 'w') as f:
+                json.dump(users, f, indent=4)
+
+            print(f"Email updated for {username} to {new_email}")
+
+            return redirect(url_for('view_profile'))
+
+        except Exception as e:
+            print(f"Error updating profile: {e}")
+            return f"Error updating profile: {e}", 500
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -234,16 +365,26 @@ def login():
         
         if username in users and users[username]['password'] == password:
             session['username'] = username
+            session['user_id'] = users[username].get('id', 'default_user')
+            print(f"username: {session['username']} user-id :{session['user_id']}")
             return redirect(url_for('index'))
         return "Invalid credentials"
     
     return render_template('login.html')
 
+@app.route('/logout')
+def logout():
+    # Clear the session
+    session.clear()
+    # Redirect to login page
+    return redirect(url_for('login'))
+
 @app.route('/Chat_dashboard')
 def Chat_dashboard():
     if 'username' not in session:
         return redirect(url_for('login'))
-    
+
+
     # Load all required data
     users = load_json('users.json')
     requests = load_json('friend_requests.json')
@@ -700,6 +841,152 @@ def get_schedule():
         return upcoming_games
     except:
         return []
+
+# Load team mapping
+with open('dataset/team.json', 'r') as f:
+    team_mapping = json.load(f)
+
+def get_team_logo(team_id):
+    return f'https://www.mlbstatic.com/team-logos/{team_id}.svg'
+
+@app.route('/save_team_data', methods=['POST'])
+def save_team_data():
+    data = request.json
+    
+    if 'username' not in session:
+        return jsonify({'success': False, 'error': 'Not authenticated'}), 401
+        
+    user_name = session['username']
+    file_path = 'database/user_teams/user_team_data.json'
+    
+    # Create directory if it doesn't exist
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    
+    try:
+        with open(file_path, 'r') as f:
+            all_data = json.load(f)
+            # Convert list to dict if necessary
+            if isinstance(all_data, list):
+                all_data = {}
+    except (FileNotFoundError, json.JSONDecodeError):
+        all_data = {}
+
+    team_name = list(data['user_team'].keys())[0]
+    new_players = data['user_team'][team_name]['selected_players']
+
+    # Initialize user and team data
+    if user_name not in all_data:
+        all_data[user_name] = {}
+    if team_name not in all_data[user_name]:
+        all_data[user_name][team_name] = {"selected_players": []}
+
+    # Track existing players
+    existing_player_ids = {
+        player['id'] 
+        for player in all_data[user_name][team_name]['selected_players']
+    }
+
+    # Add new players
+    for player in new_players:
+        if player['id'] not in existing_player_ids:
+            all_data[user_name][team_name]['selected_players'].append(player)
+            existing_player_ids.add(player['id'])
+
+    # Save the updated data
+    with open(file_path, 'w') as f:
+        json.dump(all_data, f, indent=4)
+
+    return jsonify({'success': True, 'message': 'Team data saved successfully'})
+
+@app.route('/check_session')
+def check_session():
+    return jsonify({
+        'user_data': session.get('user_data'),
+        'session_keys': list(session.keys())
+    })
+
+
+@app.route('/team_players', methods=['GET', 'POST'])
+def team_players():
+    team_id = request.args.get('team_id') or session.get('team_id')
+    if not team_id:
+        team_id = 119  # Default to Dodgers
+
+    session['team_id'] = team_id
+
+    status_filter = request.args.get('status', 'All')
+    role_filters = request.args.getlist('roles')  # Get multiple roles
+
+    # Fetch the team roster
+    team_roster_url = f"https://statsapi.mlb.com/api/v1/teams/{team_id}/roster?season=2024"
+    response = requests.get(team_roster_url)
+    roster_data = response.json()
+
+    # Fetch player details concurrently
+    def fetch_player_details(player):
+        player_id = player["person"]["id"]
+        player_name = player["person"]["fullName"]
+        player_position = player["position"]["name"]
+        player_status = player["status"]["description"]
+        player_jersey = player.get("jerseyNumber", "N/A")
+        player_response = requests.get(f"https://statsapi.mlb.com/api/v1/people/{player_id}")
+        player_details = player_response.json()["people"][0]
+        return {
+            "id": player_id,
+            "name": player_name,
+            "position": player_position,
+            "type": player["position"].get("type", "N/A"),
+            "status": player_status,
+            "jersey_number": player_jersey,
+            "dob": player_details["birthDate"],
+            "height": player_details["height"],
+            "weight": player_details["weight"],
+            "bat_side": player_details["batSide"]["description"],
+            "pitch_side": player_details["pitchHand"]["description"],
+            "strike_zone_top": player_details.get("strikeZoneTop", "N/A"),
+            "strike_zone_bottom": player_details.get("strikeZoneBottom", "N/A"),
+            "headshot_url": f'https://securea.mlb.com/mlb/images/players/head_shot/{player_id}.jpg'
+        }
+
+    with ThreadPoolExecutor() as executor:
+        players_info = list(executor.map(fetch_player_details, roster_data["roster"]))
+
+    # Filter players
+    if status_filter != 'All':
+        players_info = [p for p in players_info if p["status"] == status_filter]
+    if role_filters:
+        players_info = [p for p in players_info if p["position"] in role_filters]
+
+    team_logo = get_team_logo(team_id)
+
+    # Save only player names
+    selected_player_names = []
+    if 'user_id' in session:
+        team_file = os.path.join('details/user_teams', f'{session["user_id"]}_selected_team.json')
+        if os.path.exists(team_file):
+            with open(team_file, 'r') as f:
+                saved_team = json.load(f)
+                # Map saved player names instead of full player details
+                selected_player_names = saved_team.get('player_names', [])
+
+    # Save the selected player names
+    if request.method == 'POST':
+        selected_players = request.form.getlist('selected_players')  # Expect player names from frontend
+        team_file = os.path.join('details/user_teams', f'{session["user_id"]}_selected_team.json')
+        with open(team_file, 'w') as f:
+            json.dump({"player_names": selected_players}, f)
+
+    return render_template(
+        'players.html',
+        players=players_info,
+        team_logo=team_logo,
+        team_mapping=team_mapping,
+        selected_team=int(team_id),
+        selected_status=status_filter,
+        selected_roles=role_filters,
+        selected_players=selected_player_names,
+        selected_players_count=len(selected_player_names)
+    )
 
 @app.route('/')
 def index():

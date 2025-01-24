@@ -1,0 +1,48 @@
+{
+    "American League": {
+        "East": [
+            {"name": "New York Yankees", "id": 147},
+            {"name": "Tampa Bay Rays", "id": 139},
+            {"name": "Boston Red Sox", "id": 111},
+            {"name": "Toronto Blue Jays", "id": 141},
+            {"name": "Baltimore Orioles", "id": 110}
+        ],
+        "Central": [
+            {"name": "Cleveland Guardians", "id": 114},
+            {"name": "Minnesota Twins", "id": 142},
+            {"name": "Chicago White Sox", "id": 145},
+            {"name": "Kansas City Royals", "id": 118},
+            {"name": "Detroit Tigers", "id": 116}
+        ],
+        "West": [
+            {"name": "Houston Astros", "id": 117},
+            {"name": "Texas Rangers", "id": 140},
+            {"name": "Oakland Athletics", "id": 133},
+            {"name": "Seattle Mariners", "id": 136},
+            {"name": "Los Angeles Angels", "id": 108}
+        ]
+    },
+    "National League": {
+        "East": [
+            {"name": "New York Mets", "id": 121},
+            {"name": "Washington Nationals", "id": 120},
+            {"name": "Atlanta Braves", "id": 144},
+            {"name": "Miami Marlins", "id": 146},
+            {"name": "Philadelphia Phillies", "id": 143}
+        ],
+        "Central": [
+            {"name": "St. Louis Cardinals", "id": 138},
+            {"name": "Cincinnati Reds", "id": 113},
+            {"name": "Pittsburgh Pirates", "id": 134},
+            {"name": "Chicago Cubs", "id": 112},
+            {"name": "Milwaukee Brewers", "id": 158}
+        ],
+        "West": [
+            {"name": "San Francisco Giants", "id": 137},
+            {"name": "San Diego Padres", "id": 135},
+            {"name": "Colorado Rockies", "id": 115},
+            {"name": "Arizona Diamondbacks", "id": 109},
+            {"name": "Los Angeles Dodgers", "id": 119}
+        ]
+    }
+}

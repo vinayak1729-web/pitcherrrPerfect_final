@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .slide-in {
+            animation: slideIn 0.5s forwards;
+        }
+        .slide-out {
+            animation: slideOut 0.5s forwards;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-xl font-bold text-center mb-6">Questionnaire</h2>
+        <div id="question-container" class="relative">
+            <div id="question" class="text-lg font-medium text-gray-700 slide-in"></div>
+        </div>
+        <form id="questionForm" class="space-y-4 mt-6">
+            <input type="text" id="answer" name="answer" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm hidden" placeholder="Type your answer">
+            <textarea id="multiAnswer" name="multiAnswer" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm hidden" placeholder="Enter comma-separated values"></textarea>
+            <select id="dropdown" name="dropdown" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm hidden">
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+            </select>
+            <button type="submit" class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700">Next</button>
+        </form>
+    </div>
+
+    <script>
+        const questions = [
+            { text: 'For how long have you been a fan of MLB?', type: 'text', key: 'fan_duration' },
+            { text: 'Name 5 teams you like', type: 'multi', key: 'favorite_teams' },
+            { text: 'Name 5 favorite players', type: 'multi', key: 'favorite_players' },
+            { text: 'Which team do you want to select?', type: 'text', key: 'selected_team' },
+            { text: 'Which match did you like the most?', type: 'text', key: 'favorite_match' },
+            { text: 'Select notification frequency', type: 'dropdown', key: 'notification_frequency' },
+        ];
+
+        let currentQuestionIndex = 0;
+        const questionContainer = document.getElementById('question');
+        const questionForm = document.getElementById('questionForm');
+        const answerInput = document.getElementById('answer');
+        const multiAnswerInput = document.getElementById('multiAnswer');
+        const dropdownInput = document.getElementById('dropdown');
+        const responses = {};
+
+        function displayQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            questionContainer.textContent = currentQuestion.text;
+            questionContainer.classList.remove('slide-out');
+            questionContainer.classList.add('slide-in');
+
+            answerInput.classList.add('hidden');
+            multiAnswerInput.classList.add('hidden');
+            dropdownInput.classList.add('hidden');
+
+            if (currentQuestion.type === 'text') {
+                answerInput.classList.remove('hidden');
+                answerInput.value = '';
+                answerInput.focus();
+            } else if (currentQuestion.type === 'multi') {
+                multiAnswerInput.classList.remove('hidden');
+                multiAnswerInput.value = '';
+                multiAnswerInput.focus();
+            } else if (currentQuestion.type === 'dropdown') {
+                dropdownInput.classList.remove('hidden');
+            }
+        }
+
+        questionForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const currentQuestion = questions[currentQuestionIndex];
+            let answer;
+
+            if (currentQuestion.type === 'text') {
+                answer = answerInput.value;
+            } else if (currentQuestion.type === 'multi') {
+                answer = multiAnswerInput.value.split(',').map(item => item.trim());
+            } else if (currentQuestion.type === 'dropdown') {
+                answer = dropdownInput.value;
+            }
+
+            responses[currentQuestion.key] = answer;
+
+            questionContainer.classList.remove('slide-in');
+            questionContainer.classList.add('slide-out');
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    displayQuestion();
+                } else {
+                    fetch('/questionnaire', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(responses)
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.href = data.redirect; // Redirect to the login page
+                        } else {
+                            alert('Error saving responses!');
+                        }
+                    });
+                }
+            }, 500);
+        });
+
+        displayQuestion();
+    </script>
+</body>
+
+</html>
