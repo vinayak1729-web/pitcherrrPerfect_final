@@ -1,36 +1,45 @@
-from flask import Flask, render_template
-import requests
-from bs4 import BeautifulSoup
+import statsapi
 
-app = Flask(__name__)
+# Get player stat data
+player_data = statsapi.player_stat_data(605141, group="[fielding]", type="season", sportId=1)
 
-# Function to scrape the latest news
-def fetch_latest_news():
-    url = "https://www.mlb.com/news/"
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
+# Extract relevant hitting stats
+hitting_stats = player_data['stats'][0]['stats']  # Assuming hitting stats are in the first element of the 'stats' list
+relevant_hitting_stats = {
+    'Home Runs': hitting_stats.get('homeRuns', 0),
+    'Runs Batted In': hitting_stats.get('rbi', 0),
+    'Batting Average': hitting_stats.get('avg', 0.0),
+    'On-Base Percentage': hitting_stats.get('obp', 0.0) 
+}
 
-    # Find the news articles (modify selectors based on website structure)
-    articles = soup.find_all('article', class_='article-item', limit=4)
-    news_list = []
+# Extract relevant pitching stats
+pitching_stats = player_data['stats'][1]['stats']  # Assuming pitching stats are in the second element of the 'stats' list
+relevant_pitching_stats = {
+    'Wins': pitching_stats.get('wins', 0),
+    'Losses': pitching_stats.get('losses', 0),
+    'ERA': pitching_stats.get('era', 0.0),
+    'Strikeouts': pitching_stats.get('strikeOuts', 0)
+}
 
-    for article in articles:
-        title = article.find('h1', class_='article-item__headline').get_text(strip=True)
-        link = article.find('a', href=True)['href']
-        
-    
-        news_list.append({
-            'title': title,
-            'link': f"https://www.mlb.com/news/",
-          
-        })
+# # Extract relevant fielding stats
+# fielding_stats = player_data['stats'][2]['stats']  # Assuming fielding stats are in the third element of the 'stats' list
+# relevant_fielding_stats = {
+#     'Fielding Percentage': fielding_stats.get('fielding', 0.0)
+# }
 
-    return news_list
+# Print the relevant stats
+print("Hitting Stats:")
+for stat, value in relevant_hitting_stats.items():
+    print(f"{stat}: {value}")
 
-@app.route('/')
-def home():
-    news = fetch_latest_news()
-    return render_template('news.html', news=news)
+print("\nPitching Stats:")
+for stat, value in relevant_pitching_stats.items():
+    print(f"{stat}: {value}")
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# print("\nFielding Stats:")
+# for stat, value in relevant_fielding_stats.items():
+#     print(f"{stat}: {value}")
+import statsapi
+
+print(statsapi.player_stat_data(607455, group="[hitting]", type="season", sportId=1))
+print(statsapi.player_stat_data(607455, group="[pitching]", type="season", sportId=1))

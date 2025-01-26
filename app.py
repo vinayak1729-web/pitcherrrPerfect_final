@@ -988,6 +988,114 @@ def team_players():
         selected_players_count=len(selected_player_names)
     )
 
+def load_user_team_data():
+    with open('database/user_teams/user_team_data.json', 'r') as file:
+        return json.load(file)
+    
+@app.route('/my_team', methods=['GET', 'POST'])
+def myteam():
+    user_data = load_user_team_data()
+    user_name = session['username']
+    
+    # Get all teams for the user
+    user_teams = user_data[user_name]
+    
+    # Prepare a list of team names
+    team_names = list(user_teams.keys())
+
+    # Prepare a dictionary of players for each team
+    teams_players = {}
+    for team_name, team_data in user_teams.items():
+        players = []
+        for player in team_data['selected_players']:
+            players.append({
+                'name': player['name'],
+                'position': player['position'],
+                'headshot_url': player['headshot_url']
+            })
+        teams_players[team_name] = players
+    
+    return render_template('test.html', team_names=team_names, teams_players=teams_players)
+
+@app.route('/get_position_headshots/<team_name>/<position>')
+def get_position_headshots(team_name, position):
+    user_data = load_user_team_data()
+    user_name = session['username']
+    
+    # Get the specific team data
+    team_data = user_data[user_name][team_name]
+    
+    # Filter players by position and get their headshot URLs
+    position_headshots = []
+    for player in team_data['selected_players']:
+        if player['position'].upper() == position.upper():
+            position_headshots.append({
+                'name': player['name'],
+                'headshot_url': player['headshot_url']
+            })
+    
+    return jsonify({
+        'team_name': team_name,
+        'position': position,
+        'players': position_headshots
+    })
+
+# @app.route('/my_team', methods=['GET', 'POST'])
+# def myteam():
+#     # Load user team data
+#     user_data = load_user_team_data()
+#     user_name = session['username']
+    
+#     # Get all teams for the user
+#     user_teams = user_data[user_name]
+    
+#     # Prepare a dictionary of players for each position
+#     position_players = {
+#         'Baseman': [],
+#         'Two-Way Man': [],
+#         'Hitter': [],
+#         'Pitcher': [],
+#         'Catcher': [],
+#         'Shortstop': [],
+#         'First Base': [],
+#         'Second Base': [],
+#         'Third Base': [],
+#         'Outfielder': []  # Catch-all for all outfielders (Left, Right, Center)
+#     }
+    
+#     # Classify players into their respective positions
+#     for team_name, team_data in user_teams.items():
+#         for player in team_data['selected_players']:
+#             position = player['position']
+            
+#             # Handle outfielders separately and assign them to 'Outfielder'
+#             if position in ['Left Field', 'Right Field', 'Center Field']:
+#                 position = 'Outfielder'  # Assign outfield positions to the 'Outfielder' group
+
+#             if position in position_players:
+#                 position_players[position].append({
+#                     'name': player['name'],
+#                     'position': position,
+#                     'headshot_url': player['headshot_url']
+#                 })
+    
+#     # Handle special conditions:
+#     # 1. If there are more than 3 basemen (1st Base, 2nd Base, 3rd Base, etc.), set one as Hitter.
+#     if len(position_players['First Base']) + len(position_players['Second Base']) + len(position_players['Third Base']) > 3:
+#         # Move one Baseman to Hitter position (if there's a sufficient number of Basemen)
+#         if position_players['Baseman']:
+#             position_players['Hitter'].append(position_players['Baseman'].pop())
+
+#     # 2. If there are any 2-Way players, set one as Pitcher and the rest as Hitter
+#     if position_players['Two-Way Player']:
+#         # Move the 2-Way player to Pitcher if possible
+#         position_players['Pitcher'].append(position_players['Two-Way Player'].pop())
+
+#     # Prepare a list of team names
+#     team_names = list(user_teams.keys())
+    
+#     return render_template('my_team.html', team_names=team_names, position_players=position_players)
+
 @app.route('/')
 def index():
     if 'username' not in session:
