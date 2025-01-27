@@ -11,10 +11,21 @@ from googletrans import Translator
 import requests
 import csv 
 from features.sendemail import send_email_function
+import statsapi
+import json
 
+def strftime(date, format_string):
+    return date.strftime(format_string)
+# Load the JSON data from a file
+with open('dataset/team.json', 'r') as file:
+    teams_name_id = json.load(file)
+
+from pathlib import Path
+from features.signupEmailBody import Sign_up_email_body_template
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
-
+app.jinja_env.filters['strftime'] = strftime
+MLB_API_URL = 'https://statsapi.mlb.com/api/v1/schedule'
 # Ensure database directories exist
 os.makedirs('database/fanlink', exist_ok=True)
 os.makedirs('database', exist_ok=True)
@@ -42,9 +53,7 @@ def save_json(data, filename, base_path='database/fanlink'):
     with open(filepath, 'w') as f:
         json.dump(data, f, indent=4)
 
-import json
-from datetime import datetime
-from pathlib import Path
+
 
 def save_questionnaire_json(username, data):
     """
@@ -174,19 +183,8 @@ def questionnaire():
             save_questionnaire_json(username, data)
 
             # Send a confirmation email after questionnaire completion
-            subject = "Registration Successful"
-            body = f"""
-            Hi {username},
-            
-            Congratulations on successfully completing your registration process with us! 
-            We are excited to have you onboard.
-            
-            Click the link below to visit our website:
-            [Visit Our Website](https://yourwebsite.com)
-            
-            Best regards,
-            The Team
-            """
+            subject = "Welcome to Pitcher Perfect! ⚾"
+            body = Sign_up_email_body_template(username)
             send_email_function(email, subject, body)
 
             return jsonify({'success': True, 'redirect': '/login'})
@@ -1015,7 +1013,7 @@ def myteam():
             })
         teams_players[team_name] = players
     
-    return render_template('test.html', team_names=team_names, teams_players=teams_players)
+    return render_template('my_team.html', team_names=team_names, teams_players=teams_players)
 
 @app.route('/get_position_headshots/<team_name>/<position>')
 def get_position_headshots(team_name, position):
@@ -1040,61 +1038,167 @@ def get_position_headshots(team_name, position):
         'players': position_headshots
     })
 
-# @app.route('/my_team', methods=['GET', 'POST'])
-# def myteam():
-#     # Load user team data
-#     user_data = load_user_team_data()
-#     user_name = session['username']
-    
-#     # Get all teams for the user
-#     user_teams = user_data[user_name]
-    
-#     # Prepare a dictionary of players for each position
-#     position_players = {
-#         'Baseman': [],
-#         'Two-Way Man': [],
-#         'Hitter': [],
-#         'Pitcher': [],
-#         'Catcher': [],
-#         'Shortstop': [],
-#         'First Base': [],
-#         'Second Base': [],
-#         'Third Base': [],
-#         'Outfielder': []  # Catch-all for all outfielders (Left, Right, Center)
-#     }
-    
-#     # Classify players into their respective positions
-#     for team_name, team_data in user_teams.items():
-#         for player in team_data['selected_players']:
-#             position = player['position']
+
+@app.route('/highlights', methods=['GET', 'POST'])
+def highlights():
+    season = request.form.get('season', 2024)  # Default season
+    home_team_filter = request.form.get('home_team', None)
+    away_team_filter = request.form.get('away_team', None)
+
+    response = requests.get(f"{MLB_API_URL}?sportId=1&season={season}")
+    games_data = response.json().get("dates", [])
+
+    matches = []
+    for date_info in games_data:
+        for game in date_info["games"]:
+            home_team = game['teams']['home']['team']['name']
+            away_team = game['teams']['away']['team']['name']
+            home_score = game['teams']['home'].get('score', 'N/A')
+            away_score = game['teams']['away'].get('score', 'N/A')
             
-#             # Handle outfielders separately and assign them to 'Outfielder'
-#             if position in ['Left Field', 'Right Field', 'Center Field']:
-#                 position = 'Outfielder'  # Assign outfield positions to the 'Outfielder' group
+            game_date = game['gameDate']
+            venue = game.get('venue', {}).get('name', 'N/A')
+            game_pk = game['gamePk']
 
-#             if position in position_players:
-#                 position_players[position].append({
-#                     'name': player['name'],
-#                     'position': position,
-#                     'headshot_url': player['headshot_url']
-#                 })
+            home_team_logo = f'https://www.mlbstatic.com/team-logos/{game["teams"]["home"]["team"]["id"]}.svg'
+            away_team_logo = f'https://www.mlbstatic.com/team-logos/{game["teams"]["away"]["team"]["id"]}.svg'
+
+            # Apply filters
+            if home_team_filter and home_team_filter != home_team:
+                continue
+            if away_team_filter and away_team_filter != away_team:
+                continue
+
+            matches.append({
+            'home_team': home_team,
+            'away_team': away_team,
+            'home_score': home_score,
+            'away_score': away_score,
+            'game_date': game_date,
+            'venue': venue,
+            'game_pk': game_pk,
+            'home_team_logo': home_team_logo,
+            'away_team_logo': away_team_logo,
+            'highlights_url': f"/game/{game_pk}"  # Link to game highlights
+})
+
+
+    return render_template('highlight.html', matches=matches, teams_data=teams_name_id)
+@app.route('/game/<int:game_pk>', methods=['GET'])
+def game_details(game_pk):
+    response = requests.get(f"{MLB_API_URL}?gamePk={game_pk}")
+    game_info = response.json().get("dates", [])[0].get("games", [])[0]
     
-#     # Handle special conditions:
-#     # 1. If there are more than 3 basemen (1st Base, 2nd Base, 3rd Base, etc.), set one as Hitter.
-#     if len(position_players['First Base']) + len(position_players['Second Base']) + len(position_players['Third Base']) > 3:
-#         # Move one Baseman to Hitter position (if there's a sufficient number of Basemen)
-#         if position_players['Baseman']:
-#             position_players['Hitter'].append(position_players['Baseman'].pop())
-
-#     # 2. If there are any 2-Way players, set one as Pitcher and the rest as Hitter
-#     if position_players['Two-Way Player']:
-#         # Move the 2-Way player to Pitcher if possible
-#         position_players['Pitcher'].append(position_players['Two-Way Player'].pop())
-
-#     # Prepare a list of team names
-#     team_names = list(user_teams.keys())
+    game_data = {
+        'home_team': game_info['teams']['home']['team']['name'],
+        'away_team': game_info['teams']['away']['team']['name'],
+        'home_score': game_info['teams']['home'].get('score', 0),
+        'away_score': game_info['teams']['away'].get('score', 0),
+        'game_date': game_info['gameDate'],
+        'venue': game_info.get('venue', {}).get('name', 'N/A'),
+        'home_team_logo': f'https://www.mlbstatic.com/team-logos/{game_info["teams"]["home"]["team"]["id"]}.svg',
+        'away_team_logo': f'https://www.mlbstatic.com/team-logos/{game_info["teams"]["away"]["team"]["id"]}.svg',
+        'status': game_info.get('status', {}).get('detailedState', 'N/A')
+    }
     
-#     return render_template('my_team.html', team_names=team_names, position_players=position_players)
+    highlights_data = extract_highlights(game_pk)
+    video_highlights = fetch_video_highlights(game_pk)
+
+    # Initialize running scores
+    running_away_score = 0
+    running_home_score = 0
+
+    # Process each highlight
+    for highlight in highlights_data:
+        # Update scores based on the play result
+        if 'scores' in highlight.get('description', '').lower():
+            if 'home' in highlight.get('description', '').lower():
+                running_home_score += 1
+            else:
+                running_away_score += 1
+        
+        # Add current scores to highlight
+        highlight['away_score'] = running_away_score
+        highlight['home_score'] = running_home_score
+        highlight['time'] = highlight['time'][11:19] if isinstance(highlight['time'], str) else highlight['time']
+
+    return render_template('GameHighlights.html', 
+                         game_pk=game_pk,
+                         game_data=game_data,
+                         highlights_data=highlights_data, 
+                         video_highlights=video_highlights,
+                         previous_away_score=0,
+                         previous_home_score=0)
+
+def fetch_video_highlights(game_pk):
+    video_highlights = []
+    
+    # Get raw highlights data
+    raw_highlights = statsapi.game_highlights(game_pk)
+    
+    # Split the raw text into lines
+    lines = raw_highlights.split('\n')
+    
+    current_title = None
+    current_description = None
+    
+    for line in lines:
+        # Skip empty lines
+        if not line.strip():
+            continue
+            
+        # Check if line contains video URL
+        if line.startswith('https://') and line.endswith('.mp4'):
+            if current_title and current_description:
+                video_highlights.append({
+                    'title': current_title,
+                    'description': current_description,
+                    'video_url': line.strip()
+                })
+            current_title = None
+            current_description = None
+            
+        # Check if line contains title (they typically end with duration in parentheses)
+        elif '(' in line and ')' in line and any(x in line for x in ['00:', '01:', '02:']):
+            current_title = line.strip()
+            
+        # If not a URL or title, it's likely a description
+        elif current_title and not current_description:
+            current_description = line.strip()
+    
+    return video_highlights
+def extract_video_urls(highlights_data):
+    video_urls = []
+    for highlight in highlights_data:
+        if 'video_url' in highlight and highlight['video_url'].startswith('https://') and highlight['video_url'].endswith('.mp4'):
+            video_urls.append(highlight['video_url'])
+    return video_urls
+
+def extract_highlights(game_pk):
+    highlights = []
+    try:
+        # Get live game data
+        game = statsapi.get('game', {'gamePk': game_pk})
+        all_plays = game.get('liveData', {}).get('plays', {}).get('allPlays', [])
+        
+        for play in all_plays:
+            if play.get('about', {}).get('isComplete', False):
+                result = play.get('result', {})
+                about = play.get('about', {})
+                
+                highlight = {
+                    'description': result.get('description', ''),
+                    'score': f"Away: {result.get('awayScore', 0)}, Home: {result.get('homeScore', 0)}",
+                    'inning': f"{'Top' if about.get('halfInning') == 'top' else 'Bottom'} of the {about.get('inning')} inning",
+                    'time': about.get('endTime', '')
+                }
+                highlights.append(highlight)
+                
+    except Exception as e:
+        print(f"Error extracting highlights: {e}")
+    
+    return highlights
+
 
 @app.route('/')
 def index():

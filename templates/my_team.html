@@ -4,151 +4,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baseball Team Selector</title>
+    <title>Pitcher Perfect - Baseball Team Selector</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
-                    backgroundImage: {
-                        'fifa-gradient': 'linear-gradient(135deg, #4a90e2 0%, #1c2331 100%)',
-                        'field-gradient': 'linear-gradient(135deg, #2ecc71 0%, #27ae60 100%)'
+                    colors: {
+                        'lexus-blue': '#003DA5',
+                        'lexus-red': '#D50032'
                     },
                     boxShadow: {
-                        'fifa-card': '0 10px 20px rgba(0,0,0,0.3), 0 6px 6px rgba(0,0,0,0.2)'
+                        'neobrutalist': '0 8px 0 -2px rgba(0,0,0,0.2), 0 12px 20px rgba(0,0,0,0.15)',
+                        'player-card': '6px 6px 0 rgba(0,0,0,0.2)'
+                    },
+                    animation: {
+                        'wiggle': 'wiggle 0.5s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(0deg)' },
+                            '25%': { transform: 'rotate(-5deg)' },
+                            '75%': { transform: 'rotate(5deg)' },
+                        }
                     }
                 }
             }
         }
     </script>
     <style>
-        .field-player {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100px;
-            z-index: 20;
+        .baseball-font {
+            font-family: 'Impact', 'Haettenschweiler', sans-serif;
         }
 
-        .field-player img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 3px solid #ffd700;
-            margin-bottom: 5px;
-            object-fit: cover;
-            background-color: white;
+        .neon-text {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3);
         }
 
-        .field-player .player-name {
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 2px 8px;
-            border-radius: 12px;
-            white-space: nowrap;
+        .field-player-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        .position-slot {
-            min-width: 120px;
-            min-height: 120px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .field-player-card:hover {
+            transform: scale(1.05);
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.3);
         }
-
-        .position-slot {
-            width: 80px;
-            height: 80px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .position-slot img {
-            transition: transform 0.2s;
-        }
-
-        .position-slot:hover img {
-            transform: scale(1.1);
-        }
+        
     </style>
 </head>
 
-<body class="bg-gray-900 text-white font-sans">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white font-sans">
+    <!-- Navbar -->
+    <nav class="bg-lexus-blue dark:bg-gray-800 shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="baseball-font text-3xl neon-text">
+                        <span class="text-lexus-red dark:text-lexus-red">Pitcher</span>
+                        <span class="text-white dark:text-white">Perfect</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-8">
+                    <a href="/"
+                        class="text-white dark:text-white hover:text-lexus-red dark:hover:text-lexus-red transition-colors">Home</a>
+                    <a href="/Chat_dashboard"
+                        class="text-white dark:text-white hover:text-lexus-red dark:hover:text-lexus-red transition-colors">Fan
+                        Link</a>
+                    <a href="/yourteam"
+                        class="text-white dark:text-white hover:text-lexus-red dark:hover:text-lexus-red transition-colors">Your
+                        Team</a>
+                    <a href="/profile"
+                        class="text-white dark:text-white hover:text-lexus-red dark:hover:text-lexus-red transition-colors">Profile</a>
+                    <button id="darkModeToggle"
+                        class="text-white dark:text-white hover:text-lexus-red dark:hover:text-lexus-red transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
     <div class="container mx-auto px-4 py-8">
         <div class="field-container max-w-5xl mx-auto relative">
             <!-- Baseball Field Image -->
             <img src="{{ url_for('static', filename='images/baseball.jpg') }}" alt="Baseball Field"
-                class="w-full rounded-2xl shadow-2xl filter brightness-110 contrast-110">
+                class="w-full rounded-2xl shadow-neobrutalist filter brightness-110 contrast-110">
 
-            <!-- Player Positions with Tailwind Styling -->
-            <div class="absolute inset-0" id="fieldPositions">
-                <div id="pitcher"
-                    class="position-slot absolute top-[55%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 rounded-lg text-sm font-bold text-gray-800 hover:bg-white/90 transition"
-                    data-position="Pitcher"></div>
-                <div id="catcher"
-                    class="position-slot absolute top-[93%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 rounded-lg text-sm font-bold text-gray-800 hover:bg-white/90 transition"
-                    data-position="Catcher"></div>
-                <div id="home-base"
-                    class="position-slot absolute top-[75%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 rounded-lg text-sm font-bold text-gray-800 hover:bg-white/90 transition"
-                    data-position="Hitter"></div>
-                <div id="first-base"
-                    class="position-slot absolute top-[55%] left-[69%] -translate-x-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 rounded-lg text-sm font-bold text-gray-800 hover:bg-white/90 transition"
-                    data-position="First Base"></div>
-                <div id="second-base"
-                    class="position-slot absolute top-[31%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 rounded-lg text-sm font-bold text-gray-800 hover:bg-white/90 transition"
-                    data-position="Second Base"></div>
-                <div id="third-base"
-                    class="position-slot absolute top-[55%] left-[29%] -translate-x-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 rounded-lg text-sm font-bold text-gray-800 hover:bg-white/90 transition"
-                    data-position="Third Base"></div>
-                <div id="shortstop"
-                    class="position-slot absolute top-[26%] left-[35%] -translate-x-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 rounded-lg text-sm font-bold text-gray-800 hover:bg-white/90 transition"
-                    data-position="Shortstop"></div>
-                <div id="center-field"
-                    class="position-slot absolute top-[9%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 rounded-lg text-sm font-bold text-gray-800 hover:bg-white/90 transition"
-                    data-position="Outfielder"></div>
-                <div id="left-field"
-                    class="position-slot absolute top-[25%] left-[20%] -translate-x-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 rounded-lg text-sm font-bold text-gray-800 hover:bg-white/90 transition"
-                    data-position="Outfielder"></div>
-                <div id="right-field"
-                    class="position-slot absolute top-[25%] left-[80%] -translate-x-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 rounded-lg text-sm font-bold text-gray-800 hover:bg-white/90 transition"
-                    data-position="Outfielder"></div>
-            </div>
+                <div class="absolute inset-0" id="fieldPositions">
+                         <div class="position-slot absolute top-[55%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Pitcher" id="pitcher">
+                         </div>
+                         <div class="position-slot absolute top-[93%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Catcher" id="catcher">
+                         </div>
+                         <div class="position-slot absolute top-[75%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Hitter" id="home-base">
+                         </div>
+                         <div class="position-slot absolute top-[55%] left-[69%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="First Base" id="first-base">
+                         </div>
+                         <div class="position-slot absolute top-[31%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Second Base" id="second-base">
+                         </div>
+                         <div class="position-slot absolute top-[55%] left-[29%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Third Base" id="third-base">
+                         </div>
+                         <div class="position-slot absolute top-[26%] left-[35%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Shortstop" id="shortstop">
+                         </div>
+                         <div class="position-slot absolute top-[9%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Outfielder" id="center-field">
+                         </div>
+                         <div class="position-slot absolute top-[25%] left-[20%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Outfielder" id="left-field">
+                         </div>
+                         <div class="position-slot absolute top-[25%] left-[80%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Outfielder" id="right-field">
+                         </div>
+                        </div>
+                       </div>
         </div>
 
         <!-- Team Selection -->
         <div class="max-w-xl mx-auto mt-8 flex space-x-4">
             <select id="teamSelect"
-                class="flex-grow bg-gray-700 text-white p-3 rounded-lg border-2 border-gray-600 focus:border-blue-500 transition">
+                class="flex-grow bg-white dark:bg-gray-800 text-lexus-blue dark:text-white 
+                       p-3 rounded-lg border-4 border-lexus-blue dark:border-lexus-blue 
+                       focus:ring-2 focus:ring-lexus-red transition shadow-player-card">
                 <option value="">-- Select a Team --</option>
                 {% for team_name in team_names %}
                 <option value="{{ team_name }}">{{ team_name }}</option>
                 {% endfor %}
             </select>
             <button id="selectTeamBtn"
-                class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition transform hover:-translate-y-1 shadow-lg">
+                class="bg-lexus-red hover:bg-lexus-red/80 text-white font-bold py-3 px-6 
+                       rounded-lg transition transform hover:-translate-y-1 
+                       shadow-player-card border-4 border-lexus-blue 
+                       dark:border-lexus-blue active:translate-y-1">
                 Select Team
             </button>
         </div>
 
         <!-- Player Bench -->
         <div class="mt-8 max-w-6xl mx-auto">
-            <h2 class="text-2xl font-bold mb-4 text-center">Available Players</h2>
+            <h2 class="text-3xl font-bold mb-6 text-center text-lexus-red dark:text-lexus-red">Available Players</h2>
             <div id="playerContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 <!-- Players will be loaded here dynamically -->
             </div>
         </div>
     </div>
-
     <script>
         const teamsPlayersData = {{ teams_players| tojson }};
         const selectTeamBtn = document.getElementById('selectTeamBtn');
@@ -166,136 +164,136 @@
                 <div class="player-name">${player.name}</div>
             `;
             return fieldPlayer;
-         }
-         document.addEventListener('DOMContentLoaded', function () {
-    const teamSelect = document.getElementById('teamSelect');
-    const positionSlots = document.querySelectorAll('.position-slot');
-    const usedPlayers = new Set();
-
-    function canPlayHomeBase(playerPosition) {
-        const validHitterPositions = [
-            "Two-Way Player",  // Highest priority
-            "Designated Hitter",
-            "First Base",
-            "Second Base",
-            "Third Base",
-            "Shortstop",
-            "Outfielder"
-        ];
-        return validHitterPositions.includes(playerPosition);
-    }
-
-    function canPlayerPlayPosition(playerPosition, slotPosition) {
-        if (slotPosition === "Hitter") {
-            return canPlayHomeBase(playerPosition);
         }
-        if (slotPosition === "Outfielder") {
-            return playerPosition === "Outfielder";
-        }
-        return playerPosition === slotPosition;
-    }
+        document.addEventListener('DOMContentLoaded', function () {
+            const teamSelect = document.getElementById('teamSelect');
+            const positionSlots = document.querySelectorAll('.position-slot');
+            const usedPlayers = new Set();
 
-    positionSlots.forEach(position => {
-        position.addEventListener('dragover', (e) => e.preventDefault());
-        position.addEventListener('drop', () => {
-            if (draggedCard) {
-                const playerPosition = draggedCard.getAttribute('data-position');
-                const slotPosition = position.getAttribute('data-position');
-                const playerName = draggedCard.querySelector('.text-lg').textContent;
-
-                if (usedPlayers.has(playerName)) {
-                    alert(`${playerName} is already on the field!`);
-                    return;
-                }
-
-                if (canPlayerPlayPosition(playerPosition, slotPosition)) {
-                    position.innerHTML = '';
-                    const fieldPlayer = createFieldPlayer({
-                        name: playerName,
-                        headshot_url: draggedCard.querySelector('img').src,
-                        position: playerPosition
-                    });
-                    position.appendChild(fieldPlayer);
-                    position.classList.add('has-player');
-                    usedPlayers.add(playerName);
-                    draggedCard.remove();
-                } else {
-                    alert(`This player cannot play in the ${slotPosition} position!`);
-                }
+            function canPlayHomeBase(playerPosition) {
+                const validHitterPositions = [
+                    "Two-Way Player",  // Highest priority
+                    "Designated Hitter",
+                    "First Base",
+                    "Second Base",
+                    "Third Base",
+                    "Shortstop",
+                    "Outfielder"
+                ];
+                return validHitterPositions.includes(playerPosition);
             }
-        });
-    });
 
-    function updatePositionPlayers(teamName) {
-        usedPlayers.clear();
-        
-        // First fetch Two-Way Players for home base
-        fetch(`/get_position_headshots/${teamName}/Two-Way Player`)
-            .then(res => res.json())
-            .then(twoWayData => {
-                const twoWayPlayers = twoWayData.players || [];
-                
-                // Then fetch other positions
-                return Promise.all([
-                    Promise.resolve(twoWayPlayers),
-                    fetch(`/get_position_headshots/${teamName}/Outfielder`).then(res => res.json()),
-                    fetch(`/get_position_headshots/${teamName}/First Base`).then(res => res.json()),
-                    fetch(`/get_position_headshots/${teamName}/Second Base`).then(res => res.json()),
-                    fetch(`/get_position_headshots/${teamName}/Third Base`).then(res => res.json()),
-                    fetch(`/get_position_headshots/${teamName}/Shortstop`).then(res => res.json()),
-                    fetch(`/get_position_headshots/${teamName}/Designated Hitter`).then(res => res.json())
-                ]);
-            })
-            .then(([twoWayPlayers, outfieldData, ...otherPositions]) => {
-                const outfielders = outfieldData.players || [];
-                const potentialHitters = [];
-
-                // Add players to potential hitters in priority order
-                if (twoWayPlayers.length > 0) {
-                    potentialHitters.push(...twoWayPlayers);
+            function canPlayerPlayPosition(playerPosition, slotPosition) {
+                if (slotPosition === "Hitter") {
+                    return canPlayHomeBase(playerPosition);
                 }
-                otherPositions.forEach(data => {
-                    if (data.players) {
-                        potentialHitters.push(...data.players);
-                    }
-                });
+                if (slotPosition === "Outfielder") {
+                    return playerPosition === "Outfielder";
+                }
+                return playerPosition === slotPosition;
+            }
 
-                positionSlots.forEach((slot) => {
-                    const position = slot.getAttribute('data-position');
+            positionSlots.forEach(position => {
+                position.addEventListener('dragover', (e) => e.preventDefault());
+                position.addEventListener('drop', () => {
+                    if (draggedCard) {
+                        const playerPosition = draggedCard.getAttribute('data-position');
+                        const slotPosition = position.getAttribute('data-position');
+                        const playerName = draggedCard.querySelector('.text-lg').textContent;
 
-                    if (position === 'Outfielder') {
-                        const outfielder = outfielders.find(player => !usedPlayers.has(player.name));
-                        if (outfielder) {
-                            slot.innerHTML = createPlayerHTML(outfielder);
-                            usedPlayers.add(outfielder.name);
+                        if (usedPlayers.has(playerName)) {
+                            alert(`${playerName} is already on the field!`);
+                            return;
                         }
-                    } else if (position === 'Hitter') {
-                        const hitter = potentialHitters.find(player => !usedPlayers.has(player.name));
-                        if (hitter) {
-                            slot.innerHTML = createPlayerHTML(hitter);
-                            usedPlayers.add(hitter.name);
-                        }
-                    } else {
-                        fetch(`/get_position_headshots/${teamName}/${position}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.players && data.players.length > 0) {
-                                    const player = data.players[0];
-                                    if (!usedPlayers.has(player.name)) {
-                                        slot.innerHTML = createPlayerHTML(player);
-                                        usedPlayers.add(player.name);
-                                    }
-                                } else {
-                                    slot.innerHTML = position;
-                                }
+
+                        if (canPlayerPlayPosition(playerPosition, slotPosition)) {
+                            position.innerHTML = '';
+                            const fieldPlayer = createFieldPlayer({
+                                name: playerName,
+                                headshot_url: draggedCard.querySelector('img').src,
+                                position: playerPosition
                             });
+                            position.appendChild(fieldPlayer);
+                            position.classList.add('has-player');
+                            usedPlayers.add(playerName);
+                            draggedCard.remove();
+                        } else {
+                            alert(`This player cannot play in the ${slotPosition} position!`);
+                        }
                     }
                 });
             });
-    }
 
-    function createPlayerHTML(player) {
-        return `
+            function updatePositionPlayers(teamName) {
+                usedPlayers.clear();
+
+                // First fetch Two-Way Players for home base
+                fetch(`/get_position_headshots/${teamName}/Two-Way Player`)
+                    .then(res => res.json())
+                    .then(twoWayData => {
+                        const twoWayPlayers = twoWayData.players || [];
+
+                        // Then fetch other positions
+                        return Promise.all([
+                            Promise.resolve(twoWayPlayers),
+                            fetch(`/get_position_headshots/${teamName}/Outfielder`).then(res => res.json()),
+                            fetch(`/get_position_headshots/${teamName}/First Base`).then(res => res.json()),
+                            fetch(`/get_position_headshots/${teamName}/Second Base`).then(res => res.json()),
+                            fetch(`/get_position_headshots/${teamName}/Third Base`).then(res => res.json()),
+                            fetch(`/get_position_headshots/${teamName}/Shortstop`).then(res => res.json()),
+                            fetch(`/get_position_headshots/${teamName}/Designated Hitter`).then(res => res.json())
+                        ]);
+                    })
+                    .then(([twoWayPlayers, outfieldData, ...otherPositions]) => {
+                        const outfielders = outfieldData.players || [];
+                        const potentialHitters = [];
+
+                        // Add players to potential hitters in priority order
+                        if (twoWayPlayers.length > 0) {
+                            potentialHitters.push(...twoWayPlayers);
+                        }
+                        otherPositions.forEach(data => {
+                            if (data.players) {
+                                potentialHitters.push(...data.players);
+                            }
+                        });
+
+                        positionSlots.forEach((slot) => {
+                            const position = slot.getAttribute('data-position');
+
+                            if (position === 'Outfielder') {
+                                const outfielder = outfielders.find(player => !usedPlayers.has(player.name));
+                                if (outfielder) {
+                                    slot.innerHTML = createPlayerHTML(outfielder);
+                                    usedPlayers.add(outfielder.name);
+                                }
+                            } else if (position === 'Hitter') {
+                                const hitter = potentialHitters.find(player => !usedPlayers.has(player.name));
+                                if (hitter) {
+                                    slot.innerHTML = createPlayerHTML(hitter);
+                                    usedPlayers.add(hitter.name);
+                                }
+                            } else {
+                                fetch(`/get_position_headshots/${teamName}/${position}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.players && data.players.length > 0) {
+                                            const player = data.players[0];
+                                            if (!usedPlayers.has(player.name)) {
+                                                slot.innerHTML = createPlayerHTML(player);
+                                                usedPlayers.add(player.name);
+                                            }
+                                        } else {
+                                            slot.innerHTML = position;
+                                        }
+                                    });
+                            }
+                        });
+                    });
+            }
+
+            function createPlayerHTML(player) {
+                return `
             <div class="field-player">
                 <img src="${player.headshot_url}" 
                      alt="${player.name}" 
@@ -304,106 +302,106 @@
                 <span class="player-name">${player.name}</span>
             </div>
         `;
-    }
-
-    teamSelect.addEventListener('change', function () {
-        const selectedTeam = this.value;
-        if (selectedTeam) {
-            updatePositionPlayers(selectedTeam);
-        }
-    });
-
-    if (teamSelect.options.length > 1) {
-        updatePositionPlayers(teamSelect.options[1].value);
-    }
-});
-        document.addEventListener('DOMContentLoaded', function () {
-    const teamSelect = document.getElementById('teamSelect');
-    const positionSlots = document.querySelectorAll('.position-slot');
-    const usedPlayers = new Set(); // Track used players
-
-    function canPlayHomeBase(playerPosition) {
-        const validHitterPositions = [
-            "First Base",
-            "Second Base",
-            "Third Base",
-            "Shortstop",
-            "Outfielder",
-            "Two-Way Player",
-            "Designated Hitter"
-        ];
-        return validHitterPositions.includes(playerPosition);
-    }
-
-    function canPlayerPlayPosition(playerPosition, slotPosition) {
-        if (slotPosition === "Hitter") {
-            return canPlayHomeBase(playerPosition);
-        }
-        if (slotPosition === "Outfielder") {
-            return playerPosition === "Outfielder";
-        }
-        return playerPosition === slotPosition;
-    }
-
-    positionSlots.forEach(position => {
-        position.addEventListener('dragover', (e) => e.preventDefault());
-
-        position.addEventListener('drop', () => {
-            if (draggedCard) {
-                const playerPosition = draggedCard.getAttribute('data-position');
-                const slotPosition = position.getAttribute('data-position');
-                const playerName = draggedCard.querySelector('.text-lg').textContent;
-
-                if (usedPlayers.has(playerName)) {
-                    alert(`${playerName} is already on the field!`);
-                    return;
-                }
-
-                if (canPlayerPlayPosition(playerPosition, slotPosition)) {
-                    position.innerHTML = '';
-                    const fieldPlayer = createFieldPlayer({
-                        name: playerName,
-                        headshot_url: draggedCard.querySelector('img').src,
-                        position: playerPosition
-                    });
-                    position.appendChild(fieldPlayer);
-                    position.classList.add('has-player');
-                    usedPlayers.add(playerName);
-                    draggedCard.remove();
-                } else {
-                    alert(`This player cannot play in the ${slotPosition} position!`);
-                }
             }
-        });
-    });
 
-    function updatePositionPlayers(teamName) {
-        usedPlayers.clear();
-        let outfielders = [];
-        let potentialHitters = []; // Store potential hitters
-
-        // Collect outfielders and potential hitters
-        Promise.all([
-            fetch(`/get_position_headshots/${teamName}/Outfielder`).then(res => res.json()),
-            fetch(`/get_position_headshots/${teamName}/First Base`).then(res => res.json()),
-            fetch(`/get_position_headshots/${teamName}/Second Base`).then(res => res.json()),
-            fetch(`/get_position_headshots/${teamName}/Third Base`).then(res => res.json()),
-            fetch(`/get_position_headshots/${teamName}/Shortstop`).then(res => res.json())
-        ]).then(([outfieldData, ...infieldData]) => {
-            outfielders = outfieldData.players || [];
-            infieldData.forEach(data => {
-                if (data.players) {
-                    potentialHitters.push(...data.players);
+            teamSelect.addEventListener('change', function () {
+                const selectedTeam = this.value;
+                if (selectedTeam) {
+                    updatePositionPlayers(selectedTeam);
                 }
             });
 
-            positionSlots.forEach((slot, index) => {
-                const position = slot.getAttribute('data-position');
+            if (teamSelect.options.length > 1) {
+                updatePositionPlayers(teamSelect.options[1].value);
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            const teamSelect = document.getElementById('teamSelect');
+            const positionSlots = document.querySelectorAll('.position-slot');
+            const usedPlayers = new Set(); // Track used players
 
-                if (position === 'Outfielder') {
-                    const outfielder = outfielders.find(player => !usedPlayers.has(player.name));
-                    if (outfielder) {
-                        slot.innerHTML = `
+            function canPlayHomeBase(playerPosition) {
+                const validHitterPositions = [
+                    "First Base",
+                    "Second Base",
+                    "Third Base",
+                    "Shortstop",
+                    "Outfielder",
+                    "Two-Way Player",
+                    "Designated Hitter"
+                ];
+                return validHitterPositions.includes(playerPosition);
+            }
+
+            function canPlayerPlayPosition(playerPosition, slotPosition) {
+                if (slotPosition === "Hitter") {
+                    return canPlayHomeBase(playerPosition);
+                }
+                if (slotPosition === "Outfielder") {
+                    return playerPosition === "Outfielder";
+                }
+                return playerPosition === slotPosition;
+            }
+
+            positionSlots.forEach(position => {
+                position.addEventListener('dragover', (e) => e.preventDefault());
+
+                position.addEventListener('drop', () => {
+                    if (draggedCard) {
+                        const playerPosition = draggedCard.getAttribute('data-position');
+                        const slotPosition = position.getAttribute('data-position');
+                        const playerName = draggedCard.querySelector('.text-lg').textContent;
+
+                        if (usedPlayers.has(playerName)) {
+                            alert(`${playerName} is already on the field!`);
+                            return;
+                        }
+
+                        if (canPlayerPlayPosition(playerPosition, slotPosition)) {
+                            position.innerHTML = '';
+                            const fieldPlayer = createFieldPlayer({
+                                name: playerName,
+                                headshot_url: draggedCard.querySelector('img').src,
+                                position: playerPosition
+                            });
+                            position.appendChild(fieldPlayer);
+                            position.classList.add('has-player');
+                            usedPlayers.add(playerName);
+                            draggedCard.remove();
+                        } else {
+                            alert(`This player cannot play in the ${slotPosition} position!`);
+                        }
+                    }
+                });
+            });
+
+            function updatePositionPlayers(teamName) {
+                usedPlayers.clear();
+                let outfielders = [];
+                let potentialHitters = []; // Store potential hitters
+
+                // Collect outfielders and potential hitters
+                Promise.all([
+                    fetch(`/get_position_headshots/${teamName}/Outfielder`).then(res => res.json()),
+                    fetch(`/get_position_headshots/${teamName}/First Base`).then(res => res.json()),
+                    fetch(`/get_position_headshots/${teamName}/Second Base`).then(res => res.json()),
+                    fetch(`/get_position_headshots/${teamName}/Third Base`).then(res => res.json()),
+                    fetch(`/get_position_headshots/${teamName}/Shortstop`).then(res => res.json())
+                ]).then(([outfieldData, ...infieldData]) => {
+                    outfielders = outfieldData.players || [];
+                    infieldData.forEach(data => {
+                        if (data.players) {
+                            potentialHitters.push(...data.players);
+                        }
+                    });
+
+                    positionSlots.forEach((slot, index) => {
+                        const position = slot.getAttribute('data-position');
+
+                        if (position === 'Outfielder') {
+                            const outfielder = outfielders.find(player => !usedPlayers.has(player.name));
+                            if (outfielder) {
+                                slot.innerHTML = `
                             <div class="field-player">
                                 <img src="${outfielder.headshot_url}" 
                                      alt="${outfielder.name}" 
@@ -412,12 +410,12 @@
                                 <span class="player-name">${outfielder.name}</span>
                             </div>
                         `;
-                        usedPlayers.add(outfielder.name);
-                    }
-                } else if (position === 'Hitter') {
-                    const hitter = potentialHitters.find(player => !usedPlayers.has(player.name));
-                    if (hitter) {
-                        slot.innerHTML = `
+                                usedPlayers.add(outfielder.name);
+                            }
+                        } else if (position === 'Hitter') {
+                            const hitter = potentialHitters.find(player => !usedPlayers.has(player.name));
+                            if (hitter) {
+                                slot.innerHTML = `
                             <div class="field-player">
                                 <img src="${hitter.headshot_url}" 
                                      alt="${hitter.name}" 
@@ -426,16 +424,16 @@
                                 <span class="player-name">${hitter.name}</span>
                             </div>
                         `;
-                        usedPlayers.add(hitter.name);
-                    }
-                } else {
-                    fetch(`/get_position_headshots/${teamName}/${position}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.players && data.players.length > 0) {
-                                const player = data.players[0];
-                                if (!usedPlayers.has(player.name)) {
-                                    slot.innerHTML = `
+                                usedPlayers.add(hitter.name);
+                            }
+                        } else {
+                            fetch(`/get_position_headshots/${teamName}/${position}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.players && data.players.length > 0) {
+                                        const player = data.players[0];
+                                        if (!usedPlayers.has(player.name)) {
+                                            slot.innerHTML = `
                                         <div class="field-player">
                                             <img src="${player.headshot_url}" 
                                                  alt="${player.name}" 
@@ -444,28 +442,28 @@
                                             <span class="player-name">${player.name}</span>
                                         </div>
                                     `;
-                                    usedPlayers.add(player.name);
-                                }
-                            } else {
-                                slot.innerHTML = position;
-                            }
-                        });
+                                            usedPlayers.add(player.name);
+                                        }
+                                    } else {
+                                        slot.innerHTML = position;
+                                    }
+                                });
+                        }
+                    });
+                });
+            }
+
+            teamSelect.addEventListener('change', function () {
+                const selectedTeam = this.value;
+                if (selectedTeam) {
+                    updatePositionPlayers(selectedTeam);
                 }
             });
+
+            if (teamSelect.options.length > 1) {
+                updatePositionPlayers(teamSelect.options[1].value);
+            }
         });
-    }
-
-    teamSelect.addEventListener('change', function () {
-        const selectedTeam = this.value;
-        if (selectedTeam) {
-            updatePositionPlayers(selectedTeam);
-        }
-    });
-
-    if (teamSelect.options.length > 1) {
-        updatePositionPlayers(teamSelect.options[1].value);
-    }
-});
 
 
 
@@ -586,17 +584,17 @@
             });
         });
         // Add dark mode toggle functionality
-const darkModeToggle = document.getElementById('darkModeToggle');
-darkModeToggle.addEventListener('click', () => {
-    document.documentElement.classList.toggle('dark');
-});
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
 
-// Add sidebar toggle functionality
-const sidebarToggle = document.getElementById('sidebarToggle');
-const sidebar = document.getElementById('sidebar');
-sidebarToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('-translate-x-full');
-});
+        // Add sidebar toggle functionality
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
 
     </script>
 </body>

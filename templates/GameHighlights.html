@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ game_data.home_team }} vs {{ game_data.away_team }} Highlights </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<style>
+    .video-highlight-card {
+        background: white;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .video-highlight-card h3 {
+        margin-bottom: 12px;
+        color: #2b4c7e;
+    }
+    
+    .tabs {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    
+    .tab {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        background: #e2e8f0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .tab.active {
+        background: #2b4c7e;
+        color: white;
+    }
+    .play-list {
+    list-style: none;
+    padding: 0;
+}
+
+.play-item {
+    margin-bottom: 1.5em;
+    padding: 10px;
+    border-left: 3px solid #eee;
+}
+
+.play-item strong {
+    color: #444;
+    font-size: 1.1em;
+}
+
+.score {
+    color: #d32f2f;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.time {
+    color: #666;
+    font-size: 0.9em;
+}
+
+    </style>
+    
+<body>
+    <div class="neo-brutal-container">
+        <h1 class="game-details text-4xl font-extrabold text-blue-800">{{ game_data.home_team }} vs {{ game_data.away_team }} Highlights</h1>
+        <div class="score-display">
+            <div class="team-score">
+                <h2>{{ game_data.home_team }}</h2>
+                <span class="score">{{ game_data.home_score }}</span>
+            </div>
+            <div class="vs">VS</div>
+            <div class="team-score">
+                <h2>{{ game_data.away_team }}</h2>
+                <span class="score">{{ game_data.away_score }}</span>
+            </div>
+        </div>
+
+        <div class="game-details">
+            <p><strong>Date:</strong> {{ game_data.game_date }}</p>
+            <p><strong>Venue:</strong> {{ game_data.venue }}</p>
+            <p><strong>Status:</strong> {{ game_data.status }}</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab" data-tab="video">Video Highlights</button>
+            <button class="tab active" data-tab="text">Text Highlights</button>
+            
+        </div>
+
+        <div id="text-highlights" class="highlight-content">
+            <ul class="play-list">
+                {% set prev_away = 0 %}
+                {% set prev_home = 0 %}
+                {% for play in highlights_data %}
+                    <li class="play-item">
+                        <strong>{{ play.inning }}</strong>
+                        <p>{{ play.description }}</p>
+                        
+                        {% if play.away_score != prev_away or play.home_score != prev_home %}
+                            <p class="score">Score: Away {{ play.away_score }} - Home {{ play.home_score }}</p>
+                            {% set prev_away = play.away_score %}
+                            {% set prev_home = play.home_score %}
+                        {% endif %}
+                        
+                        <span class="time">{{ play.time }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        
+        <div id="video-highlights" class="highlight-content" style="display: none;">
+            {% for video in video_highlights %}
+            <div class="video-highlight-card bg-white rounded-lg shadow-md p-4 mb-6">
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="text-xl font-bold text-blue-800">{{ video.title }}</h3>
+                    <button 
+                        onclick="shareVideo('{{ video.title }}', '{{ video.description }}', '{{ video.video_url }}')"
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                    >
+                        Share
+                    </button>
+                </div>
+                
+                <p class="text-gray-600 mb-4">{{ video.description }}</p>
+                
+                <video controls crossorigin="anonymous" width="100%" class="rounded-lg">
+                    <source src="{{ video.video_url }}" type="video/mp4">
+                </video>
+                
+                <div class="mt-4 flex gap-2">
+                    <button 
+                        onclick="copyToClipboard('{{ video.video_url }}')"
+                        class="text-sm bg-gray-100 px-3 py-1 rounded hover:bg-gray-200"
+                    >
+                        Copy Video URL
+                    </button>
+                    <button 
+                        onclick="copyToClipboard('{{ video.title }}\n{{ video.description }}\n{{ video.video_url }}')"
+                        class="text-sm bg-gray-100 px-3 py-1 rounded hover:bg-gray-200"
+                    >
+                        Copy All Info
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+<script>
+    function shareVideo(title, description, videoUrl) {
+    if (navigator.share) {
+        navigator.share({
+            title: title,
+            text: description,
+            url: videoUrl
+        })
+        .catch(error => console.log('Error sharing:', error));
+    } else {
+        copyToClipboard(`${title}\n${description}\n${videoUrl}`);
+        alert('Video information copied to clipboard!');
+    }
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text)
+        .then(() => {
+            // Optional: Show a brief success message
+            const msg = document.createElement('div');
+            msg.textContent = 'Copied!';
+            msg.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded';
+            document.body.appendChild(msg);
+            setTimeout(() => msg.remove(), 2000);
+        });
+}
+    document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.highlight-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove active class from all tabs
+            tabs.forEach(t => t.classList.remove('active'));
+            // Add active class to clicked tab
+            tab.classList.add('active');
+            
+            // Hide all content sections
+            contents.forEach(content => content.style.display = 'none');
+            // Show selected content
+            document.getElementById(`${tab.dataset.tab}-highlights`).style.display = 'block';
+        });
+    });
+});
+</script>
+</html>
