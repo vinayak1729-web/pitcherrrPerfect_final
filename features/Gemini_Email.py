@@ -78,12 +78,12 @@ def generate_email_prompts(question_type, answer, team=None):
     })
 
 # Load the main user database
-with open("database/users.json", "r") as user_file:
+with open("/PitcherPerfectmain/database/users.json", "r") as user_file:
     users = json.load(user_file)
 
 for user in users:
     username = user["username"]
-    details_path = f"database/details/{username}.json"
+    details_path = f"/PitcherPerfectmain/database/details/{username}.json"
 
     if os.path.exists(details_path):
         with open(details_path, "r") as details_file:
@@ -99,7 +99,7 @@ for user in users:
         # Get the answer based on question type
         if question_id in ["favorite_teams", "favorite_players"]:
             random_ans = random.choice(random_question["answer"])
-            answer = random.choice(random_ans)
+            answer = random.choice(answer)
         else:
             answer = random_question["answer"]
 
@@ -126,26 +126,13 @@ for user in users:
 
 # Inside your user processing loop:
 subject = generate_email_subject(question_id, answer, selected_team)
-
 gemini_prompt = GEMINI_PROMPT_TEMPLATE.format(
     question_type=question_id,
     answer=answer,
     team=selected_team,
     notification=notification_answer
 )
-def gemini_chat(user_input):
-    try:
-        # Send the user input to the model
-        response = chat_session.send_message(user_input)
-        return response.text
-    except Exception as e:
-        print(f"Error during chat: {e}")
-        return "An error occurred. Please try again."
-
-chat_session = model.start_chat()
-
-
-email_body = gemini_chat(gemini_prompt)
+email_body = model.generate_content(gemini_prompt).text
 
 print(f"Subject: {subject}")
 print(f"Body: {email_body}\n")

@@ -1,42 +1,42 @@
 {
-    "user_id": "-1265245146456315774",
-    "username": "nnn",
+    "user_id": "1892471318779020452",
+    "username": "jj",
     "email": "",
-    "submission_date": "2025-01-24 16:14:08",
+    "submission_date": "2025-01-27 16:19:25",
     "questions": [
         {
             "id": "fan_duration",
             "question": "For how long have you been a fan of MLB?",
-            "answer": "4"
+            "answer": "1"
         },
         {
             "id": "favorite_teams",
             "question": "Name 5 teams you like",
             "answer": [
-                "r",
-                "r",
-                "r",
-                "r",
-                "r",
-                "r"
+                "Baltimore Orioles",
+                "Boston Red Sox",
+                "Toronto Blue Jays",
+                "Tampa Bay Rays",
+                "New York Yankees"
             ]
         },
         {
             "id": "favorite_players",
             "question": "Name 5 favorite players",
             "answer": [
-                "t",
-                "t",
-                "t",
-                "t",
-                "t",
-                "t"
+                "v",
+                "v",
+                "v",
+                "v",
+                "v"
             ]
         },
         {
             "id": "selected_team",
             "question": "Which team do you want to select?",
-            "answer": "yankees"
+            "answer": [
+                "Tampa Bay Rays"
+            ]
         },
         {
             "id": "favorite_match",
@@ -46,7 +46,7 @@
         {
             "id": "notifications",
             "question": "Select notification frequency",
-            "answer": "daily"
+            "answer": "monthly"
         }
     ]
 }

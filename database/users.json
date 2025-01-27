@@ -1,26 +1,5 @@
 [
     {
-        "user_id": "c8a5d7a9-f73f-405b-9e76-30d2bf5f6590",
-        "username": "gg",
-        "email": "yes@gmail.com",
-        "password": "12345678",
-        "signup_date": "2025-01-23 15:02:44"
-    },
-    {
-        "user_id": "06179227-179c-48c1-bb66-c10d2d96d686",
-        "username": "rr",
-        "email": "yes@gmail.com",
-        "password": "1234567",
-        "signup_date": "2025-01-23 15:27:03"
-    },
-    {
-        "user_id": "39ebf4bc-c4f5-4846-a0b3-c80c7f44c1be",
-        "username": "demo22",
-        "email": "base@gmail.com",
-        "password": "123123",
-        "signup_date": "2025-01-23 15:31:01"
-    },
-    {
         "user_id": "43d05d87-1c80-4446-b291-beb3a9433990",
         "username": "yourDady22",
         "email": "dad@gmail.com",
@@ -28,32 +7,11 @@
         "signup_date": "2025-01-23 15:43:33"
     },
     {
-        "user_id": "413ff635-3818-40a4-be4b-77b241f3f2c3",
-        "username": "vinayak8899",
-        "email": "vinayak@892.com",
-        "password": "123",
-        "signup_date": "2025-01-24 15:38:19"
-    },
-    {
-        "user_id": "33ba3cb3-46a1-412b-9895-c0ecf2001935",
-        "username": "NANO",
-        "email": "mahindra@gmail.com",
-        "password": "123",
-        "signup_date": "2025-01-24 15:38:36"
-    },
-    {
         "user_id": "ced950a1-6a57-4903-8c9b-b4869d5fd842",
         "username": "Vinayak9271",
         "email": "vs8879785320@gmail.com",
         "password": "123",
         "signup_date": "2025-01-24 16:13:20"
-    },
-    {
-        "user_id": "1cc33c44-ed18-4fbc-b5a4-7f0327540c3b",
-        "username": "nnn",
-        "email": "vishal213.mishra@gmail.com",
-        "password": "123",
-        "signup_date": "2025-01-24 16:13:28"
     },
     {
         "user_id": "d1416218-bf17-41b5-8027-678dad423840",
@@ -70,17 +28,17 @@
         "signup_date": "2025-01-24 16:19:07"
     },
     {
-        "user_id": "de0f747c-2b06-412b-8da5-2360358dc856",
-        "username": "love",
+        "user_id": "38a0f41c-bcd8-4315-8890-e077360f68da",
+        "username": "nn",
         "email": "vishal213.mishra@gmail.com",
         "password": "123",
-        "signup_date": "2025-01-24 17:49:53"
+        "signup_date": "2025-01-27 15:37:22"
     },
     {
-        "user_id": "81171b19-54ce-4375-b7b3-2316f7dfd897",
-        "username": "j",
-        "email": "f@gmail.com",
+        "user_id": "ba821ecf-f76d-4c60-90b7-b1a5b72f157c",
+        "username": "jj",
+        "email": "vishal213.mishra@gmail.com",
         "password": "123",
-        "signup_date": "2025-01-24 17:50:43"
+        "signup_date": "2025-01-27 16:18:40"
     }
 ]

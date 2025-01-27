@@ -8,6 +8,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Baseball+Script&display=swap" rel="stylesheet">
     <style>
+
+
+
         :root {
             --neon-red: #ff1744;
             --neon-blue: #2979ff;
@@ -87,7 +90,7 @@
 
 <body class="bg-gray-100 light:bg-gray-900 min-h-screen transition-colors duration-300">
     <!-- Navbar -->
-    <nav class="bg-white dark:bg-gray-800 shadow-lg">
+    <nav class="bg-white dark:bg-gray-800 shadow-lg fixed top-0 left-0 right-0 z-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
@@ -99,6 +102,8 @@
                 <div class="flex items-center space-x-8">
                     <a href="/"
                         class="text-gray-800 dark:text-white hover:text-red-600 dark:hover:text-red-500 transition-colors">Home</a>
+                    <a href="/"
+                        class="text-gray-800 dark:text-white hover:text-red-600 dark:hover:text-red-500 transition-colors">Highlights</a>
                     <a href="/Chat_dashboard"
                         class="text-gray-800 dark:text-white hover:text-red-600 dark:hover:text-red-500 transition-colors">Fan
                         Link</a>
@@ -113,7 +118,7 @@
     </nav>
 
     <!-- Settings Icons -->
-    <div class="fixed top-4 right-4 z-50 flex items-center space-x-4">
+    <div class="settings-container fixed top-4 right-4 z-50">
         <button id="theme-toggle"
             class="p-3 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
             🌓
@@ -197,26 +202,31 @@
         </div>
 
         <!-- Enhanced News Section -->
-        <div class="fixed bottom-4 left-4 w-96 max-w-[90vw] z-40">
-            <h2 class="text-2xl font-bold mb-3 text-blue-600 dark:text-blue-500 neon-text">
-            </h2>
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-4 news-scroll">
-                {% for article in news %}
-                <a href="{{ article.link }}"
-                    class="block mb-4 last:mb-0 hover:transform hover:scale-102 transition-all">
-                    <div class="p-4 rounded-lg news-card hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors">
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">{{ article.title }}</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm">{{ article.summary }}</p>
-                        <div class="mt-2 flex justify-between items-center">
-                            <span class="text-red-600 dark:text-red-500 text-sm">{{ article.date }}</span>
-                            <span class="text-blue-600 dark:text-blue-500 text-sm">Read more →</span>
-                        </div>
+            <!-- News Toggle Button -->
+    <button id="news-toggle" class="fixed bottom-4 left-4 z-50 w-14 h-14 bg-red-600 dark:bg-red-500 text-white rounded-full flex items-center justify-center text-2xl shadow-lg hover:bg-blue-600 dark:hover:bg-blue-500 transition-colors neon-box">
+        📰
+    </button>
+
+    <!-- News Section -->
+    <div id="news-section" class="fixed bottom-20 left-4 w-96 max-w-[90vw] bg-white dark:bg-gray-800 rounded-lg shadow-xl p-4 hidden z-50">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-500 neon-text">Latest News</h2>
+            <button id="close-news" class="text-gray-600 hover:text-red-600">✖</button>
+        </div>
+        <div class="news-scroll max-h-[60vh] overflow-y-auto">
+            {% for article in news %}
+            <a href="{{ article.link }}" class="block mb-4 last:mb-0 hover:transform hover:scale-102 transition-all">
+                <div class="p-4 rounded-lg news-card hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">{{ article.title }}</h3>
+                    <div class="mt-2 flex justify-between items-center">
+                        <span class="text-blue-600 dark:text-blue-500 text-sm">Read more →</span>
                     </div>
-                </a>
-                {% endfor %}
-            </div>
+                </div>
+            </a>
+            {% endfor %}
         </div>
     </div>
+
 
     <!-- Chatbot -->
     <div class="fixed bottom-4 right-4 z-50">
@@ -246,174 +256,144 @@
     </div>
 
     <script>
-        // Theme and News UI Elements
-        const themeToggle = document.getElementById('theme-toggle');
-        const newsSection = document.querySelector('.fixed.bottom-4.left-4');
-        const newsIcon = document.createElement('button');
 
-        // Set up the news toggle icon
-        newsIcon.innerHTML = '📰';
-        newsIcon.className = 'w-14 h-14 bg-red-600 dark:bg-red-500 text-white rounded-full flex items-center justify-center text-2xl shadow-lg hover:bg-blue-600 dark:hover:bg-blue-500 transition-colors neon-box';
-        newsSection.style.display = 'none'; // Initially hide news section
 
-        // Insert news toggle button before the news section
-        newsSection.parentNode.insertBefore(newsIcon, newsSection);
+            // Set up the news toggle icon
+            // DOM Elements
+    const elements = {
+        newsSection: document.querySelector('.fixed.bottom-4.left-4'),
+        themeToggle: document.getElementById('theme-toggle'),
+        settingsToggle: document.getElementById('settings-toggle'),
+        settingsDropdown: document.getElementById('settings-dropdown'),
+        chatbotTrigger: document.getElementById('chatbot-trigger'),
+        chatbotContainer: document.getElementById('chatbot-container'),
+        chatbotMessages: document.getElementById('chatbot-messages'),
+        chatbotInput: document.getElementById('chatbot-input'),
+        sendMessage: document.getElementById('send-message'),
+        closeChatbot: document.getElementById('close-chatbot')
+    };
 
-        // Theme Toggle Functionality
-        function updateThemeIcon() {
-            const isDark = document.documentElement.classList.contains('dark');
-            themeToggle.innerHTML = isDark ? '☀️' : '🌙';
-        }
+    // Create and set up news toggle icon
+    const newsIcon = document.createElement('button');
+    newsIcon.innerHTML = '📰';
+    newsIcon.className = 'w-14 h-14 bg-red-600 dark:bg-red-500 text-white rounded-full flex items-center justify-center text-2xl shadow-lg hover:bg-blue-600 dark:hover:bg-blue-500 transition-colors neon-box';
+    elements.newsSection.style.display = 'none';
+    elements.newsSection.parentNode.insertBefore(newsIcon, elements.newsSection);
 
-        // Initialize theme based on system preference
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
+    // Theme functionality
+    function updateThemeIcon() {
+        const isDark = document.documentElement.classList.contains('dark');
+        elements.themeToggle.innerHTML = isDark ? '☀️' : '🌙';
+    }
+
+    // Initialize theme
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+    }
+    updateThemeIcon();
+
+    // Theme toggle
+    elements.themeToggle.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
         updateThemeIcon();
+        localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    });
 
-        // Theme toggle event listener
-        themeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-            updateThemeIcon();
+    // News toggle
+    newsIcon.addEventListener('click', () => {
+        const currentDisplay = elements.newsSection.style.display;
+        elements.newsSection.style.display = currentDisplay === 'none' ? 'block' : 'none';
+        
+        if (elements.newsSection.style.display === 'block') {
+            elements.newsSection.classList.add('animate-fade-in');
+            setTimeout(() => elements.newsSection.classList.remove('animate-fade-in'), 300);
+        }
+    });
 
-            // Save theme preference
-            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-        });
+    // Add animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+    `;
+    document.head.appendChild(style);
 
-        // News toggle functionality
-        newsIcon.addEventListener('click', () => {
-            const currentDisplay = newsSection.style.display;
-            newsSection.style.display = currentDisplay === 'none' ? 'block' : 'none';
+    // System theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        document.documentElement.classList.toggle('dark', e.matches);
+        updateThemeIcon();
+    });
 
-            // Add a subtle animation class
-            if (newsSection.style.display === 'block') {
-                newsSection.classList.add('animate-fade-in');
-                setTimeout(() => newsSection.classList.remove('animate-fade-in'), 300);
-            }
-        });
+    // Settings dropdown
+    elements.settingsToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        elements.settingsDropdown.classList.toggle('hidden');
+    });
 
-        // Add animation keyframes to existing styles
-        const style = document.createElement('style');
-        style.textContent = `
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-fade-in {
-        animation: fadeIn 0.3s ease-out;
-    }
-`;
-        document.head.appendChild(style);
+    document.addEventListener('click', (e) => {
+        if (!elements.settingsDropdown.contains(e.target)) {
+            elements.settingsDropdown.classList.add('hidden');
+        }
+    });
 
-        // Listen for system theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-            if (e.matches) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-            updateThemeIcon();
-        });
+    // Chatbot functionality
+    elements.chatbotTrigger.addEventListener('click', () => {
+        elements.chatbotContainer.style.display = 
+            elements.chatbotContainer.style.display === 'none' || 
+            elements.chatbotContainer.style.display === '' ? 'block' : 'none';
+    });
 
-        // Settings Dropdown
-        const settingsToggle = document.getElementById('settings-toggle');
-        const settingsDropdown = document.getElementById('settings-dropdown');
+    elements.closeChatbot.addEventListener('click', () => {
+        elements.chatbotContainer.style.display = 'none';
+    });
 
-        settingsToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            settingsDropdown.classList.toggle('hidden');
-        });
+    // Message handling
+    async function handleSendMessage() {
+        const userMessage = elements.chatbotInput.value.trim();
+        if (!userMessage) return;
 
-        document.addEventListener('click', (e) => {
-            if (!settingsDropdown.contains(e.target)) {
-                settingsDropdown.classList.add('hidden');
-            }
-        });
-        // JavaScript for Chatbot Functionality
-        const chatbotTrigger = document.getElementById("chatbot-trigger");
-        const chatbotContainer = document.getElementById("chatbot-container");
-        const chatbotMessages = document.getElementById("chatbot-messages");
-        const chatbotInput = document.getElementById("chatbot-input");
-        const sendMessageBtn = document.getElementById("send-message");
-        const closeChatbotBtn = document.getElementById("close-chatbot");
+        const userMessageElement = document.createElement('div');
+        userMessageElement.innerText = `You: ${userMessage}`;
+        userMessageElement.style.color = 'blue';
+        elements.chatbotMessages.appendChild(userMessageElement);
+        elements.chatbotMessages.scrollTop = elements.chatbotMessages.scrollHeight;
+        elements.chatbotInput.value = '';
 
-        // Toggle chatbot visibility
-        chatbotTrigger.addEventListener("click", () => {
-            chatbotContainer.style.display =
-                chatbotContainer.style.display === "none" || chatbotContainer.style.display === ""
-                    ? "block"
-                    : "none";
-        });
+        try {
+            const response = await fetch('/chatbot', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userMessage })
+            });
 
-        // Close chatbot
-        closeChatbotBtn.addEventListener("click", () => {
-            chatbotContainer.style.display = "none";
-        });
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
 
-        // Handle sending messages
-        async function handleSendMessage() {
-            const userMessage = chatbotInput.value.trim();
-
-            if (!userMessage) return;
-
-            // Create and append user message
-            const userMessageElement = document.createElement("div");
-            userMessageElement.innerText = `You: ${userMessage}`;
-            userMessageElement.style.color = "blue";
-            chatbotMessages.appendChild(userMessageElement);
-
-            // Auto scroll to bottom
-            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-
-            // Clear input
-            chatbotInput.value = "";
-
-            try {
-                // Send message to backend
-                const response = await fetch("/chatbot", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ message: userMessage }),
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const data = await response.json();
-
-                // Create and append bot response
-                const botMessageElement = document.createElement("div");
-                botMessageElement.innerText = `PitcherPerfect: ${data.response}`;
-                botMessageElement.style.color = "red";
-                chatbotMessages.appendChild(botMessageElement);
-
-            } catch (error) {
-                // Handle error gracefully
-                const errorMessage = document.createElement("div");
-                errorMessage.innerText = "Sorry, I'm having trouble connecting right now. Please try again later.";
-                errorMessage.style.color = "red";
-                chatbotMessages.appendChild(errorMessage);
-                console.error('Error:', error);
-            }
-
-            // Auto scroll to bottom
-            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            const botMessageElement = document.createElement('div');
+            botMessageElement.innerText = `PitcherPerfect: ${data.response}`;
+            botMessageElement.style.color = 'red';
+            elements.chatbotMessages.appendChild(botMessageElement);
+        } catch (error) {
+            const errorMessage = document.createElement('div');
+            errorMessage.innerText = "Sorry, I'm having trouble connecting right now. Please try again later.";
+            errorMessage.style.color = 'red';
+            elements.chatbotMessages.appendChild(errorMessage);
+            console.error('Error:', error);
         }
 
-        // Event listeners for sending messages
-        sendMessageBtn.addEventListener("click", handleSendMessage);
+        elements.chatbotMessages.scrollTop = elements.chatbotMessages.scrollHeight;
+    }
 
-        // Allow sending messages with Enter key
-        chatbotInput.addEventListener("keypress", (event) => {
-            if (event.key === "Enter") {
-                handleSendMessage();
-            }
-        });
+    elements.sendMessage.addEventListener('click', handleSendMessage);
+    elements.chatbotInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') handleSendMessage();
+    });
+
     </script>
 </body>
 

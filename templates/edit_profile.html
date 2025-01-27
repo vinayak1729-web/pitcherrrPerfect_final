@@ -4,8 +4,142 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --baseball-red: #E31837;
+            --baseball-blue: #002D72;
+            --baseball-white: #FFFFFF;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Bungee', cursive;
+            background: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .profile-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: var(--baseball-white);
+            padding: 30px;
+            border: 4px solid black;
+            box-shadow: 8px 8px 0 black;
+            border-radius: 12px;
+            
+        }
+
+        .profile-header {
+            color: var(--baseball-red);
+            font-size: 2.5em;
+            text-transform: uppercase;
+            text-align: center;
+            text-shadow: 3px 3px 0 black;
+            margin-bottom: 40px;
+            
+        }
+
+        .form-section {
+            background: #f8f8f8;
+            padding: 25px;
+            margin: 20px 0;
+            border: 3px solid black;
+            box-shadow: 6px 6px 0 var(--shadow-color);
+            
+        }
+
+        .form-section h3 {
+            color: var(--baseball-blue);
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 3px solid var(--baseball-red);
+            padding-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            color: #333;
+            font-size: 1em;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 3px solid black;
+            border-radius: 8px;
+            font-family: 'Bungee', cursive;
+            font-size: 0.9em;
+            background: white;
+            transition: transform 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            transform: scale(1.01);
+            box-shadow: 4px 4px 0 var(--shadow-color);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .save-button, .cancel-button {
+            padding: 15px 30px;
+            font-family: 'Bungee', cursive;
+            font-size: 1em;
+            border: 3px solid black;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+
+        .save-button {
+            background: var(--baseball-red);
+            color: white;
+            box-shadow: 4px 4px 0 black;
+        }
+
+        .cancel-button {
+            background: var(--baseball-blue);
+            color: white;
+            box-shadow: 4px 4px 0 black;
+            text-decoration: none;
+        }
+
+        .save-button:hover, .cancel-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 black;
+        }
+
+        .save-button:active, .cancel-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 black;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Rest of your HTML remains the same -->
     <div class="profile-container">
         <h1 class="profile-header">Edit Profile</h1>
         
@@ -50,6 +184,5 @@
             </div>
         </form>
     </div>
-    
 </body>
 </html>

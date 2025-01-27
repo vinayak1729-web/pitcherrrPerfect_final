@@ -5,79 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Baseball Chat - Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        baseball: '#C41E3A',  // Classic baseball red
-                        field: '#2E7D32'      // Baseball field green
-                    }
-                }
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+    <style>
+        .baseball-stitches {
+            background-image: linear-gradient(to right, transparent 50%, #ff1414 50%),
+                            linear-gradient(to right, transparent 50%, #ff1414 50%);
+            background-size: 20px 4px;
+            background-position: 0 0, 0 100%;
+            background-repeat: repeat-x;
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s forwards;
+        }
+
+        @keyframes slideIn {
+            from { 
+                transform: translateX(-100%);
+                opacity: 0; 
+            }
+            to { 
+                transform: translateX(0);
+                opacity: 1; 
             }
         }
-    </script>
-</head>
-<body class="bg-gray-100 dark:bg-gray-900 min-h-screen flex items-center justify-center p-4">
-    <div class="w-full max-w-md">
-        <!-- Login Card -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden">
-            <!-- Header with Baseball Design -->
-            <div class="bg-baseball p-6 text-white text-center relative">
-                <div class="absolute top-0 left-0 w-full h-full opacity-10">
-                    <!-- Baseball Stitching Pattern -->
-                    <div class="border-2 border-white rounded-full w-32 h-32 absolute -top-16 -left-16"></div>
-                    <div class="border-2 border-white rounded-full w-32 h-32 absolute -bottom-16 -right-16"></div>
-                </div>
-                <h1 class="text-3xl font-bold">⚾ Baseball Chat</h1>
-                <p class="mt-2">Welcome back to the dugout!</p>
-            </div>
 
-            <!-- Login Form - Fixed form action and method -->
-            <form class="p-6 space-y-6" id="loginForm" action="{{ url_for('login') }}" method="POST">
+        .shadow-custom {
+            box-shadow: 8px 8px 0px rgba(0,0,0,1);
+        }
+
+        .hover-shadow-custom:hover {
+            box-shadow: 4px 4px 0px rgba(0,0,0,1);
+        }
+    </style>
+</head>
+
+<body class="bg-[#E5F6FF] min-h-screen flex items-center justify-center p-4" style="font-family: 'Bungee', cursive;">
+    <div class="w-full max-w-md slide-in">
+        <div class="w-full max-w-md p-8 bg-white border-black border-4 shadow-custom baseball-stitches">
+            <h2 class="text-3xl text-center mb-8 text-[#1B3B6F]">BASEBALL CHAT</h2>
+
+            <form class="space-y-6" id="loginForm" action="{{ url_for('login') }}" method="POST">
                 {% if error %}
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <div class="bg-red-100 border-2 border-black text-red-700 px-4 py-3 rounded-lg" role="alert">
                     <span class="block sm:inline">{{ error }}</span>
                 </div>
                 {% endif %}
-                
+
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Username</label>
+                    <label class="block text-xl font-medium text-[#1B3B6F] mb-2">USERNAME</label>
                     <input type="text" name="username" required 
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-baseball focus:border-baseball dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                           class="w-full border-black border-2 p-3 rounded-lg focus:outline-none focus:shadow-[4px_4px_0px_rgba(0,0,0,1)] focus:bg-[#FFE5E5]">
                 </div>
+
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+                    <label class="block text-xl font-medium text-[#1B3B6F] mb-2">PASSWORD</label>
                     <input type="password" name="password" required 
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-baseball focus:border-baseball dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                           class="w-full border-black border-2 p-3 rounded-lg focus:outline-none focus:shadow-[4px_4px_0px_rgba(0,0,0,1)] focus:bg-[#FFE5E5]">
                 </div>
-                <div class="flex items-center justify-between">
+
+                <div class="flex items-center justify-between text-[#1B3B6F]">
                     <div class="flex items-center">
                         <input type="checkbox" id="remember" name="remember"
-                               class="h-4 w-4 text-baseball focus:ring-baseball border-gray-300 rounded">
-                        <label for="remember" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                               class="h-4 w-4 border-2 border-black rounded">
+                        <label for="remember" class="ml-2 text-sm">
                             Remember me
                         </label>
                     </div>
-                    <a href="#" class="text-sm text-baseball hover:text-red-800 dark:hover:text-red-400">
+                    <a href="#" class="text-sm text-[#ff1414] hover:text-[#d10000]">
                         Forgot password?
                     </a>
                 </div>
-                <div>
-                    <button type="submit" 
-                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-baseball hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-baseball">
-                        Sign In
-                    </button>
-                </div>
+
+                <button type="submit" 
+                        class="w-full py-4 px-6 bg-[#ff1414] border-black border-2 text-white hover:bg-[#d10000] hover-shadow-custom active:bg-[#b00000] transition-all rounded-lg transform hover:-translate-y-1">
+                    PLAY BALL! ⚾
+                </button>
             </form>
 
-            <!-- Footer -->
-            <div class="px-6 pb-6 text-center">
-                <p class="text-sm text-gray-600 dark:text-gray-400">
+            <div class="mt-6 text-center">
+                <p class="text-[#1B3B6F]">
                     Need a spot on the team?
-                    <a href="{{ url_for('signup') }}" class="font-medium text-baseball hover:text-red-800 dark:hover:text-red-400">
-                        Sign up now
+                    <a href="{{ url_for('signup') }}" class="text-[#ff1414] hover:text-[#d10000] font-bold">
+                        SIGN UP NOW
                     </a>
                 </p>
             </div>

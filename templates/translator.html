@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <h1>{{ header }}</h1>
+    <form method="post">
+        <p>{{ instructions }}</p>
+        <textarea name="text" rows="4" cols="50" placeholder="{{ textarea_placeholder }}"></textarea><br><br>
+        <label for="language">{{ language_prompt }}</label>
+        <select name="language">
+            {% for lang_code, lang_name in languages.items() %}
+                <option value="{{ lang_code }}">{{ lang_name }}</option>
+            {% endfor %}
+        </select><br><br>
+        <button type="submit">{{ button_text }}</button>
+    </form>
+    {% if translated_text %}
+    <h2>{{ translated_text_label }}</h2>
+    <p>{{ translated_text }}</p>
+    {% endif %}
+</body>
+</html>

@@ -150,5 +150,19 @@
         "password": "123",
         "friends": [],
         "profile_pic": "/static/default.png"
+    },
+    "nn": {
+        "user_id": "38a0f41c-bcd8-4315-8890-e077360f68da",
+        "email": "vishal213.mishra@gmail.com",
+        "password": "123",
+        "friends": [],
+        "profile_pic": "/static/default.png"
+    },
+    "jj": {
+        "user_id": "ba821ecf-f76d-4c60-90b7-b1a5b72f157c",
+        "email": "vishal213.mishra@gmail.com",
+        "password": "123",
+        "friends": [],
+        "profile_pic": "/static/default.png"
     }
 }
