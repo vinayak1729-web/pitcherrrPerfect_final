@@ -3,69 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ game_data.home_team }} vs {{ game_data.away_team }} Highlights </title>
+    <title>{{ game_data.home_team }} vs {{ game_data.away_team }} Highlights</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<style>
-    .video-highlight-card {
-        background: white;
-        border-radius: 8px;
-        padding: 16px;
-        margin-bottom: 16px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .video-highlight-card h3 {
-        margin-bottom: 12px;
-        color: #2b4c7e;
-    }
-    
-    .tabs {
-        display: flex;
-        gap: 16px;
-        margin-bottom: 24px;
-    }
-    
-    .tab {
-        padding: 12px 24px;
-        border: none;
-        border-radius: 6px;
-        background: #e2e8f0;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    .tab.active {
-        background: #2b4c7e;
-        color: white;
-    }
-    .play-list {
-    list-style: none;
-    padding: 0;
-}
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
 
-.play-item {
-    margin-bottom: 1.5em;
-    padding: 10px;
-    border-left: 3px solid #eee;
-}
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'bungee': ['Bungee', 'cursive'],
+                    },
+                    colors: {
+                        mlb: {
+                            red: '#ff6b6b',
+                            blue: '#4ecdc4',
+                            yellow: '#ffe66d',
+                            navy: '#1e3d59',
+                            dirt: '#8B4513'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
-.play-item strong {
-    color: #444;
-    font-size: 1.1em;
-}
+    <style>
+        body {
+            font-family: 'Bungee', cursive;
+            background: 
+                radial-gradient(circle at top right, rgba(255,107,107,0.2), transparent 70%),
+                radial-gradient(circle at bottom left, rgba(30,61,89,0.2), transparent 70%),
+                repeating-linear-gradient(45deg, #f4f1de 0px, #f4f1de 10px, #ffffff 10px, #ffffff 20px);
+        }
 
-.score {
-    color: #d32f2f;
-    font-weight: bold;
-    margin: 5px 0;
-}
+        .neo-brutal-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
 
-.time {
-    color: #666;
-    font-size: 0.9em;
-}
+        .score-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
 
+        .team-score {
+            border: 4px solid black;
+            padding: 1rem 2rem;
+            background: white;
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+            transform: rotate(-1deg);
+        }
+
+        .vs {
+            font-size: 2.5rem;
+            color: #ff6b6b;
+            transform: rotate(-5deg);
+        }
+
+        .tab {
+            border: 4px solid black;
+            background: white;
+            font-family: 'Bungee', cursive;
+           
+            transition: all 0.2s ease;
+        }
+
+        .tab:hover {
+          
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+        }
+
+        .tab.active {
+            background: #1e3d59;
+            color: white;
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+        }
+
+        .play-item {
+            border: 4px solid black;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: white;
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+            transform: rotate(-0.5deg);
+            transition: all 0.2s ease;
+        }
+
+        .play-item:hover {
+            transform: translate(-2px, -2px) rotate(0deg);
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+        }
+
+        .video-highlight-card {
+            border: 4px solid black;
+            background: white;
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+            transform: rotate(-0.5deg);
+            transition: all 0.2s ease;
+        }
+
+        .video-highlight-card:hover {
+            transform: translate(-2px, -2px) rotate(0deg);
+            box-shadow: 10px 10px 0px 0px rgba(0,0,0,0.9);
+        }
+
+        button {
+            font-family: 'Bungee', cursive;
+        }
+
+        .share-button {
+            border: 3px solid black;
+            background: #4ecdc4;
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .share-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.9);
+        }
+
+        .score {
+            color: #ff6b6b;
+            font-size: 1.5rem;
+        }
+
+        .time {
+            color: #1e3d59;
+            font-size: 0.8rem;
+        }
     </style>
     
 <body>
@@ -94,7 +165,7 @@
             <button class="tab active" data-tab="text">Text Highlights</button>
             
         </div>
-
+<br>
         <div id="text-highlights" class="highlight-content">
             <ul class="play-list">
                 {% set prev_away = 0 %}

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pitcher Perfect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<style>
+    /* Neo-brutalist styles */
+.neo-brutal {
+    background: #cbe4f5;
+    border: 4px solid #000;
+    box-shadow: 8px 8px 0 #000;
+    
+}
+
+.baseball-stitch {
+    position: relative;
+    border: 4px solid #000;
+}
+
+.baseball-stitch::before,
+.baseball-stitch::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 4px;
+    background: #ff2e2e;
+    transform: rotate(-45deg);
+}
+
+.nav-item {
+    font-family: 'Bungee', cursive;
+    padding: 0.5rem 1rem;
+    background: #ff2e2e;
+    color: white;
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0 #000;
+    transition: all 0.2s;
+}
+
+.nav-item:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #000;
+}
+
+.game-card {
+    background: white;
+    border: 4px solid #000;
+    box-shadow: 8px 8px 0 #85aafb;
+    transform: rotate(1deg);
+    transition: all 0.3s;
+}
+
+.game-card:hover {
+    transform: rotate(-1deg) scale(1.02);
+    box-shadow: 10px 10px 0 #ff2e2e;
+}
+
+/* Updated navbar with baseball theme */
+.navbar {
+    background: #85e5fb;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* Hero section */
+.hero-section {
+    background-image: url('baseball-pattern.png');
+    padding: 4rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '⚾';
+    font-size: 20rem;
+    position: absolute;
+    opacity: 0.1;
+    right: -5rem;
+    top: -5rem;
+    transform: rotate(15deg);
+}
+
+
+/* Layout fixes */
+.upcoming-games {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    margin-bottom: 300px; /* Space for news section */
+}
+
+/* Neo-brutalist components */
+.neo-brutal-button {
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0 #000;
+    font-family: 'Bungee', cursive;
+    transition: all 0.2s;
+}
+
+.neo-brutal-button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #000;
+}
+
+.neo-brutal-panel {
+    border: 4px solid #000;
+    box-shadow: 8px 8px 0 #000;
+    background: #fff;
+}
+
+.dark .neo-brutal-panel {
+    background: #1f2937;
+    border-color: #fff;
+    box-shadow: 8px 8px 0 #fff;
+}
+
+.neo-brutal-card {
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0 #000;
+    background: #fff;
+}
+
+.dark .neo-brutal-card {
+    background: #1f2937;
+    border-color: #fff;
+    box-shadow: 4px 4px 0 #fff;
+}
+
+.neo-brutal-input {
+    border: 3px solid #000;
+    padding: 0.5rem 1rem;
+    font-family: 'Permanent Marker', cursive;
+    outline: none;
+}
+
+.dark .neo-brutal-input {
+    background: #1f2937;
+    color: #fff;
+    border-color: #fff;
+}
+
+/* Language options animation */
+.language-options a {
+    position: relative;
+}
+
+.language-options a::after {
+    content: '⚾';
+    position: absolute;
+    left: -20px;
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+.language-options a:hover::after {
+    opacity: 1;
+    left: 10px;
+}
+.logo-neo {
+    mix-blend-mode: multiply;
+    transform: rotate(-2deg);
+    border: 3px solid #000;
+    padding: 8px;
+    background: white;
+    box-shadow: 4px 4px 0 #000;
+    transition: all 0.3s ease;
+}
+
+.logo-neo:hover {
+    transform: translate(-4px, -4px) rotate(0deg);
+    box-shadow: 8px 8px 0 #ff2e2e,
+                12px 12px 0 #213a8f;
+    cursor: pointer;
+}
+
+/* For dark mode */
+.dark .logo-neo {
+    background: #1f2937;
+    border-color: #fff;
+    box-shadow: 4px 4px 0 #fff;
+}
+
+.dark .logo-neo:hover {
+    box-shadow: 8px 8px 0 #ff2e2e,
+                12px 12px 0 #fff;
+}
+/* News Section Positioning */
+#news-section {
+    position: fixed;
+    bottom: 20px;
+    left: 4px;
+    width: 100%;
+    max-width: 400px;
+    z-index: 40;
+}
+/* Dark Mode Styles */
+.dark {
+    background-color: #1f2937;
+    color: #fff;
+}
+
+.dark .game-card {
+    background-color: #374151;
+    border-color: #fff;
+}
+
+.dark .nav-item {
+    background-color: #374151;
+    border-color: #fff;
+    color: #fff;
+}
+
+.dark .neo-brutal-button {
+    background-color: #374151;
+    border-color: #fff;
+    color: #fff;
+}
+
+.dark .neo-brutal-panel {
+    background-color: #1f2937;
+    border-color: #fff;
+}
+
+/* Chatbot positioning */
+#chatbot-container {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    z-index: 50;
+}
+
+/* Sidebar z-index fix */
+#sidebar {
+    z-index: 45;
+}
+
+/* Button hover states */
+.neo-brutal-button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #000;
+}
+
+.dark .neo-brutal-button:hover {
+    box-shadow: 6px 6px 0 #fff;
+}
+/* General Neo-Brutal Styles */
+body {
+    background-color: #fefefe;
+    color: #333;
+    font-family: 'Bungee', sans-serif;
+}
+
+/* Title Styling */
+.neo-brutal-title {
+    text-shadow: -2px 2px 0px #000, 2px 2px 0px #000, 2px -2px 0px #000, -2px -2px 0px #000;
+    padding: 1rem;
+    background: linear-gradient(135deg, #ff4081, #2196f3);
+    display: inline-block;
+    border: 4px solid #000;
+    border-radius: 16px;
+    transform: rotate(-1deg);
+}
+
+/* Subtitle Styling */
+.neo-brutal-subtitle {
+    background-color: #fff176;
+    border: 4px solid #000;
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    display: inline-block;
+    text-shadow: 2px 2px 0px #000;
+    margin-top: 1rem;
+}
+
+.neon-brutal-header {
+    text-align: center; /* Centers the text horizontally */
+    margin: 0 auto; /* Centers the element in its container */
+    display: inline-block; /* Ensures proper visual alignment */
+    text-shadow: 2px 2px 0px #000;
+    background: linear-gradient(90deg, #ff5722, #4caf50, #2196f3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border: 4px solid #000;
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+
+</style>
+<nav class="navbar neo-brutal">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo-neo h-20 w-50 object-contain filter-none transition-all duration-300">
+
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <a href="/" class="nav-item">
+                    <i class="fas fa-home mr-2"></i>Home
+                </a>
+                <a href="/Chat_dashboard" class="nav-item">
+                    <i class="fas fa-users mr-2"></i>Fan Link
+                </a>
+                <div class="relative group">
+                    <button class="nav-item">
+                        <i class="fas fa-baseball-ball mr-2"></i>Your Team
+                        <i class="fas fa-chevron-down ml-2"></i>
+                    </button>
+                    <div class="absolute hidden group-hover:block w-48 bg-white border-4 border-black shadow-brutal">
+                        <a href="/my_team" class="block px-4 py-2 hover:bg-red-100">My Team</a>
+                        <a href="/team_players" class="block px-4 py-2 hover:bg-red-100">Players</a>
+                        <a href="/team_compare" class="block px-4 py-2 hover:bg-red-100">Team Compare</a>
+                    </div>
+                </div>
+                <a href="/profile" class="nav-item">
+                    <i class="fas fa-user mr-2"></i>Profile
+                </a>
+                <button id="darkModeToggle" class="nav-item">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav><br>
+<!-- Left Sidebar -->
+<div class="fixed left-0 top-5 z-40">
+    <div class="neo-brutal-button bg-[#ff2e2e] p-4 rounded-r-lg transform transition-transform hover:translate-x-2">
+        <button id="sidebar-toggle" class="text-white text-2xl font-bungee">☰</button>
+    </div>
+    
+    <div id="sidebar" class="hidden neo-brutal-panel bg-white dark:bg-gray-800 w-64 h-screen p-4">
+        <div class="mb-6">
+            <h3 class="text-xl font-bungee mb-4 text-[#213a8f] dark:text-white">Language</h3>
+            <div class="language-options space-y-2">
+                {% for lang, name in [('en', 'English'), ('ja', 'Japanese'), ('es', 'Spanish'), 
+                                    ('de', 'German'), ('ko', 'Korean'), ('fr', 'French'), ('hi', 'Hindi')] %}
+                <a href="?lang={{ lang }}" 
+                   class="neo-brutal-link block px-4 py-2 font-permanent-marker hover:transform hover:-translate-y-1 transition-all">
+                    {{ name }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<h1 class="neon-brutal-header text-4xl font-bungee text-[#213a8f] underline" style="text-align: center;">
+    Upcoming Matches
+</h1>
+
+</div>
+
+<div class="upcoming-games">
+    {% for game in upcoming_games %}
+    <div class="game-card p-6">
+        <div class="flex justify-between items-center mb-4">
+            <div class="team-info">
+                <img src="{{ game.homeTeamLogo }}" class="w-16 h-16 mb-2">
+                <div class="font-bungee text-xl">{{ game.homeTeam }}</div>
+            </div>
+            <div class="text-3xl font-permanent-marker text-red-600">VS</div>
+            <div class="team-info text-right">
+                <img src="{{ game.awayTeamLogo }}" class="w-16 h-16 mb-2">
+                <div class="font-bungee text-xl">{{ game.awayTeam }}</div>
+            </div>
+        </div>
+        <div class="venue-info mt-4 font-permanent-marker">
+            <i class="fas fa-map-marker-alt text-red-600 mr-2"></i>
+            {{ game.venue }}
+        </div>
+        <div class="game-time mt-2 font-permanent-marker">
+            <i class="fas fa-clock text-blue-600 mr-2"></i>
+            {{ game.gameDate|replace("T", " ")|replace("Z", "") }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div id="news-toggle" class="fixed bottom-5 left-5 z-50">
+    <button class="neo-brutal-button bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition">
+        <i class="fas fa-newspaper text-2xl"></i>
+    </button>
+</div>
+
+<!-- News Section -->
+<div id="news-section" class="fixed bottom-5 left-5 z-40 hidden bg-white border-4 border-black rounded-lg shadow-brutal w-80 max-h-[70vh] overflow-y-auto">
+    <div class="p-4">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bungee text-[#213a8f]">Latest News</h2>
+            <button id="close-news" class="text-red-500 text-2xl font-bold hover:text-red-700 transition">✖</button>
+        </div>
+        <div>
+            {% for article in news %}
+            <a href="{{ article.link }}" target="_blank" class="block p-3 mb-3 rounded-lg hover:bg-gray-100">
+                <h3 class="text-lg font-permanent-marker text-black">{{ article.title }}</h3>
+                <span class="text-sm text-blue-500">Read more →</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% if latest_game %}
+<div class="latest-game-card p-6 mb-8">
+    <h2 class="text-2xl font-bungee mb-4">Latest Game</h2>
+    <div class="flex justify-between items-center">
+        <div class="team-info">
+            <img src="{{ latest_game.home_team_logo }}" class="w-16 h-16 mb-2">
+            <div class="font-bungee text-xl">{{ latest_game.home_team }}</div>
+            <div class="score text-2xl">{{ latest_game.home_score }}</div>
+        </div>
+        <div class="text-3xl font-permanent-marker text-red-600">VS</div>
+        <div class="team-info text-right">
+            <img src="{{ latest_game.away_team_logo }}" class="w-16 h-16 mb-2">
+            <div class="font-bungee text-xl">{{ latest_game.away_team }}</div>
+            <div class="score text-2xl">{{ latest_game.away_score }}</div>
+        </div>
+    </div>
+    <div class="venue-info mt-4 font-permanent-marker">
+        <i class="fas fa-map-marker-alt text-red-600 mr-2"></i>
+        {{ latest_game.venue }}
+    </div>
+    <div class="game-time mt-2 font-permanent-marker">
+        <i class="fas fa-clock text-blue-600 mr-2"></i>
+        {{ latest_game.game_date|replace("T", " ")|replace("Z", "") }}
+    </div>
+    <a href="{{ latest_game.highlights_url }}" class="block mt-4 text-blue-600 hover:text-blue-800">
+        View Highlights →
+    </a>
+</div>
+{% endif %}
+
+<!-- Chatbot -->
+<div class="fixed bottom-4 right-4 z-50">
+    <button id="chatbot-trigger" class="neo-brutal-button w-14 h-14 bg-[#ff2e2e] dark:bg-red-500 rounded-full">
+        <span class="text-2xl">⚾</span>
+    </button>
+    <div id="chatbot-container" class="hidden absolute bottom-16 right-0 w-96 neo-brutal-panel">
+        <div class="p-4 bg-[#ff2e2e] dark:bg-red-500 rounded-t-lg flex justify-between items-center">
+            <h5 class="font-bungee text-white">Pitcher Perfect Chatbot ⚾</h5>
+            <button id="close-chatbot" class="neo-brutal-button text-white">✖</button>
+        </div>
+        <div id="chatbot-messages" class="h-96 p-4 overflow-y-auto bg-white dark:bg-gray-800"></div>
+        <div class="p-4 border-t-4 border-black flex">
+            <input type="text" id="chatbot-input" class="neo-brutal-input flex-1" placeholder="Type your message..." />
+            <button id="send-message" class="neo-brutal-button ml-2 bg-[#ff2e2e] text-white">Send</button>
+        </div>
+    </div>
+</div>
+
+<script>
+      document.getElementById('news-toggle').addEventListener('click', () => {
+        document.getElementById('news-section').classList.toggle('hidden');
+    });
+document.addEventListener('DOMContentLoaded', function() {
+    // Dark Mode Toggle
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const html = document.documentElement;
+    
+    darkModeToggle.addEventListener('click', () => {
+        html.classList.toggle('dark');
+        localStorage.setItem('darkMode', html.classList.contains('dark'));
+    });
+
+    // Sidebar Toggle
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebar = document.getElementById('sidebar');
+    
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('hidden');
+    });
+
+    // News Section Toggle
+    const closeNews = document.getElementById('close-news');
+    const newsSection = document.getElementById('news-section');
+    
+    closeNews.addEventListener('click', () => {
+        newsSection.classList.add('hidden');
+    });
+
+    // Chatbot Toggle
+    const chatbotTrigger = document.getElementById('chatbot-trigger');
+    const chatbotContainer = document.getElementById('chatbot-container');
+    const closeChatbot = document.getElementById('close-chatbot');
+    
+    chatbotTrigger.addEventListener('click', () => {
+        chatbotContainer.classList.toggle('hidden');
+    });
+    
+    closeChatbot.addEventListener('click', () => {
+        chatbotContainer.classList.add('hidden');
+    });
+});
+
+
+</script>
+</html>

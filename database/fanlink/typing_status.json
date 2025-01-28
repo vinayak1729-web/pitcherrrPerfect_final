@@ -1,18 +1,12 @@
 {
-    "Vinayak121": {
-        "Vishal216": false
+    "Vinayak9271": {
+        "NANO": false,
+        "jj": false
     },
-    "Vishal216": {
-        "Vinayak121": false,
-        "Nikhil12": false,
-        "surya": true,
-        "VinayakShinde": false
+    "NANO": {
+        "Vinayak9271": false
     },
-    "Nikhil12": {
-        "Vishal216": false,
-        "Vinayak121": false
-    },
-    "VinayakShinde": {
-        "Vishal216": false
+    "jj": {
+        "Vinayak9271": false
     }
 }

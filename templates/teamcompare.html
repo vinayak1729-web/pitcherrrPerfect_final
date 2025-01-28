@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Team Comparison</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+            /* Font Import */
+            @import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+
+            :root {
+                --mlb-blue: #002D72;
+                --mlb-red: #E31837;
+                --neo-black: #000000;
+                --neo-white: #ffffff;
+                --neo-shadow: 8px 8px 0px rgba(0, 0, 0, 0.9);
+            }
+
+            body {
+                font-family: 'Bungee', cursive;
+                background: repeating-linear-gradient(
+                    45deg,
+                    #1a1a1a,
+                    #1a1a1a 10px,
+                    #222 10px,
+                    #222 20px
+                );
+                color: var(--neo-white);
+                margin: 0;
+                padding: 40px;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                background: #2a2a2a;
+                padding: 40px;
+                border: 4px solid var(--neo-black);
+                box-shadow: var(--neo-shadow);
+            }
+
+            .header {
+                background: linear-gradient(90deg, var(--mlb-blue), var(--mlb-red));
+                padding: 20px;
+                margin: -40px -40px 40px -40px;
+                border-bottom: 4px solid var(--neo-black);
+            }
+
+            .header h1 {
+                font-size: 3rem;
+                text-transform: uppercase;
+                text-shadow: 4px 4px 0px var(--neo-black);
+                letter-spacing: 2px;
+                margin: 0;
+                text-align: center;
+            }
+
+            .team-select-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                margin-bottom: 40px;
+            }
+
+            .team-select {
+                background: var(--neo-white);
+                color: var(--neo-black);
+                padding: 30px;
+                border: 4px solid var(--neo-black);
+                box-shadow: var(--neo-shadow);
+                transform: rotate(-1deg);
+            }
+
+            .team-select:nth-child(2) {
+                transform: rotate(1deg);
+            }
+
+            .team-select h2 {
+                color: var(--neo-black);
+                text-transform: uppercase;
+                margin-top: 0;
+                text-align: center;
+                font-size: 1.8rem;
+            }
+
+            select {
+                width: 100%;
+                padding: 15px;
+                border: 4px solid var(--neo-black);
+                background: var(--neo-white);
+                font-family: 'Bungee', cursive;
+                font-size: 1rem;
+                appearance: none;
+                cursor: pointer;
+            }
+
+            .team-logo {
+                width: 150px;
+                height: 150px;
+                margin: 20px auto;
+                display: block;
+                filter: drop-shadow(4px 4px 0px var(--neo-black));
+            }
+
+            .compare-btn {
+                display: block;
+                margin: 40px auto;
+                padding: 20px 40px;
+                background: var(--mlb-red);
+                color: var(--neo-white);
+                border: 4px solid var(--neo-black);
+                box-shadow: var(--neo-shadow);
+                font-family: 'Bungee', cursive;
+                font-size: 1.5rem;
+                cursor: pointer;
+                transform: rotate(-2deg);
+                transition: transform 0.2s, box-shadow 0.2s;
+            }
+
+            .compare-btn:hover {
+                transform: rotate(-2deg) translate(4px, 4px);
+                box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.9);
+            }
+
+            .comparison-container {
+                background: var(--neo-white);
+                padding: 40px;
+                border: 4px solid var(--neo-black);
+                box-shadow: var(--neo-shadow);
+                margin-top: 60px;
+                position: relative;
+                height: 500px;
+                width: 85%;
+                max-width: 1100px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .comparison-container::before {
+                content: '';
+                position: absolute;
+                top: -4px;
+                left: -4px;
+                right: -4px;
+                bottom: -4px;
+                border: 4px solid var(--neo-black);
+                z-index: -1;
+            }
+
+            #comparisonChart {
+                width: 90% ;
+                height: 90%;
+                margin: 0 auto;
+                background: var(--neo-white);
+            }
+
+
+
+            .visualization-buttons {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+                margin: 20px 0;
+                flex-wrap: wrap;
+            }
+            
+            .viz-btn {
+                padding: 15px 25px;
+                background: var(--mlb-blue);
+                color: var(--neo-white);
+                border: 4px solid var(--neo-black);
+                box-shadow: var(--neo-shadow);
+                font-family: 'Bungee', cursive;
+                font-size: 1rem;
+                cursor: pointer;
+                transform: rotate(-1deg);
+                transition: all 0.2s;
+            }
+            
+            .viz-btn:hover {
+                transform: rotate(1deg) translate(2px, 2px);
+                box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.9);
+            }
+            
+            .viz-btn.active {
+                background: var(--mlb-red);
+                transform: translate(4px, 4px);
+                box-shadow: none;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Team Comparison</h1>
+        </div>
+
+        <div class="team-select-container">
+            <div class="team-select">
+                <h2>Home Team</h2>
+                <img id="homeLogo" class="team-logo" src="" alt="Home Team Logo">
+                <select id="homeTeam"></select>
+            </div>
+
+            <div class="team-select">
+                <h2>Away Team</h2>
+                <img id="awayLogo" class="team-logo" src="" alt="Away Team Logo">
+                <select id="awayTeam"></select>
+            </div>
+        </div>
+
+        <button class="compare-btn" onclick="compareTeams()">Compare Teams</button>
+
+        <div class="visualization-buttons" id="vizButtons" style="display: none;">
+            <button class="viz-btn active" onclick="switchVisualization('bar')">Bar Chart</button>
+            <button class="viz-btn" onclick="switchVisualization('hexagon')">Hexagon Battle</button>
+            <button class="viz-btn" onclick="switchVisualization('diamond')">Diamond Meter</button>
+            <button class="viz-btn" onclick="switchVisualization('duel')">Pitcher Duel</button>
+            <button class="viz-btn" onclick="switchVisualization('scoreboard')">Scoreboard</button>
+        </div>
+
+        <div class="comparison-container">
+            <canvas id="comparisonChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const teams = {
+            "American League": {
+                "East": [
+                    {"name": "New York Yankees", "id": 147},
+                    {"name": "Tampa Bay Rays", "id": 139},
+                    {"name": "Boston Red Sox", "id": 111},
+                    {"name": "Toronto Blue Jays", "id": 141},
+                    {"name": "Baltimore Orioles", "id": 110}
+                ],
+                "Central": [
+                    {"name": "Cleveland Guardians", "id": 114},
+                    {"name": "Minnesota Twins", "id": 142},
+                    {"name": "Chicago White Sox", "id": 145},
+                    {"name": "Kansas City Royals", "id": 118},
+                    {"name": "Detroit Tigers", "id": 116}
+                ],
+                "West": [
+                    {"name": "Houston Astros", "id": 117},
+                    {"name": "Texas Rangers", "id": 140},
+                    {"name": "Oakland Athletics", "id": 133},
+                    {"name": "Seattle Mariners", "id": 136},
+                    {"name": "Los Angeles Angels", "id": 108}
+                ]
+            },
+            "National League": {
+                "East": [
+                    {"name": "New York Mets", "id": 121},
+                    {"name": "Washington Nationals", "id": 120},
+                    {"name": "Atlanta Braves", "id": 144},
+                    {"name": "Miami Marlins", "id": 146},
+                    {"name": "Philadelphia Phillies", "id": 143}
+                ],
+                "Central": [
+                    {"name": "St. Louis Cardinals", "id": 138},
+                    {"name": "Cincinnati Reds", "id": 113},
+                    {"name": "Pittsburgh Pirates", "id": 134},
+                    {"name": "Chicago Cubs", "id": 112},
+                    {"name": "Milwaukee Brewers", "id": 158}
+                ],
+                "West": [
+                    {"name": "San Francisco Giants", "id": 137},
+                    {"name": "San Diego Padres", "id": 135},
+                    {"name": "Colorado Rockies", "id": 115},
+                    {"name": "Arizona Diamondbacks", "id": 109},
+                    {"name": "Los Angeles Dodgers", "id": 119}
+                ]
+            }
+        };
+
+        let chart = null;
+
+        //visualizationfunctions
+        // Main visualization switcher function
+        function updateVisualization(data) {
+            const container = document.querySelector('.comparison-container');
+            container.style.height = '700px';
+            
+            switch(currentViz) {
+                case 'bar':
+                    updateBarChart(data);
+                    break;
+                case 'hexagon':
+                    updateHexagonBattle(data);
+                    break;
+                case 'diamond':
+                    updateDiamondMeter(data);
+                    break;
+                case 'duel':
+                    updatePitcherDuel(data);
+                    break;
+                case 'scoreboard':
+                    updateScoreboard(data);
+                    break;
+            }
+        }
+
+        // 1. Enhanced Bar Chart
+        function updateBarChart(data) {
+            if (chart) chart.destroy();
+            
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Batting', 'Pitching'],
+                    datasets: [{
+                        label: 'Home Team',
+                        data: [data.home.batting.value, data.home.pitching.value],
+                        backgroundColor: 'rgba(0, 45, 114, 0.8)',
+                        borderColor: '#000000',
+                        borderWidth: 4
+                    }, {
+                        label: 'Away Team',
+                        data: [data.away.batting.value, data.away.pitching.value],
+                        backgroundColor: 'rgba(227, 24, 55, 0.8)',
+                        borderColor: '#000000',
+                        borderWidth: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: { family: 'Bungee', size: 16 },
+                                color: '#000000'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { color: '#000000', lineWidth: 2 }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutBounce'
+                    }
+                }
+            });
+        }
+
+        // 2. Hexagon Battle
+        function updateHexagonBattle(data) {
+            if (chart) chart.destroy();
+            
+            const canvas = document.getElementById('comparisonChart');
+            const ctx = canvas.getContext('2d');
+            
+            function drawHexagon(x, y, size, stats, teamColor) {
+                ctx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i * Math.PI) / 3;
+                    const statValue = stats[i % 2] / 100 * size;
+                    const px = x + Math.cos(angle) * statValue;
+                    const py = y + Math.sin(angle) * statValue;
+                    if (i === 0) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                }
+                ctx.closePath();
+                ctx.fillStyle = teamColor;
+                ctx.fill();
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+            }
+            
+            gsap.to({}, {
+                duration: 1.5,
+                onUpdate: () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawHexagon(canvas.width/3, canvas.height/2, 150,
+                        [data.home.batting.value, data.home.pitching.value],
+                        'rgba(0, 45, 114, 0.8)');
+                    drawHexagon(2*canvas.width/3, canvas.height/2, 150,
+                        [data.away.batting.value, data.away.pitching.value],
+                        'rgba(227, 24, 55, 0.8)');
+                }
+            });
+        }
+
+        // 3. Diamond Meter
+        function updateDiamondMeter(data) {
+            if (chart) chart.destroy();
+            
+            const canvas = document.getElementById('comparisonChart');
+            const ctx = canvas.getContext('2d');
+            
+            function drawDiamond(x, y, size, battingValue, pitchingValue, color) {
+                const points = [
+                    [x, y - size * (battingValue/100)],  // Top
+                    [x + size * (pitchingValue/100), y], // Right
+                    [x, y + size * (battingValue/100)],  // Bottom
+                    [x - size * (pitchingValue/100), y]  // Left
+                ];
+                
+                ctx.beginPath();
+                ctx.moveTo(points[0][0], points[0][1]);
+                for (let i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i][0], points[i][1]);
+                }
+                ctx.closePath();
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+            }
+            
+            gsap.to({}, {
+                duration: 1.5,
+                onUpdate: () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawDiamond(canvas.width/3, canvas.height/2, 100,
+                        data.home.batting.value, data.home.pitching.value,
+                        'rgba(0, 45, 114, 0.8)');
+                    drawDiamond(2*canvas.width/3, canvas.height/2, 100,
+                        data.away.batting.value, data.away.pitching.value,
+                        'rgba(227, 24, 55, 0.8)');
+                }
+            });
+        }
+
+        // 4. Pitcher Duel
+        function updatePitcherDuel(data) {
+            if (chart) chart.destroy();
+            
+            const canvas = document.getElementById('comparisonChart');
+            const ctx = canvas.getContext('2d');
+            
+            function drawPitcher(x, y, size, stats, isHome) {
+                // Draw mound
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fillStyle = '#8B4513';
+                ctx.fill();
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+                
+                // Draw power meter
+                const meterHeight = size * 2;
+                const meterWidth = 30;
+                ctx.fillStyle = isHome ? 'rgba(0, 45, 114, 0.8)' : 'rgba(227, 24, 55, 0.8)';
+                ctx.fillRect(x - meterWidth/2,
+                    y - meterHeight/2,
+                    meterWidth,
+                    meterHeight * (stats.pitching.value/100));
+            }
+            
+            gsap.to({}, {
+                duration: 2,
+                onUpdate: () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawPitcher(canvas.width/3, canvas.height/2, 50, data.home, true);
+                    drawPitcher(2*canvas.width/3, canvas.height/2, 50, data.away, false);
+                }
+            });
+        }
+
+        // 5. Scoreboard
+        function updateScoreboard(data) {
+            if (chart) chart.destroy();
+            
+            const canvas = document.getElementById('comparisonChart');
+            const ctx = canvas.getContext('2d');
+            
+            function drawScoreboard() {
+                // Background
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // LED display style text
+                ctx.font = '40px Bungee';
+                ctx.textAlign = 'center';
+                
+                // Home Team
+                ctx.fillStyle = 'rgba(0, 45, 114, 1)';
+                ctx.fillText('HOME', canvas.width/4, 100);
+                ctx.fillStyle = '#fff';
+                ctx.fillText(`BAT: ${Math.round(data.home.batting.value)}`, canvas.width/4, 200);
+                ctx.fillText(`PIT: ${Math.round(data.home.pitching.value)}`, canvas.width/4, 300);
+                
+                // Away Team
+                ctx.fillStyle = 'rgba(227, 24, 55, 1)';
+                ctx.fillText('AWAY', 3*canvas.width/4, 100);
+                ctx.fillStyle = '#fff';
+                ctx.fillText(`BAT: ${Math.round(data.away.batting.value)}`, 3*canvas.width/4, 200);
+                ctx.fillText(`PIT: ${Math.round(data.away.pitching.value)}`, 3*canvas.width/4, 300);
+            }
+            
+            gsap.to({}, {
+                duration: 0.5,
+                onUpdate: drawScoreboard,
+                ease: "steps(1)",
+                repeat: -1,
+                yoyo: true
+            });
+        }
+
+
+        let currentViz = 'bar';
+        let lastData = null;
+
+        async function compareTeams() {
+            const homeTeam = document.getElementById('homeTeam').value;
+            const awayTeam = document.getElementById('awayTeam').value;
+            
+            const formData = new FormData();
+            formData.append('home_team', homeTeam);
+            formData.append('away_team', awayTeam);
+
+            try {
+                const response = await fetch('/compare', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                });
+                
+                const data = await response.json();
+                lastData = data;
+                
+                // Show visualization buttons after comparison
+                document.getElementById('vizButtons').style.display = 'flex';
+                
+                // Update the current visualization
+                updateVisualization(data);
+            } catch (error) {
+                console.error('Error comparing teams:', error);
+            }
+        }
+
+        function switchVisualization(type) {
+            currentViz = type;
+            document.querySelectorAll('.viz-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.viz-btn[onclick*="${type}"]`).classList.add('active');
+            if (lastData) {
+                updateVisualization(lastData);
+            }
+        }
+        
+
+        function populateTeamSelects() {
+            const homeSelect = document.getElementById('homeTeam');
+            const awaySelect = document.getElementById('awayTeam');
+
+            for (const league in teams) {
+                for (const division in teams[league]) {
+                    const optgroup = document.createElement('optgroup');
+                    optgroup.label = `${league} ${division}`;
+
+                    teams[league][division].forEach(team => {
+                        const option = document.createElement('option');
+                        option.value = team.id;
+                        option.textContent = team.name;
+                        optgroup.appendChild(option.cloneNode(true));
+                    });
+
+                    homeSelect.appendChild(optgroup.cloneNode(true));
+                    awaySelect.appendChild(optgroup);
+                }
+            }
+        }
+
+        function setDefaultTeam() {
+            const yankeeId = '147';
+            document.getElementById('homeTeam').value = yankeeId;
+            document.getElementById('awayTeam').value = '139'; // Setting Rays as default away team
+            updateTeamLogo('homeTeam');
+            updateTeamLogo('awayTeam');
+        }
+
+        function updateTeamLogo(selectId) {
+            const select = document.getElementById(selectId);
+            const logoId = selectId === 'homeTeam' ? 'homeLogo' : 'awayLogo';
+            const teamId = select.value;
+            const logoUrl = `https://www.mlbstatic.com/team-logos/${teamId}.svg`;
+            document.getElementById(logoId).src = logoUrl;
+        }
+
+        document.getElementById('homeTeam').addEventListener('change', () => updateTeamLogo('homeTeam'));
+        document.getElementById('awayTeam').addEventListener('change', () => updateTeamLogo('awayTeam'));
+
+        // Initialize the team selects when the page loads
+        populateTeamSelects();
+        setDefaultTeam();
+    </script>
+</body>
+</html>

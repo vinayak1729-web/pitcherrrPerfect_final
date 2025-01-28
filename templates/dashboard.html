@@ -2,33 +2,138 @@
 <html>
 
 <head>
-    <title>Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Baseball Chat Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Permanent+Marker&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    'bungee': ['Bungee', 'cursive'],
+                },
+                colors: {
+                    baseball: {
+                        red: '#ff6b6b',
+                        blue: '#4ecdc4',
+                        yellow: '#ffe66d',
+                        green: '#2ecc71',
+                        cream: '#f4f1de'
+                    }
+                },
+                boxShadow: {
+                    'brutal': '8px 8px 0px 0px rgba(0,0,0,0.9)',
+                    'brutal-hover': '12px 12px 0px 0px rgba(0,0,0,0.9)',
+                }
+            }
+        }
+    }
+</script>
+
+<style>
+    body {
+        background: 
+            radial-gradient(circle at 100% 0%, rgba(255,107,107,0.2) 0%, transparent 50%),
+            radial-gradient(circle at 0% 100%, rgba(78,205,196,0.2) 0%, transparent 50%),
+            repeating-linear-gradient(45deg, 
+                #f4f1de 0px, 
+                #f4f1de 10px, 
+                #ffffff 10px, 
+                #ffffff 20px
+            ),
+            url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0C22.4 0 0 22.4 0 50s22.4 50 50 50 50-22.4 50-50S77.6 0 50 0zm0 92C26.8 92 8 73.2 8 50S26.8 8 50 8s42 18.8 42 42-18.8 42-42 42z' fill='%23000000' fill-opacity='0.03'/%3E%3C/svg%3E");
+        background-attachment: fixed;
+    }
+
+    
+
+    .neo-brutal {
+        border: 4px solid black;
+        box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transform: rotate(-1deg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .neo-brutal::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0V0zm2 2v16h16V2H2z' fill='%23000000' fill-opacity='0.05'/%3E%3C/svg%3E");
+        opacity: 0.1;
+        pointer-events: none;
+    }
+
+    .neo-brutal:hover {
+        transform: translate(-4px, -4px) rotate(0deg);
+        box-shadow: 12px 12px 0px 0px rgba(0,0,0,0.9);
+    }
+
+    .input-brutal {
+        border: 4px solid black;
+        background: white;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transform-origin: center;
+    }
+
+    .input-brutal:focus {
+        transform: translate(-4px, -4px) scale(1.01);
+        box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+        outline: none;
+    }
+
+    .button-brutal {
+        border: 4px solid black;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transform: rotate(1deg);
+        position: relative;
+        z-index: 1;
+    }
+
+    .button-brutal:hover {
+        transform: translate(-2px, -2px) rotate(0deg) scale(1.05);
+        box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+    }
+
+    .button-brutal:active {
+        transform: translate(0px, 0px) rotate(0deg) scale(0.95);
+        box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.9);
+    }
+</style>
 </head>
 
-<body class="bg-gray-100">
-    <div class="container mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<body class="bg-white min-h-screen font-bungee">
+    <div class="container mx-auto p-8">
+        <h1 class="text-4xl font-bungee text-black text-center mb-12 transform -rotate-2">⚾ BASEBALL CHAT HQ ⚾</h1>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-            <div class="container mx-auto px-4 py-8">
+
+            <!-- Left Column -->
+            <div class="space-y-8">
                 <!-- Search Section -->
-                <div class="mb-8">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-900">Search Users & Groups</h2>
+                <div class="bg-white border-4 border-black p-6 shadow-brutal transform hover:-rotate-1 transition-transform">
+                    <h2 class="text-2xl font-bungee text-baseball-red mb-4">SCOUT PLAYERS </h2>
                     <div class="relative">
                         <input type="text" id="searchInput"
-                            class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                            placeholder="Search for users or groups...">
-                        <div id="searchResults"
-                            class="absolute z-10 w-full mt-2 bg-white rounded-lg shadow-xl max-h-96 overflow-y-auto">
-                        </div>
+                            class="w-full px-4 py-3 border-4 border-black font-bungee text-sm placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-baseball-blue"
+                            placeholder="Search dugout...">
+                        <div id="searchResults" class="mt-4 border-4 border-black"></div>
                     </div>
                 </div>
 
                 <!-- Friend Requests Section -->
-                <div class="mb-8">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-900">Friend Requests</h2>
-                    <div id="friendRequests" class="grid gap-4">
+                <div
+                    class="bg-baseball-red border-4 border-black p-6 shadow-brutal transform hover:rotate-1 transition-transform">
+                    <h2 class="text-2xl font-bungee text-white mb-4">PENDING LINEUP</h2>
+                    <div id="friendRequests" class="space-y-4">
                         {% for request in pending_requests %}
                         <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow">
                             <span class="font-medium">{{ request }}</span>
@@ -44,9 +149,10 @@
                 </div>
 
                 <!-- Friends List Section -->
-                <div>
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-900">My Friends</h2>
-                    <div id="friendsList" class="grid gap-4">
+                <div
+                    class="bg-baseball-blue border-4 border-black p-6 shadow-brutal transform hover:-rotate-1 transition-transform">
+                    <h2 class="text-2xl font-bungee text-white mb-4">MY TEAMMATE</h2>
+                    <div id="friendsList" class="space-y-4">
                         {% for friend in friends %}
                         <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow">
                             <div>
@@ -62,65 +168,73 @@
                 </div>
             </div>
 
-            <!-- Create Group Chat -->
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-bold mb-4">Create Group Chat</h2>
-                <div class="mb-4">
-                    <input type="text" id="groupName"
-                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        placeholder="Group Name">
-                </div>
-                <div class="mb-4">
-                    <textarea id="groupDescription"
-                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        placeholder="Group Description"></textarea>
-                </div>
-                <button onclick="createGroup()" class="bg-indigo-500 text-white px-4 py-1 rounded hover:bg-indigo-600">
-                    Create Group
-                </button>
-            </div>
 
-            <!-- Available Groups -->
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-bold mb-4">Available Groups</h2>
-                <div class="space-y-2">
-                    {% for group in available_groups %}
-                    <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
-                        <div>
-                            <span class="font-medium">{{ group.name }}</span>
-                            <p class="text-sm text-gray-500">{{ group.description }}</p>
-                        </div>
-                        <button onclick="joinGroup('{{ group.id }}')"
-                            class="bg-indigo-500 text-white px-4 py-1 rounded hover:bg-indigo-600">
-                            Join
-                        </button>
+            <!-- Right Column -->
+            <div class="space-y-8">
+                <!-- Create Group Chat -->
+                <div
+                    class="bg-baseball-green border-4 border-black p-6 shadow-brutal transform hover:rotate-1 transition-transform">
+                    <h2 class="text-2xl font-bungee text-white mb-4">CREATE LEAGUE</h2>
+                    <div class="mb-4">
+                        <input type="text" id="groupName"
+                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            placeholder="   Group Name">
                     </div>
-                    {% endfor %}
+                    <div class="mb-4">
+                        <textarea id="groupDescription"
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            placeholder="   Group Description"></textarea>
+                    </div>
+                    <button onclick="createGroup()"
+                        class="bg-indigo-500 text-white px-4 py-1 rounded hover:bg-indigo-600">
+                        Create Group
+                    </button>
                 </div>
-            </div>
 
-            <!-- My Groups -->
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-bold mb-4">My Groups</h2>
-                <div class="space-y-2">
-                    {% for group in my_groups %}
-                    <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
-                        <div>
-                            <span class="font-medium">{{ group.name }}</span>
-                            <p class="text-sm text-gray-500">{{ group.description }}</p>
-                        </div>
-                        <div class="space-x-2">
-                            <a href="/group_chat/{{ group.id }}"
-                                class="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600">
-                                Chat
-                            </a>
-                            <button onclick="leaveGroup('{{ group.id }}')"
-                                class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600">
-                                Leave
+                <!-- Available Groups -->
+                <div
+                    class="neo-brutal bg-purple-400 border-4 border-black p-6 shadow-brutal transform hover:-rotate-1 transition-transform">
+                    <h2 class="text-2xl font-bungee text-white mb-6">OPEN LEAGUES</h2>
+                    <div class="space-y-2">
+                        {% for group in available_groups %}
+                        <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                            <div>
+                                <span class="font-medium">{{ group.name }}</span>
+                                <p class="text-sm text-gray-500">{{ group.description }}</p>
+                            </div>
+                            <button onclick="joinGroup('{{ group.id }}')"
+                                class="bg-indigo-500 text-white px-4 py-1 rounded hover:bg-indigo-600">
+                                Join
                             </button>
                         </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
+                </div>
+
+                <!-- My Groups -->
+                <div
+                    class="bg-white border-4 border-black p-6 shadow-brutal transform hover:rotate-1 transition-transform">
+                    <h2 class="text-2xl font-bungee text-baseball-blue mb-4">MY LEAGUES</h2>
+                    <div class="space-y-2">
+                        {% for group in my_groups %}
+                        <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                            <div>
+                                <span class="font-medium">{{ group.name }}</span>
+                                <p class="text-sm text-gray-500">{{ group.description }}</p>
+                            </div>
+                            <div class="space-x-2">
+                                <a href="/group_chat/{{ group.id }}"
+                                    class="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600">
+                                    Chat
+                                </a>
+                                <button onclick="leaveGroup('{{ group.id }}')"
+                                    class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600">
+                                    Leave
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -289,7 +403,7 @@
                     });
             };
         });
-        
+
         async function createGroup() {
             const groupName = document.getElementById('groupName').value;
             const groupDescription = document.getElementById('groupDescription').value;

@@ -1,8 +1,8 @@
 {
-    "user_id": "-1224955646318978921",
+    "user_id": "-6502940114445056616",
     "username": "Vinayak9271",
     "email": "",
-    "submission_date": "2025-01-24 16:14:00",
+    "submission_date": "2025-01-28 10:45:11",
     "questions": [
         {
             "id": "fan_duration",
@@ -13,11 +13,11 @@
             "id": "favorite_teams",
             "question": "Name 5 teams you like",
             "answer": [
-                "r",
-                "r",
-                "r",
-                "r",
-                "r"
+                "New York Yankees",
+                "Tampa Bay Rays",
+                "Boston Red Sox",
+                "Toronto Blue Jays",
+                "Baltimore Orioles"
             ]
         },
         {
@@ -34,17 +34,19 @@
         {
             "id": "selected_team",
             "question": "Which team do you want to select?",
-            "answer": "r"
+            "answer": [
+                "New York Yankees"
+            ]
         },
         {
             "id": "favorite_match",
             "question": "Which match did you like the most?",
-            "answer": "a vs b"
+            "answer": "x vs y"
         },
         {
             "id": "notifications",
             "question": "Select notification frequency",
-            "answer": "daily"
+            "answer": "weekly"
         }
     ]
 }

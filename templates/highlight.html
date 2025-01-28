@@ -5,86 +5,172 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MLB Match Highlights</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'bungee': ['Bungee', 'cursive'],
+                    },
+                    colors: {
+                        mlb: {
+                            red: '#ff6b6b',
+                            blue: '#4ecdc4',
+                            yellow: '#ffe66d',
+                            navy: '#1e3d59',
+                            dirt: '#8B4513'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Bungee', cursive;
+            background: 
+                radial-gradient(circle at top right, rgba(77, 193, 252, 0.2), transparent 60%),
+                radial-gradient(circle at bottom left, rgba(74, 171, 255, 0.2), transparent 60%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0C13.4 0 0 13.4 0 30s13.4 30 30 30 30-13.4 30-30S46.6 0 30 0zm0 55.2C16.1 55.2 4.8 43.9 4.8 30S16.1 4.8 30 4.8 55.2 16.1 55.2 30 43.9 55.2 30 55.2z' fill='%23000000' fill-opacity='0.03'/%3E%3C/svg%3E");
+        }
+
+        .neo-brutal {
+            border: 4px solid black;
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .neo-brutal:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 0.9);
+        }
+
+        .match-card {
+            border: 4px solid black;
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+            transition: all 0.2s ease;
+       
+        }
+
+        .match-card:hover {
+            transform: translate(-2px, -2px) rotate(0deg);
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+        }
+
+        .brutal-select {
+            border: 4px solid black;
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.9);
+            transition: all 0.2s ease;
+        }
+
+        .brutal-select:focus {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+            outline: none;
+        }
+
+        .brutal-select:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+            outline: none;
+        }
+
+        .brutal-button {
+            border: 4px solid black;
+            transform: rotate(1deg);
+            transition: all 0.2s ease;
+        }
+
+        .brutal-button:hover {
+            transform: translate(-2px, -2px) rotate(0deg);
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+        }
+    </style>
 </head>
 <body class="bg-red-50 font-sans text-gray-900">
-    <h1 class="text-center text-4xl font-extrabold mt-6 text-blue-800 underline decoration-white decoration-wavy">
-        ⚾ MLB Match Highlights ⚾
+    <h1 class="text-center text-6xl font-bungee mt-6 text-mlb-navy transform -rotate-2">
+        ⚾ THE SHOW ⚾
     </h1>
     <div class="container mx-auto mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Sidebar -->
-        <div class="sidebar bg-blue-800 text-white p-4 rounded-xl shadow-lg col-span-1">
-            <h2 class="text-xl font-bold mb-4">Filter Matches</h2>
-            <form method="POST" class="space-y-4">
+        <div class="neo-brutal  text-white p-6 rounded-lg col-span-1 bg-mlb-blue">
+            <h2 class="text-2xl mb-6">SCOUT REPORT</h2>
+            <form method="POST" class="space-y-6">
                 <div>
-                    <label for="season" class="block font-semibold">Season:</label>
-                    <select name="season" id="season" class="w-full bg-blue-50 border-2 border-blue-700 p-2 rounded-md">
-                        <option value="2024">2024</option>
-                        <option value="2023">2023</option>
-                        <option value="2022">2022</option>
+                    <label for="season" class="block font-bungee text-xl">SEASON:</label>
+                    <select name="season" id="season" class="brutal-select w-full text-black p-2 rounded-lg font-bungee">
+                        <option value="2024" class="font-bungee">2024</option>
+                        <option value="2023" class="font-bungee">2023</option>
+                        <option value="2022" class="font-bungee">2022</option>
                     </select>
                 </div>
+            
                 <div>
-                    <label for="home_team" class="block font-semibold">Home Team:</label>
-                    <select name="home_team" id="home_team" class="w-full bg-blue-50 border-2 border-blue-700 p-2 rounded-md">
-                        <option value="">All</option>
+                    <label for="home_team" class="block font-bungee text-xl">HOME TEAM:</label>
+                    <select name="home_team" id="home_team" class="brutal-select w-full text-black p-2 rounded-lg font-bungee">
+                        <option value="" class="font-bungee">ALL</option>
                         {% for league, divisions in teams_data.items() %}
                             {% for division, teams in divisions.items() %}
                                 {% for team in teams %}
-                                    <option value="{{ team.name }}">{{ team.name }}</option>
+                                    <option value="{{ team.name }}" class="font-bungee">{{ team.name }}</option>
                                 {% endfor %}
                             {% endfor %}
                         {% endfor %}
                     </select>
                 </div>
+            
                 <div>
-                    <label for="away_team" class="block font-semibold">Away Team:</label>
-                    <select name="away_team" id="away_team" class="w-full bg-blue-50 border-2 border-blue-700 p-2 rounded-md">
-                        <option value="">All</option>
+                    <label for="away_team" class="block font-bungee text-xl">AWAY TEAM:</label>
+                    <select name="away_team" id="away_team" class="brutal-select w-full text-black p-2 rounded-lg font-bungee">
+                        <option value="" class="font-bungee">ALL</option>
                         {% for league, divisions in teams_data.items() %}
                             {% for division, teams in divisions.items() %}
                                 {% for team in teams %}
-                                    <option value="{{ team.name }}">{{ team.name }}</option>
+                                    <option value="{{ team.name }}" class="font-bungee">{{ team.name }}</option>
                                 {% endfor %}
                             {% endfor %}
                         {% endfor %}
                     </select>
                 </div>
-                <button type="submit" class="w-full bg-white text-blue-800 font-bold py-2 rounded-md border-2 border-blue-700 hover:bg-blue-700 hover:text-white transition-all">
-                    Apply Filters
+            
+                <button type="submit" class="neo-brutal w-full bg-mlb-red text-white font-bungee text-xl py-3 rounded-lg">
+                    PLAY BALL!
                 </button>
-            </form>
+            </form>            
         </div>
 
         <!-- Matches Section -->
         <div class="matches col-span-3 space-y-4">
             {% for match in matches %}
-            <div class="match bg-white shadow-md border-4 border-gray-200 rounded-xl p-4 hover:scale-105 transition-transform">
-                <a href="{{ url_for('game_details', game_pk=match['game_pk']) }}" class="highlight-card flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
+            <div class="match bg-white shadow-sm border-4 border-gray-200 rounded-xl p-4 hover:scale-105 match-card bg-white p-6 rounded-lg">
+                <a href="{{ url_for('game_details', game_pk=match['game_pk']) }}" class="block">
                     <div class="teams flex items-center space-x-8">
                         <!-- Home Team -->
-                        <div class="team flex items-center space-x-2">
-                            <img src="{{ match['home_team_logo'] }}" alt="{{ match['home_team'] }} Logo" class="w-12 h-12">
-                            <div>
-                                <p class="text-lg font-bold">{{ match['home_team'] }}</p>
-                                <p class="text-xl font-extrabold text-blue-800">{{ match['home_score'] }}</p>
+                        <div class="team flex items-center gap-4">
+                            <img src="{{ match['home_team_logo'] }}" alt="{{ match['home_team'] }} Logo" class="w-14 h-14 neo-brutal bg-white p-1 rounded-full">
+                            <div class="text-center">
+                                <p class="text-xl">{{ match['home_team'] }}</p>
+                                <p class="text-3xl text-mlb-navy">{{ match['home_score'] }}</p>
                             </div>
                         </div>
 
-                        <p class="text-2xl font-extrabold text-gray-600">VS</p>
+                        <p class="text-4xl font-bold text-mlb-red ">VS</p>
 
                         <!-- Away Team -->
                         <div class="team flex items-center space-x-2">
-                            <img src="{{ match['away_team_logo'] }}" alt="{{ match['away_team'] }} Logo" class="w-12 h-12">
+                            <img src="{{ match['away_team_logo'] }}" alt="{{ match['away_team'] }} Logo" class="w-14 h-14 neo-brutal bg-white p-1 rounded-full">
                             <div>
                                 <p class="text-lg font-bold">{{ match['away_team'] }}</p>
                                 <p class="text-xl font-extrabold text-red-800">{{ match['away_score'] }}</p>
                             </div>
                         </div>
                     </div>
-
-                    <div class="game-info text-center md:text-left">
-                        <p class="text-gray-600 font-medium">Date: {{ match['game_date'] }}</p>
-                        <p class="text-gray-600 font-medium">Venue: {{ match['venue'] }}</p>
+                    <div class="game-info text-center md:text-right">
+                        <p class="text-lg">{{ match['game_date'] }}</p>
+                        <p class="text-mlb-dirt">{{ match['venue'] }}</p>
                     </div>
                 </a>
             </div>

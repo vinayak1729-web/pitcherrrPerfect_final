@@ -1,44 +1,16 @@
 [
     {
-        "user_id": "43d05d87-1c80-4446-b291-beb3a9433990",
-        "username": "yourDady22",
-        "email": "dad@gmail.com",
-        "password": "123",
-        "signup_date": "2025-01-23 15:43:33"
-    },
-    {
-        "user_id": "ced950a1-6a57-4903-8c9b-b4869d5fd842",
+        "user_id": "7dd26d95-4202-4937-832c-2895ed07dd8b",
         "username": "Vinayak9271",
         "email": "vs8879785320@gmail.com",
         "password": "123",
-        "signup_date": "2025-01-24 16:13:20"
+        "signup_date": "2025-01-28 10:44:18"
     },
     {
-        "user_id": "d1416218-bf17-41b5-8027-678dad423840",
-        "username": "uuu",
-        "email": "vishal213.mishra@gmail.com",
-        "password": "123",
-        "signup_date": "2025-01-24 16:18:51"
-    },
-    {
-        "user_id": "247d545b-6de4-42f7-8dda-85ad7005ce1e",
-        "username": "shinde9271",
-        "email": "vs8879785320@gmail.com",
-        "password": "123",
-        "signup_date": "2025-01-24 16:19:07"
-    },
-    {
-        "user_id": "38a0f41c-bcd8-4315-8890-e077360f68da",
-        "username": "nn",
-        "email": "vishal213.mishra@gmail.com",
-        "password": "123",
-        "signup_date": "2025-01-27 15:37:22"
-    },
-    {
-        "user_id": "ba821ecf-f76d-4c60-90b7-b1a5b72f157c",
+        "user_id": "5c8cbfef-79da-4b89-a748-2226325ffab3",
         "username": "jj",
         "email": "vishal213.mishra@gmail.com",
         "password": "123",
-        "signup_date": "2025-01-27 16:18:40"
+        "signup_date": "2025-01-28 11:13:11"
     }
 ]

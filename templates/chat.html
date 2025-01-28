@@ -2,27 +2,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chat with {{ friend }}</title>
+    <<title>Chat with {{ friend }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'bungee': ['Bungee', 'cursive'],
+                    },
+                    colors: {
+                        baseball: {
+                            red: '#ff6b6b',
+                            blue: '#4ecdc4',
+                            yellow: '#ffe66d',
+                            green: '#2ecc71',
+                            dirt: '#8B4513'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        .messages-container {
-            scrollbar-width: thin;
-            scrollbar-color: #CBD5E0 #F3F4F6;
+        body {
+            background: 
+                radial-gradient(circle at top right, rgba(255,107,107,0.2), transparent 70%),
+                radial-gradient(circle at bottom left, rgba(78,205,196,0.2), transparent 70%),
+                repeating-linear-gradient(45deg, #f4f1de 0px, #f4f1de 10px, #ffffff 10px, #ffffff 20px);
+            font-family: 'Bungee', cursive;
         }
-        .messages-container::-webkit-scrollbar {
-            width: 8px;
+
+        .neo-brutal {
+            border: 4px solid black;
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .messages-container::-webkit-scrollbar-track {
-            background: #F3F4F6;
+
+        .message-brutal {
+            border: 3px solid black;
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.9);
+            transition: transform 0.2s ease;
         }
-        .messages-container::-webkit-scrollbar-thumb {
-            background-color: #CBD5E0;
-            border-radius: 20px;
+
+        .message-brutal:hover {
+            transform: translateY(-2px);
+        }
+
+        .input-brutal {
+            border: 4px solid black;
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.9);
+            transition: all 0.2s ease;
+        }
+
+        .input-brutal:focus {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+            outline: none;
+        }
+
+        .button-brutal {
+            border: 4px solid black;
+            transform: rotate(1deg);
+            transition: all 0.2s ease;
+        }
+
+        .button-brutal:hover {
+            transform: translate(-2px, -2px) rotate(0deg);
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
         }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 min-h-screen p-4">
     <div class="container mx-auto p-4 h-screen flex flex-col">
         <div class="max-w-4xl mx-auto w-full flex-grow flex flex-col bg-white rounded-lg shadow-lg overflow-hidden">
             <!-- Chat Header -->

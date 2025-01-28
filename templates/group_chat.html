@@ -1,27 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ group['name'] }} - Group Chat</title>
+    <title>{{ group['name'] }} - Team Dugout</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'bungee': ['Bungee', 'cursive'],
+                    },
+                    colors: {
+                        dugout: {
+                            red: '#ff6b6b',
+                            blue: '#4ecdc4',
+                            yellow: '#ffe66d',
+                            green: '#2ecc71',
+                            dirt: '#8B4513'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
+        body {
+            font-family: 'Bungee', cursive;
+            background: 
+                radial-gradient(circle at top right, rgba(255,107,107,0.2), transparent 70%),
+                radial-gradient(circle at bottom left, rgba(78,205,196,0.2), transparent 70%),
+                repeating-linear-gradient(45deg, #f4f1de 0px, #f4f1de 10px, #ffffff 10px, #ffffff 20px);
+        }
+
+        .neo-brutal {
+            border: 4px solid black;
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: rotate(-1deg);
+        }
+
+        .message-box {
+            border: 3px solid black;
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.9);
+            transition: transform 0.2s ease;
+        }
+
+        .message-box:hover {
+            transform: translateY(-2px);
+        }
+
+        .brutal-input {
+            border: 4px solid black;
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.9);
+            transition: all 0.2s ease;
+        }
+
+        .brutal-input:focus {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+            outline: none;
+        }
+
+        .brutal-button {
+            border: 4px solid black;
+            transform: rotate(1deg);
+            transition: all 0.2s ease;
+        }
+
+        .brutal-button:hover {
+            transform: translate(-2px, -2px) rotate(0deg);
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+        }
+
         .messages-container {
             scrollbar-width: thin;
-            scrollbar-color: #CBD5E0 #F3F4F6;
-            height: calc(100vh - 200px); /* Fixed height calculation */
+            scrollbar-color: #000000 #F3F4F6;
+            height: calc(100vh - 240px);
         }
 
         .messages-container::-webkit-scrollbar {
-            width: 8px;
+            width: 12px;
         }
 
         .messages-container::-webkit-scrollbar-track {
             background: #F3F4F6;
+            border: 2px solid black;
         }
 
         .messages-container::-webkit-scrollbar-thumb {
-            background-color: #CBD5E0;
-            border-radius: 20px;
+            background-color: #000000;
+            border: 2px solid #F3F4F6;
         }
     </style>
 </head>

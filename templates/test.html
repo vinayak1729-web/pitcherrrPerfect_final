@@ -1,69 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pitcher Perfect - Baseball Team Selector</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        'lexus-blue': '#003DA5',
-                        'lexus-red': '#D50032'
-                    },
-                    boxShadow: {
-                        'neobrutalist': '0 8px 0 -2px rgba(0,0,0,0.2), 0 12px 20px rgba(0,0,0,0.15)',
-                        'player-card': '6px 6px 0 rgba(0,0,0,0.2)'
-                    },
-                    animation: {
-                        'wiggle': 'wiggle 0.5s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        wiggle: {
-                            '0%, 100%': { transform: 'rotate(0deg)' },
-                            '25%': { transform: 'rotate(-5deg)' },
-                            '75%': { transform: 'rotate(5deg)' },
-                        }
-                    }
-                }
+    <title>Pitcher Perfect - Baseball Stats</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #d5e7f3;
+            --primary: #ff2e2e;
+            --secondary: #213a8f;
+            --white: #ffffff;
+            --black: #000000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Permanent Marker', cursive;
+            overflow-x: hidden;
+        }
+
+        /* Neo-brutalist navbar */
+        .navbar {
+            background: var(--secondary);
+            border: 4px solid var(--black);
+            box-shadow: 8px 8px 0 var(--black);
+            padding: 1rem;
+            margin: 1rem;
+            position: relative;
+        }
+
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Bungee', cursive;
+            font-size: 2rem;
+            color: var(--white);
+            text-shadow: 4px 4px 0 var(--black);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            border: 3px solid var(--black);
+            background: var(--primary);
+            box-shadow: 4px 4px 0 var(--black);
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        /* Baseball stitching border */
+        .baseball-border {
+            position: relative;
+            padding: 2rem;
+            margin: 2rem;
+            background: var(--white);
+            border: 4px solid var(--black);
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        .baseball-border::before,
+        .baseball-border::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 20px;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--primary) 0,
+                var(--primary) 10px,
+                transparent 10px,
+                transparent 20px
+            );
+        }
+
+        .baseball-border::before {
+            top: 0;
+            left: 0;
+        }
+
+        .baseball-border::after {
+            bottom: 0;
+            left: 0;
+        }
+
+        /* Game cards */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .game-card {
+            background: var(--white);
+            border: 4px solid var(--black);
+            box-shadow: 8px 8px 0 var(--black);
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .game-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0 var(--black);
+        }
+
+        /* News section */
+        .news-section {
+            background: var(--secondary);
+            color: var(--white);
+            padding: 2rem;
+            margin: 2rem;
+            border: 4px solid var(--black);
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        .news-card {
+            background: var(--white);
+            color: var(--black);
+            margin: 1rem 0;
+            padding: 1rem;
+            border: 3px solid var(--black);
+            box-shadow: 4px 4px 0 var(--black);
+            transition: all 0.2s ease;
+        }
+
+        .news-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        /* Chatbot */
+        .chatbot-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border: 3px solid var(--black);
+            box-shadow: 4px 4px 0 var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--white);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .chatbot-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        /* Dark mode toggle */
+        .dark-mode-toggle {
+            background: var(--primary);
+            border: 3px solid var(--black);
+            box-shadow: 4px 4px 0 var(--black);
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .navbar-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .game-grid {
+                grid-template-columns: 1fr;
             }
         }
-    </script>
-    <style>
-        .baseball-font {
-            font-family: 'Impact', 'Haettenschweiler', sans-serif;
-        }
-
-        .neon-text {
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3);
-        }
-
-        .field-player-card {
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        .field-player-card:hover {
-            transform: scale(1.05);
-            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.3);
-        }
-        
     </style>
 </head>
-
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white font-sans">
-    <!-- Navbar -->
-    <nav class="bg-lexus-blue dark:bg-gray-800 shadow-lg sticky top-0 z-50">
+<body>
+    <!-- Main Navigation -->
+    <nav class="bg-[#213a8f] dark:bg-gray-800 shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <div class="baseball-font text-3xl neon-text">
-                        <span class="text-lexus-red dark:text-lexus-red">Pitcher</span>
-                        <span class="text-white dark:text-white">Perfect</span>
-                    </div>
+                    <img src="" alt="Logo" class="h-12">
                 </div>
                 <div class="flex items-center space-x-8">
                     <a href="/"
@@ -84,507 +237,144 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </button>
-                </div>
+</div>
             </div>
         </div>
     </nav>
-    <div class="container mx-auto px-4 py-8">
-        <div class="field-container max-w-5xl mx-auto relative">
-            <!-- Baseball Field Image -->
-            <img src="{{ url_for('static', filename='images/baseball.jpg') }}" alt="Baseball Field"
-                class="w-full rounded-2xl shadow-neobrutalist filter brightness-110 contrast-110">
 
-                <div class="absolute inset-0" id="fieldPositions">
-                         <div class="position-slot absolute top-[55%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Pitcher" id="pitcher">
-                         </div>
-                         <div class="position-slot absolute top-[93%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Catcher" id="catcher">
-                         </div>
-                         <div class="position-slot absolute top-[75%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Hitter" id="home-base">
-                         </div>
-                         <div class="position-slot absolute top-[55%] left-[69%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="First Base" id="first-base">
-                         </div>
-                         <div class="position-slot absolute top-[31%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Second Base" id="second-base">
-                         </div>
-                         <div class="position-slot absolute top-[55%] left-[29%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Third Base" id="third-base">
-                         </div>
-                         <div class="position-slot absolute top-[26%] left-[35%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Shortstop" id="shortstop">
-                         </div>
-                         <div class="position-slot absolute top-[9%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Outfielder" id="center-field">
-                         </div>
-                         <div class="position-slot absolute top-[25%] left-[20%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Outfielder" id="left-field">
-                         </div>
-                         <div class="position-slot absolute top-[25%] left-[80%] -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-lexus-blue to-lexus-red text-white p-3 rounded-lg shadow-player-card hover:animate-wiggle transition-all" data-position="Outfielder" id="right-field">
-                         </div>
-                        </div>
-                       </div>
+     <!-- Left Sidebar -->
+     <div class="fixed left-0 top-1/4 z-40">
+        <div class="bg-[#ff2e2e] p-4 rounded-r-lg shadow-xl transform transition-transform hover:translate-x-2">
+            <button id="sidebar-toggle" class="text-white text-2xl">☰</button>
         </div>
-
-        <!-- Team Selection -->
-        <div class="max-w-xl mx-auto mt-8 flex space-x-4">
-            <select id="teamSelect"
-                class="flex-grow bg-white dark:bg-gray-800 text-lexus-blue dark:text-white 
-                       p-3 rounded-lg border-4 border-lexus-blue dark:border-lexus-blue 
-                       focus:ring-2 focus:ring-lexus-red transition shadow-player-card">
-                <option value="">-- Select a Team --</option>
-                {% for team_name in team_names %}
-                <option value="{{ team_name }}">{{ team_name }}</option>
-                {% endfor %}
-            </select>
-            <button id="selectTeamBtn"
-                class="bg-lexus-red hover:bg-lexus-red/80 text-white font-bold py-3 px-6 
-                       rounded-lg transition transform hover:-translate-y-1 
-                       shadow-player-card border-4 border-lexus-blue 
-                       dark:border-lexus-blue active:translate-y-1">
-                Select Team
-            </button>
-        </div>
-
-        <!-- Player Bench -->
-        <div class="mt-8 max-w-6xl mx-auto">
-            <h2 class="text-3xl font-bold mb-6 text-center text-lexus-red dark:text-lexus-red">Available Players</h2>
-            <div id="playerContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                <!-- Players will be loaded here dynamically -->
+        <div id="sidebar" class="hidden bg-white dark:bg-gray-800 w-64 h-screen p-4 shadow-xl">
+            <!-- Language Settings -->
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-4">Language</h3>
+            <div id="settings-dropdown"
+                class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700">
+                <div class="py-1">
+                    <a href="?lang=en"
+                        class="block px-4 py-2 hover:bg-red-100 dark:hover:bg-red-900 transition-colors">English</a>
+                    <a href="?lang=ja"
+                        class="block px-4 py-2 hover:bg-red-100 dark:hover:bg-red-900 transition-colors">Japanese</a>
+                    <a href="?lang=es"
+                        class="block px-4 py-2 hover:bg-red-100 dark:hover:bg-red-900 transition-colors">Spanish</a>
+                    <a href="?lang=de"
+                        class="block px-4 py-2 hover:bg-red-100 dark:hover:bg-red-900 transition-colors">German</a>
+                    <a href="?lang=ko"
+                        class="block px-4 py-2 hover:bg-red-100 dark:hover:bg-red-900 transition-colors">Korean</a>
+                    <a href="?lang=fr"
+                        class="block px-4 py-2 hover:bg-red-100 dark:hover:bg-red-900 transition-colors">French</a>
+                    <a href="?lang=hi"
+                        class="block px-4 py-2 hover:bg-red-100 dark:hover:bg-red-900 transition-colors">Hindi</a>
+                </div>
             </div>
         </div>
     </div>
-    <script>
-        const teamsPlayersData = {{ teams_players| tojson }};
-        const selectTeamBtn = document.getElementById('selectTeamBtn');
-        const teamSelect = document.getElementById('teamSelect');
-        const playerContainer = document.getElementById('playerContainer');
-        const fieldPositions = document.getElementById('fieldPositions');
-        const positionSlots = document.querySelectorAll('.position-slot');
-        let draggedCard = null;
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-12">
+            <h1 class="baseball-font text-6xl mb-3 neon-text">
+                <span class="text-red-600 dark:text-red-500">Pitcher</span>
+                <span class="text-blue-600 dark:text-blue-500">Perfect</span>
+            </h1>
+            <p class="text-gray-600 dark:text-gray-400 italic text-xl">Your Perfect Pitch for All MLB Game Needs</p>
+        </div>
 
-        function createFieldPlayer(player) {
-            const fieldPlayer = document.createElement('div');
-            fieldPlayer.className = 'field-player';
-            fieldPlayer.innerHTML = `
-                <img src="${player.headshot_url}" alt="${player.name}">
-                <div class="player-name">${player.name}</div>
-            `;
-            return fieldPlayer;
-        }
-        document.addEventListener('DOMContentLoaded', function () {
-            const teamSelect = document.getElementById('teamSelect');
-            const positionSlots = document.querySelectorAll('.position-slot');
-            const usedPlayers = new Set();
-
-            function canPlayHomeBase(playerPosition) {
-                const validHitterPositions = [
-                    "Two-Way Player",  // Highest priority
-                    "Designated Hitter",
-                    "First Base",
-                    "Second Base",
-                    "Third Base",
-                    "Shortstop",
-                    "Outfielder"
-                ];
-                return validHitterPositions.includes(playerPosition);
-            }
-
-            function canPlayerPlayPosition(playerPosition, slotPosition) {
-                if (slotPosition === "Hitter") {
-                    return canPlayHomeBase(playerPosition);
-                }
-                if (slotPosition === "Outfielder") {
-                    return playerPosition === "Outfielder";
-                }
-                return playerPosition === slotPosition;
-            }
-
-            positionSlots.forEach(position => {
-                position.addEventListener('dragover', (e) => e.preventDefault());
-                position.addEventListener('drop', () => {
-                    if (draggedCard) {
-                        const playerPosition = draggedCard.getAttribute('data-position');
-                        const slotPosition = position.getAttribute('data-position');
-                        const playerName = draggedCard.querySelector('.text-lg').textContent;
-
-                        if (usedPlayers.has(playerName)) {
-                            alert(`${playerName} is already on the field!`);
-                            return;
-                        }
-
-                        if (canPlayerPlayPosition(playerPosition, slotPosition)) {
-                            position.innerHTML = '';
-                            const fieldPlayer = createFieldPlayer({
-                                name: playerName,
-                                headshot_url: draggedCard.querySelector('img').src,
-                                position: playerPosition
-                            });
-                            position.appendChild(fieldPlayer);
-                            position.classList.add('has-player');
-                            usedPlayers.add(playerName);
-                            draggedCard.remove();
-                        } else {
-                            alert(`This player cannot play in the ${slotPosition} position!`);
-                        }
-                    }
-                });
-            });
-
-            function updatePositionPlayers(teamName) {
-                usedPlayers.clear();
-
-                // First fetch Two-Way Players for home base
-                fetch(`/get_position_headshots/${teamName}/Two-Way Player`)
-                    .then(res => res.json())
-                    .then(twoWayData => {
-                        const twoWayPlayers = twoWayData.players || [];
-
-                        // Then fetch other positions
-                        return Promise.all([
-                            Promise.resolve(twoWayPlayers),
-                            fetch(`/get_position_headshots/${teamName}/Outfielder`).then(res => res.json()),
-                            fetch(`/get_position_headshots/${teamName}/First Base`).then(res => res.json()),
-                            fetch(`/get_position_headshots/${teamName}/Second Base`).then(res => res.json()),
-                            fetch(`/get_position_headshots/${teamName}/Third Base`).then(res => res.json()),
-                            fetch(`/get_position_headshots/${teamName}/Shortstop`).then(res => res.json()),
-                            fetch(`/get_position_headshots/${teamName}/Designated Hitter`).then(res => res.json())
-                        ]);
-                    })
-                    .then(([twoWayPlayers, outfieldData, ...otherPositions]) => {
-                        const outfielders = outfieldData.players || [];
-                        const potentialHitters = [];
-
-                        // Add players to potential hitters in priority order
-                        if (twoWayPlayers.length > 0) {
-                            potentialHitters.push(...twoWayPlayers);
-                        }
-                        otherPositions.forEach(data => {
-                            if (data.players) {
-                                potentialHitters.push(...data.players);
-                            }
-                        });
-
-                        positionSlots.forEach((slot) => {
-                            const position = slot.getAttribute('data-position');
-
-                            if (position === 'Outfielder') {
-                                const outfielder = outfielders.find(player => !usedPlayers.has(player.name));
-                                if (outfielder) {
-                                    slot.innerHTML = createPlayerHTML(outfielder);
-                                    usedPlayers.add(outfielder.name);
-                                }
-                            } else if (position === 'Hitter') {
-                                const hitter = potentialHitters.find(player => !usedPlayers.has(player.name));
-                                if (hitter) {
-                                    slot.innerHTML = createPlayerHTML(hitter);
-                                    usedPlayers.add(hitter.name);
-                                }
-                            } else {
-                                fetch(`/get_position_headshots/${teamName}/${position}`)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        if (data.players && data.players.length > 0) {
-                                            const player = data.players[0];
-                                            if (!usedPlayers.has(player.name)) {
-                                                slot.innerHTML = createPlayerHTML(player);
-                                                usedPlayers.add(player.name);
-                                            }
-                                        } else {
-                                            slot.innerHTML = position;
-                                        }
-                                    });
-                            }
-                        });
-                    });
-            }
-
-            function createPlayerHTML(player) {
-                return `
-            <div class="field-player">
-                <img src="${player.headshot_url}" 
-                     alt="${player.name}" 
-                     class="w-16 h-16 rounded-full border-2 border-yellow-400"
-                />
-                <span class="player-name">${player.name}</span>
-            </div>
-        `;
-            }
-
-            teamSelect.addEventListener('change', function () {
-                const selectedTeam = this.value;
-                if (selectedTeam) {
-                    updatePositionPlayers(selectedTeam);
-                }
-            });
-
-            if (teamSelect.options.length > 1) {
-                updatePositionPlayers(teamSelect.options[1].value);
-            }
-        });
-        document.addEventListener('DOMContentLoaded', function () {
-            const teamSelect = document.getElementById('teamSelect');
-            const positionSlots = document.querySelectorAll('.position-slot');
-            const usedPlayers = new Set(); // Track used players
-
-            function canPlayHomeBase(playerPosition) {
-                const validHitterPositions = [
-                    "First Base",
-                    "Second Base",
-                    "Third Base",
-                    "Shortstop",
-                    "Outfielder",
-                    "Two-Way Player",
-                    "Designated Hitter"
-                ];
-                return validHitterPositions.includes(playerPosition);
-            }
-
-            function canPlayerPlayPosition(playerPosition, slotPosition) {
-                if (slotPosition === "Hitter") {
-                    return canPlayHomeBase(playerPosition);
-                }
-                if (slotPosition === "Outfielder") {
-                    return playerPosition === "Outfielder";
-                }
-                return playerPosition === slotPosition;
-            }
-
-            positionSlots.forEach(position => {
-                position.addEventListener('dragover', (e) => e.preventDefault());
-
-                position.addEventListener('drop', () => {
-                    if (draggedCard) {
-                        const playerPosition = draggedCard.getAttribute('data-position');
-                        const slotPosition = position.getAttribute('data-position');
-                        const playerName = draggedCard.querySelector('.text-lg').textContent;
-
-                        if (usedPlayers.has(playerName)) {
-                            alert(`${playerName} is already on the field!`);
-                            return;
-                        }
-
-                        if (canPlayerPlayPosition(playerPosition, slotPosition)) {
-                            position.innerHTML = '';
-                            const fieldPlayer = createFieldPlayer({
-                                name: playerName,
-                                headshot_url: draggedCard.querySelector('img').src,
-                                position: playerPosition
-                            });
-                            position.appendChild(fieldPlayer);
-                            position.classList.add('has-player');
-                            usedPlayers.add(playerName);
-                            draggedCard.remove();
-                        } else {
-                            alert(`This player cannot play in the ${slotPosition} position!`);
-                        }
-                    }
-                });
-            });
-
-            function updatePositionPlayers(teamName) {
-                usedPlayers.clear();
-                let outfielders = [];
-                let potentialHitters = []; // Store potential hitters
-
-                // Collect outfielders and potential hitters
-                Promise.all([
-                    fetch(`/get_position_headshots/${teamName}/Outfielder`).then(res => res.json()),
-                    fetch(`/get_position_headshots/${teamName}/First Base`).then(res => res.json()),
-                    fetch(`/get_position_headshots/${teamName}/Second Base`).then(res => res.json()),
-                    fetch(`/get_position_headshots/${teamName}/Third Base`).then(res => res.json()),
-                    fetch(`/get_position_headshots/${teamName}/Shortstop`).then(res => res.json())
-                ]).then(([outfieldData, ...infieldData]) => {
-                    outfielders = outfieldData.players || [];
-                    infieldData.forEach(data => {
-                        if (data.players) {
-                            potentialHitters.push(...data.players);
-                        }
-                    });
-
-                    positionSlots.forEach((slot, index) => {
-                        const position = slot.getAttribute('data-position');
-
-                        if (position === 'Outfielder') {
-                            const outfielder = outfielders.find(player => !usedPlayers.has(player.name));
-                            if (outfielder) {
-                                slot.innerHTML = `
-                            <div class="field-player">
-                                <img src="${outfielder.headshot_url}" 
-                                     alt="${outfielder.name}" 
-                                     class="w-16 h-16 rounded-full border-2 border-yellow-400"
-                                />
-                                <span class="player-name">${outfielder.name}</span>
-                            </div>
-                        `;
-                                usedPlayers.add(outfielder.name);
-                            }
-                        } else if (position === 'Hitter') {
-                            const hitter = potentialHitters.find(player => !usedPlayers.has(player.name));
-                            if (hitter) {
-                                slot.innerHTML = `
-                            <div class="field-player">
-                                <img src="${hitter.headshot_url}" 
-                                     alt="${hitter.name}" 
-                                     class="w-16 h-16 rounded-full border-2 border-yellow-400"
-                                />
-                                <span class="player-name">${hitter.name}</span>
-                            </div>
-                        `;
-                                usedPlayers.add(hitter.name);
-                            }
-                        } else {
-                            fetch(`/get_position_headshots/${teamName}/${position}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.players && data.players.length > 0) {
-                                        const player = data.players[0];
-                                        if (!usedPlayers.has(player.name)) {
-                                            slot.innerHTML = `
-                                        <div class="field-player">
-                                            <img src="${player.headshot_url}" 
-                                                 alt="${player.name}" 
-                                                 class="w-16 h-16 rounded-full border-2 border-yellow-400"
-                                            />
-                                            <span class="player-name">${player.name}</span>
-                                        </div>
-                                    `;
-                                            usedPlayers.add(player.name);
-                                        }
-                                    } else {
-                                        slot.innerHTML = position;
-                                    }
-                                });
-                        }
-                    });
-                });
-            }
-
-            teamSelect.addEventListener('change', function () {
-                const selectedTeam = this.value;
-                if (selectedTeam) {
-                    updatePositionPlayers(selectedTeam);
-                }
-            });
-
-            if (teamSelect.options.length > 1) {
-                updatePositionPlayers(teamSelect.options[1].value);
-            }
-        });
-
-
-
-
-        function loadTeamPlayers(teamName) {
-            playerContainer.innerHTML = '';
-            // Replace the existing drop event listener with this code
-            positionSlots.forEach(position => {
-                position.addEventListener('dragover', (e) => e.preventDefault());
-
-                position.addEventListener('drop', () => {
-                    if (draggedCard) {
-                        const playerPosition = draggedCard.getAttribute('data-position');
-                        const slotPosition = position.getAttribute('data-position');
-
-                        if (playerPosition === slotPosition || slotPosition === 'Hitter') {
-                            // Clear existing content
-                            position.innerHTML = '';
-
-                            // Get player details
-                            const playerName = draggedCard.querySelector('.text-lg').textContent;
-                            const playerImage = draggedCard.querySelector('img').src;
-
-                            // Create field player element
-                            const fieldPlayer = document.createElement('div');
-                            fieldPlayer.className = 'field-player';
-                            fieldPlayer.innerHTML = `
-                    <img src="${playerImage}" alt="${playerName}">
-                    <div class="player-name">${playerName}</div>
-                `;
-
-                            position.appendChild(fieldPlayer);
-                            position.classList.add('has-player');
-
-                            // Remove from player container
-                            draggedCard.remove();
-                        } else {
-                            alert(`This player cannot play in the ${slotPosition} position!`);
-                        }
-                    }
-                });
-            });
-
-            if (teamName && teamsPlayersData[teamName]) {
-                teamsPlayersData[teamName].forEach(player => {
-                    const playerCard = document.createElement('div');
-                    playerCard.className = 'bg-fifa-gradient p-4 rounded-2xl shadow-fifa-card transform transition hover:-translate-y-2 cursor-grab relative overflow-hidden';
-                    playerCard.draggable = true;
-                    playerCard.setAttribute('data-position', player.position);
-                    playerCard.innerHTML = `
-                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-tr from-white/10 to-transparent opacity-20 pointer-events-none"></div>
-                    <div class="flex flex-col items-center">
-                        <img src="${player.headshot_url}" alt="${player.name}" class="w-32 h-32 rounded-full object-cover border-4 border-yellow-400 mb-3 shadow-lg">
-                        <div class="text-lg font-bold text-white mb-2">${player.name}</div>
-                        <div class="bg-black/30 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider">${player.position}</div>
+        <BR><BR></BR></BR>
+        <!-- Upcoming Games Section -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-red-600 dark:text-red-500 neon-text"></h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                {% for game in upcoming_games %}
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 border-2 border-red-400 dark:border-red-600 hover:border-blue-600 dark:hover:border-blue-500 transition-all transform hover:scale-105">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="text-xl font-bold text-gray-800 dark:text-white">{{ game.homeTeam }}</div>
+                        <div class="text-lg text-red-600 dark:text-red-500 neon-text">vs</div>
+                        <div class="text-xl font-bold text-gray-800 dark:text-white">{{ game.awayTeam }}</div>
                     </div>
-                `;
+                    <div class="text-gray-600 dark:text-gray-400 mb-2">
+                        <i class="fas fa-map-marker-alt"></i> {{ game.venue }}
+                    </div>
+                    <div class="text-gray-600 dark:text-gray-400">
+                        {{ game.gameDate|replace("T", " ")|replace("Z", "") }}
+                    </div>
+                    <div
+                        class="mt-3 inline-block bg-red-500 dark:bg-red-600 text-white px-3 py-1 rounded-full text-sm neon-box">
+                       
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
 
-                    playerCard.addEventListener('dragstart', (e) => {
-                        draggedCard = playerCard;
-                        playerCard.classList.add('opacity-50', 'scale-95');
-                    });
+   
 
-                    playerCard.addEventListener('dragend', () => {
-                        draggedCard = null;
-                        playerCard.classList.remove('opacity-50', 'scale-95');
-                    });
+    <!-- News Section -->
+    <div id="news-section" class="fixed bottom-20 left-4">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-500 neon-text">Latest News</h2>
+            <button id="close-news" class="text-gray-600 hover:text-red-600">✖</button>
+        </div>
+        <div class="news-scroll max-h-[60vh] overflow-y-auto">
+            {% for article in news %}
+            <a href="{{ article.link }}" class="block mb-4 last:mb-0 hover:transform hover:scale-102 transition-all">
+                <div class="p-4 rounded-lg news-card hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">{{ article.title }}</h3>
+                    <div class="mt-2 flex justify-between items-center">
+                        <span class="text-blue-600 dark:text-blue-500 text-sm">Read more →</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
 
-                    playerContainer.appendChild(playerCard);
-                });
-            }
-        }
 
-        selectTeamBtn.addEventListener('click', () => {
-            const selectedTeam = teamSelect.value;
-            loadTeamPlayers(selectedTeam);
-        });
+    <!-- Chatbot -->
+    <div class="fixed bottom-4 right-4 z-50">
+        <button id="chatbot-trigger"
+            class="w-14 h-14 bg-red-600 dark:bg-red-500 text-white rounded-full flex items-center justify-center text-2xl shadow-lg hover:bg-blue-600 dark:hover:bg-blue-500 transition-colors neon-box">
+            ⚾
+        </button>
+        <div id="chatbot-container"
+            class="hidden absolute bottom-16 right-0 w-96 max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-800 rounded-lg shadow-xl">
+            <div class="p-4 bg-red-600 dark:bg-red-500 text-white rounded-t-lg flex justify-between items-center">
+                <h5 class="font-bold">Pitcher Perfect Chatbot ⚾</h5>
+                <button id="close-chatbot" class="hover:text-gray-200">✖</button>
+            </div>
+            <div id="chatbot-messages" class="h-96 p-4 overflow-y-auto">
+                <!-- Messages will appear here -->
+            </div>
+            <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex">
+                <input type="text" id="chatbot-input"
+                    class="flex-1 px-4 py-2 rounded-l-lg border-2 border-r-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:outline-none focus:border-red-500 dark:focus:border-red-400"
+                    placeholder="Type your message here..." />
+                <button id="send-message"
+                    class="px-6 py-2 bg-red-600 dark:bg-red-500 text-white rounded-r-lg hover:bg-blue-600 dark:hover:bg-blue-500 transition-colors">
+                    Send
+                </button>
+            </div>
+        </div>
+    </div>
 
-        positionSlots.forEach(position => {
-            position.addEventListener('dragover', (e) => e.preventDefault());
+    <script>
 
-            position.addEventListener('drop', () => {
-                if (draggedCard) {
-                    // Check if player's position matches the slot
-                    const playerPosition = draggedCard.getAttribute('data-position');
-                    const slotPosition = position.getAttribute('data-position');
+// Sidebar Toggle
+document.getElementById('sidebar-toggle').addEventListener('click', () => {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('hidden');
+});
 
-                    if (playerPosition === slotPosition || slotPosition === 'Hitter') {
-                        // Clear existing content
-                        position.innerHTML = '';
 
-                        // Create a full player card in the position
-                        const fullPlayerCard = document.createElement('div');
-                        fullPlayerCard.className = 'flex flex-col items-center text-center';
-                        fullPlayerCard.innerHTML = `
-                        <img src="${draggedCard.querySelector('img').src}" 
-                             class="w-24 h-24 rounded-full object-cover border-4 border-yellow-400 mb-2">
-                        <div class="text-sm font-bold">${draggedCard.querySelector('div:nth-child(2)').textContent}</div>
-                        <div class="text-xs text-gray-300">${draggedCard.querySelector('div:nth-child(3)').textContent}</div>
-                    `;
-
-                        // Create and add field player
-                        const fieldPlayer = createFieldPlayer({
-                            name: draggedCard.querySelector('div:nth-child(2)').textContent,
-                            headshot_url: draggedCard.querySelector('img').src,
-                            position: draggedCard.querySelector('div:nth-child(3)').textContent
-                        });
-                        position.appendChild(fieldPlayer);
-                        position.appendChild(fullPlayerCard);
-                        position.classList.add('has-player');
-
-                        // Remove from player container
-                        draggedCard.remove();
-                    } else {
-                        alert(`This player cannot play in the ${slotPosition} position!`);
-                    }
-                }
-            });
-        });
-        // Add dark mode toggle functionality
-        const darkModeToggle = document.getElementById('darkModeToggle');
+// Chatbot Toggle
+document.getElementById('chatbot-trigger').addEventListener('click', () => {
+    document.getElementById('chatbot-container').classList.toggle('hidden');
+});
+ // Add dark mode toggle functionality
+ const darkModeToggle = document.getElementById('darkModeToggle');
         darkModeToggle.addEventListener('click', () => {
             document.documentElement.classList.toggle('dark');
         });
@@ -595,6 +385,141 @@
         sidebarToggle.addEventListener('click', () => {
             sidebar.classList.toggle('-translate-x-full');
         });
+            // Set up the news toggle icon
+            // DOM Elements
+    const elements = {
+        newsSection: document.querySelector('.fixed.bottom-4.left-4'),
+        themeToggle: document.getElementById('theme-toggle'),
+        settingsToggle: document.getElementById('settings-toggle'),
+        settingsDropdown: document.getElementById('settings-dropdown'),
+        chatbotTrigger: document.getElementById('chatbot-trigger'),
+        chatbotContainer: document.getElementById('chatbot-container'),
+        chatbotMessages: document.getElementById('chatbot-messages'),
+        chatbotInput: document.getElementById('chatbot-input'),
+        sendMessage: document.getElementById('send-message'),
+        closeChatbot: document.getElementById('close-chatbot')
+    };
+
+    // Create and set up news toggle icon
+    const newsIcon = document.createElement('button');
+    newsIcon.innerHTML = '📰';
+    newsIcon.className = 'w-14 h-14 bg-red-600 dark:bg-red-500 text-white rounded-full flex items-center justify-center text-2xl shadow-lg hover:bg-blue-600 dark:hover:bg-blue-500 transition-colors neon-box';
+    elements.newsSection.style.display = 'none';
+    elements.newsSection.parentNode.insertBefore(newsIcon, elements.newsSection);
+
+    // Theme functionality
+    function updateThemeIcon() {
+        const isDark = document.documentElement.classList.contains('dark');
+        elements.themeToggle.innerHTML = isDark ? '☀️' : '🌙';
+    }
+
+    // Initialize theme
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+    }
+    updateThemeIcon();
+
+    // Theme toggle
+    elements.themeToggle.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        updateThemeIcon();
+        localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    });
+
+    // News toggle
+    newsIcon.addEventListener('click', () => {
+        const currentDisplay = elements.newsSection.style.display;
+        elements.newsSection.style.display = currentDisplay === 'none' ? 'block' : 'none';
+        
+        if (elements.newsSection.style.display === 'block') {
+            elements.newsSection.classList.add('animate-fade-in');
+            setTimeout(() => elements.newsSection.classList.remove('animate-fade-in'), 300);
+        }
+    });
+
+    // Add animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // System theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        document.documentElement.classList.toggle('dark', e.matches);
+        updateThemeIcon();
+    });
+
+    // Settings dropdown
+    elements.settingsToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        elements.settingsDropdown.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!elements.settingsDropdown.contains(e.target)) {
+            elements.settingsDropdown.classList.add('hidden');
+        }
+    });
+
+    // Chatbot functionality
+    elements.chatbotTrigger.addEventListener('click', () => {
+        elements.chatbotContainer.style.display = 
+            elements.chatbotContainer.style.display === 'none' || 
+            elements.chatbotContainer.style.display === '' ? 'block' : 'none';
+    });
+
+    elements.closeChatbot.addEventListener('click', () => {
+        elements.chatbotContainer.style.display = 'none';
+    });
+
+    // Message handling
+    async function handleSendMessage() {
+        const userMessage = elements.chatbotInput.value.trim();
+        if (!userMessage) return;
+
+        const userMessageElement = document.createElement('div');
+        userMessageElement.innerText = `You: ${userMessage}`;
+        userMessageElement.style.color = 'blue';
+        elements.chatbotMessages.appendChild(userMessageElement);
+        elements.chatbotMessages.scrollTop = elements.chatbotMessages.scrollHeight;
+        elements.chatbotInput.value = '';
+
+        try {
+            const response = await fetch('/chatbot', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userMessage })
+            });
+
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+
+            const botMessageElement = document.createElement('div');
+            botMessageElement.innerText = `PitcherPerfect: ${data.response}`;
+            botMessageElement.style.color = 'red';
+            elements.chatbotMessages.appendChild(botMessageElement);
+        } catch (error) {
+            const errorMessage = document.createElement('div');
+            errorMessage.innerText = "Sorry, I'm having trouble connecting right now. Please try again later.";
+            errorMessage.style.color = 'red';
+            elements.chatbotMessages.appendChild(errorMessage);
+            console.error('Error:', error);
+        }
+
+        elements.chatbotMessages.scrollTop = elements.chatbotMessages.scrollHeight;
+    }
+
+    elements.sendMessage.addEventListener('click', handleSendMessage);
+    elements.chatbotInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') handleSendMessage();
+    });
 
     </script>
 </body>

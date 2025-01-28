@@ -13,7 +13,10 @@ import csv
 from features.sendemail import send_email_function
 import statsapi
 import json
-
+import asyncio
+import aiohttp
+from functools import lru_cache
+from features.ovrCalculation import calculate_ovr
 def strftime(date, format_string):
     return date.strftime(format_string)
 # Load the JSON data from a file
@@ -811,7 +814,6 @@ def fetch_latest_news():
         })
     
     return news_list
-
 def get_schedule():
     season = 2025
     url = f'https://statsapi.mlb.com/api/v1/schedule?sportId=1&season={season}'
@@ -819,23 +821,30 @@ def get_schedule():
         response = requests.get(url)
         data = response.json()
         games = []
-
+        
         if 'dates' in data:
             for date in data['dates']:
                 for game in date.get('games', []):
+                    home_team = game.get('teams', {}).get('home', {}).get('team', {})
+                    away_team = game.get('teams', {}).get('away', {}).get('team', {})
+                    
                     games.append({
                         'gamePk': game.get('gamePk'),
                         'gameDate': game.get('gameDate'),
                         'status': game.get('status', {}).get('abstractGameState'),
-                        'homeTeam': game.get('teams', {}).get('home', {}).get('team', {}).get('name'),
-                        'awayTeam': game.get('teams', {}).get('away', {}).get('team', {}).get('name'),
+                        'homeTeam': home_team.get('name'),
+                        'awayTeam': away_team.get('name'),
+                        'homeTeamId': home_team.get('id'),
+                        'awayTeamId': away_team.get('id'),
+                        'homeTeamLogo': f"https://www.mlbstatic.com/team-logos/{home_team.get('id')}.svg",
+                        'awayTeamLogo': f"https://www.mlbstatic.com/team-logos/{away_team.get('id')}.svg",
                         'venue': game.get('venue', {}).get('name'),
                         'homeScore': game.get('teams', {}).get('home', {}).get('score', 0),
                         'awayScore': game.get('teams', {}).get('away', {}).get('score', 0)
                     })
-
+                    
         games.sort(key=lambda x: x['gameDate'])
-        upcoming_games = [g for g in games if g['status'] == 'Preview'][:4]  # Show 4 upcoming games
+        upcoming_games = [g for g in games if g['status'] == 'Preview'][:4]
         return upcoming_games
     except:
         return []
@@ -990,30 +999,142 @@ def load_user_team_data():
     with open('database/user_teams/user_team_data.json', 'r') as file:
         return json.load(file)
     
-@app.route('/my_team', methods=['GET', 'POST'])
-def myteam():
-    user_data = load_user_team_data()
-    user_name = session['username']
-    
-    # Get all teams for the user
-    user_teams = user_data[user_name]
-    
-    # Prepare a list of team names
-    team_names = list(user_teams.keys())
+# Define positional weights for the team OVR calculation
+POSITION_WEIGHTS = {
+    'Pitcher': 0.25,
+    'Catcher': 0.15,
+    'First Base': 0.10,
+    'Second Base': 0.10,
+    'Third Base': 0.10,
+    'Shortstop': 0.10,
+    'Left Fielder': 0.05,
+    'Center Fielder': 0.10,
+    'Right Fielder': 0.05
+}
 
-    # Prepare a dictionary of players for each team
+
+@app.route('/<username>/my_team', methods=['GET', 'POST'])
+def myteam(username):
+    # Check if user is logged in
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    
+    # Load users data to check friendship
+    users = load_json('users.json')
+    
+    # Check if the requested username exists
+    if username not in users:
+        return "User not found", 404
+    
+    # Check if the viewer is the profile owner or a friend
+    current_user = session['username']
+    if current_user != username and current_user not in users[username]['friends']:
+        return "You must be friends with this user to view their teams", 403
+    
+    user_data = load_user_team_data()
+    
+    # Check if the requested username exists in team data
+    if username not in user_data:
+        return "No teams found for this user", 404
+    
+    # Get all teams for the requested user
+    user_teams = user_data[username]
+    team_names = list(user_teams.keys())
     teams_players = {}
+    team_ovrs = {}
+
     for team_name, team_data in user_teams.items():
         players = []
+        total_weighted_ovr = 0
+        total_weights = 0
+
         for player in team_data['selected_players']:
-            players.append({
+            ovr_data = calculate_ovr(player['id'], player['position'])
+            ovr_rating = int(ovr_data['overall_rating'] if isinstance(ovr_data, dict) else 0)
+            position_weight = POSITION_WEIGHTS.get(player['position'], 0)
+            
+            total_weighted_ovr += ovr_rating * position_weight
+            total_weights += position_weight
+            
+            player_info = {
                 'name': player['name'],
                 'position': player['position'],
-                'headshot_url': player['headshot_url']
-            })
+                'headshot_url': player['headshot_url'],
+                'ovr': int(ovr_rating)
+            }
+            players.append(player_info)
+
+        team_ovr = int(total_weighted_ovr / total_weights if total_weights else 0)
         teams_players[team_name] = players
     
-    return render_template('my_team.html', team_names=team_names, teams_players=teams_players)
+    return render_template('my_team.html', 
+                         team_names=team_names, 
+                         teams_players=teams_players, 
+                         team_ovrs=int(team_ovr),
+                         profile_username=username)
+
+@app.route('/my_team')
+def redirect_to_myteam():
+    if 'username' in session:
+        return redirect(url_for('myteam', username=session['username']))
+    return redirect(url_for('login'))
+
+@app.route('/player_stats/<int:player_id>', methods=['GET'])
+def get_player_stats(player_id):
+    try:
+        # Fetch player data using statsapi
+        player_data = statsapi.player_stat_data(player_id)
+        
+        # Extract relevant stats
+        stats = {
+            'player_info': {
+                'id': player_id,
+                'name': player_data.get('first_name', '') + ' ' + player_data.get('last_name', ''),
+                'position': player_data.get('position', ''),
+                'team': player_data.get('current_team', ''),
+            },
+            'hitting_stats': extract_hitting_stats(player_data),
+            'fielding_stats': extract_fielding_stats(player_data)
+        }
+        
+        return jsonify(stats), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+def extract_hitting_stats(player_data):
+    hitting_stats = {}
+    for stat_group in player_data.get('stats', []):
+        if stat_group.get('group') == 'hitting' and stat_group.get('type') == 'season':
+            stats = stat_group.get('stats', {})
+            hitting_stats = {
+                'avg': stats.get('avg', '.000'),
+                'hr': stats.get('homeRuns', 0),
+                'rbi': stats.get('rbi', 0),
+                'obp': stats.get('obp', '.000'),
+                'slg': stats.get('slg', '.000'),
+                'ops': stats.get('ops', '.000'),
+                'sb': stats.get('stolenBases', 0),
+                'runs': stats.get('runs', 0)
+            }
+            break
+    return hitting_stats
+
+def extract_fielding_stats(player_data):
+    fielding_stats = {}
+    for stat_group in player_data.get('stats', []):
+        if stat_group.get('group') == 'fielding' and stat_group.get('type') == 'season':
+            stats = stat_group.get('stats', {})
+            fielding_stats = {
+                'fielding_pct': stats.get('fielding', '.000'),
+                'assists': stats.get('assists', 0),
+                'putouts': stats.get('putOuts', 0),
+                'errors': stats.get('errors', 0),
+                'double_plays': stats.get('doublePlays', 0),
+                'range_factor': stats.get('rangeFactorPerGame', '0.00')
+            }
+            break
+    return fielding_stats
 
 @app.route('/get_position_headshots/<team_name>/<position>')
 def get_position_headshots(team_name, position):
@@ -1023,13 +1144,19 @@ def get_position_headshots(team_name, position):
     # Get the specific team data
     team_data = user_data[user_name][team_name]
     
-    # Filter players by position and get their headshot URLs
+    # Filter players by position and get their headshot URLs along with OVR
     position_headshots = []
     for player in team_data['selected_players']:
         if player['position'].upper() == position.upper():
+            # Calculate OVR for each player
+            ovr_data = calculate_ovr(player['id'], player['position'])
+            ovr_rating = ovr_data['overall_rating'] if isinstance(ovr_data, dict) else 'N/A'
+            
             position_headshots.append({
                 'name': player['name'],
-                'headshot_url': player['headshot_url']
+                'position': player['position'],
+                'headshot_url': player['headshot_url'],
+                'ovr': ovr_rating  # Include OVR in the response
             })
     
     return jsonify({
@@ -1038,6 +1165,127 @@ def get_position_headshots(team_name, position):
         'players': position_headshots
     })
 
+@app.route('/generate_team_link/<username>')
+def generate_team_link(username):
+    if 'username' not in session:
+        return jsonify({'error': 'Not authenticated'}), 401
+    
+    # Generate a unique token for sharing
+    share_token = secrets.token_urlsafe(16)
+    
+    # Store the share token with expiration time (24 hours from now)
+    share_links = load_json('share_links.json')
+    share_links[share_token] = {
+        'username': username,
+        'expires': (datetime.now() + timedelta(days=1)).timestamp()
+    }
+    save_json(share_links, 'share_links.json')
+    
+    # Generate the shareable link
+    share_url = url_for('view_shared_team', share_token=share_token, _external=True)
+    return jsonify({'share_url': share_url})
+
+@app.route('/shared_team/<share_token>')
+def view_shared_team(share_token):
+    share_links = load_json('share_links.json')
+    
+    # Check if token exists and is valid
+    if share_token not in share_links:
+        return "Invalid or expired link", 404
+    
+    share_data = share_links[share_token]
+    
+    # Check if link has expired
+    if datetime.now().timestamp() > share_data['expires']:
+        del share_links[share_token]
+        save_json(share_links, 'share_links.json')
+        return "Link has expired", 404
+    
+    username = share_data['username']
+    user_data = load_user_team_data()
+    
+    if username not in user_data:
+        return "No teams found for this user", 404
+    
+    # Get all teams for the requested user
+    user_teams = user_data[username]
+    team_names = list(user_teams.keys())
+    teams_players = {}
+    team_ovrs = {}
+
+    for team_name, team_data in user_teams.items():
+        players = []
+        total_weighted_ovr = 0
+        total_weights = 0
+
+        for player in team_data['selected_players']:
+            ovr_data = calculate_ovr(player['id'], player['position'])
+            ovr_rating = int(ovr_data['overall_rating'] if isinstance(ovr_data, dict) else 0)
+            position_weight = POSITION_WEIGHTS.get(player['position'], 0)
+            
+            total_weighted_ovr += ovr_rating * position_weight
+            total_weights += position_weight
+            
+            player_info = {
+                'name': player['name'],
+                'position': player['position'],
+                'headshot_url': player['headshot_url'],
+                'ovr': int(ovr_rating)
+            }
+            players.append(player_info)
+
+        team_ovr = int(total_weighted_ovr / total_weights if total_weights else 0)
+        teams_players[team_name] = players
+    
+    return render_template('my_team.html', 
+                         team_names=team_names, 
+                         teams_players=teams_players, 
+                         team_ovrs=int(team_ovr),
+                         profile_username=username)
+
+# @app.route('/<username>/get_position_headshots/<team_name>/<position>')
+# def get_position_headshots(username, team_name, position):
+#     # Check if user is logged in
+#     if 'username' not in session:
+#         return jsonify({'error': 'Not authenticated'}), 401
+    
+#     # Load users data to check friendship
+#     users = load_json('users.json')
+    
+#     # Check if the requested username exists
+#     if username not in users:
+#         return jsonify({'error': 'User not found'}), 404
+    
+#     # Check if the viewer is the profile owner or a friend
+#     current_user = session['username']
+#     if current_user != username and current_user not in users[username]['friends']:
+#         return jsonify({'error': 'Access denied'}), 403
+
+#     user_data = load_user_team_data()
+    
+#     # Get the specific team data
+#     team_data = user_data[username][team_name]
+    
+#     # Filter players by position and get their headshot URLs along with OVR
+#     position_headshots = []
+#     for player in team_data['selected_players']:
+#         if player['position'].upper() == position.upper():
+#             # Calculate OVR for each player
+#             ovr_data = calculate_ovr(player['id'], player['position'])
+#             ovr_rating = ovr_data['overall_rating'] if isinstance(ovr_data, dict) else 'N/A'
+            
+#             position_headshots.append({
+#                 'name': player['name'],
+#                 'position': player['position'],
+#                 'headshot_url': player['headshot_url'],
+#                 'ovr': ovr_rating
+#             })
+    
+#     return jsonify({
+#         'team_name': team_name,
+#         'position': position,
+#         'players': position_headshots
+#     })
 
 @app.route('/highlights', methods=['GET', 'POST'])
 def highlights():
@@ -1200,21 +1448,231 @@ def extract_highlights(game_pk):
     return highlights
 
 
+
+
+#TEAM COMPARE
+def initialize_stats():
+    return {
+        'batting': {'avg': 0, 'obp': 0, 'slg': 0, 'ops': 0, 'count': 0},
+        'pitching': {'era': 0, 'whip': 0, 'k9': 0, 'baa': 0, 'count': 0},
+        'fielding': {'fpct': 0, 'assists': 0, 'putouts': 0, 'count': 0},
+        'catching': {'cs_pct': 0, 'pb': 0, 'fpct': 0, 'count': 0}
+    }
+
+async def fetch_stats_async(session, url):
+    async with session.get(url) as response:
+        return await response.json()
+
+async def get_team_stats_async(team_id, season=2024):
+    async with aiohttp.ClientSession() as session:
+        roster_url = f'https://statsapi.mlb.com/api/v1/teams/{team_id}/roster?season={season}'
+        roster_response = await fetch_stats_async(session, roster_url)
+        
+        tasks = []
+        for player in roster_response.get('roster', []):
+            player_id = player['person']['id']
+            stats_url = f'https://statsapi.mlb.com/api/v1/people/{player_id}/stats?stats=season&season={season}'
+            tasks.append(fetch_stats_async(session, stats_url))
+        
+        player_stats_responses = await asyncio.gather(*tasks)
+        
+        stats = initialize_stats()
+        for player_stats, player in zip(player_stats_responses, roster_response.get('roster', [])):
+            process_player_stats(player_stats, player['position']['abbreviation'], stats)
+        
+        return calculate_team_metrics(stats)
+
+def process_player_stats(stats_data, position, team_stats):
+    if not stats_data.get('stats'):
+        return
+        
+    if position == 'P':
+        process_pitcher_stats(stats_data, team_stats)
+    elif position == 'C':
+        process_catcher_stats(stats_data, team_stats)
+        process_fielder_stats(stats_data, team_stats)
+    else:
+        process_batter_stats(stats_data, team_stats)
+        process_fielder_stats(stats_data, team_stats)
+
+def process_batter_stats(stats_data, team_stats):
+    hitting_stats = next((group for group in stats_data['stats'] 
+                         if group['group']['displayName'] == 'hitting'), None)
+    if hitting_stats and hitting_stats.get('splits'):
+        stats = hitting_stats['splits'][0]['stat']
+        team_stats['batting']['avg'] += float(stats.get('avg', 0))
+        team_stats['batting']['obp'] += float(stats.get('obp', 0))
+        team_stats['batting']['slg'] += float(stats.get('slg', 0))
+        team_stats['batting']['ops'] += float(stats.get('ops', 0))
+        team_stats['batting']['count'] += 1
+
+def process_pitcher_stats(stats_data, team_stats):
+    pitching_stats = next((group for group in stats_data['stats'] 
+                          if group['group']['displayName'] == 'pitching'), None)
+    if pitching_stats and pitching_stats.get('splits'):
+        stats = pitching_stats['splits'][0]['stat']
+        team_stats['pitching']['era'] += float(stats.get('era', 0))
+        team_stats['pitching']['whip'] += float(stats.get('whip', 0))
+        team_stats['pitching']['k9'] += float(stats.get('strikeoutsPer9Inn', 0))
+        team_stats['pitching']['baa'] += float(stats.get('avg', 0))
+        team_stats['pitching']['count'] += 1
+
+def process_fielder_stats(stats_data, team_stats):
+    fielding_stats = next((group for group in stats_data['stats'] 
+                          if group['group']['displayName'] == 'fielding'), None)
+    if fielding_stats and fielding_stats.get('splits'):
+        stats = fielding_stats['splits'][0]['stat']
+        team_stats['fielding']['fpct'] += float(stats.get('fielding', 0))
+        team_stats['fielding']['assists'] += float(stats.get('assists', 0))
+        team_stats['fielding']['putouts'] += float(stats.get('putOuts', 0))
+        team_stats['fielding']['count'] += 1
+
+def process_catcher_stats(stats_data, team_stats):
+    catching_stats = next((group for group in stats_data['stats'] 
+                          if group['group']['displayName'] == 'catching'), None)
+    if catching_stats and catching_stats.get('splits'):
+        stats = catching_stats['splits'][0]['stat']
+        team_stats['catching']['cs_pct'] += float(stats.get('catcherCaughtStealing', 0))
+        team_stats['catching']['pb'] += float(stats.get('passedBalls', 0))
+        team_stats['catching']['fpct'] += float(stats.get('fielding', 0))
+        team_stats['catching']['count'] += 1
+
+def calculate_team_metrics(stats):
+    metrics = {}
+    
+    for category in stats:
+        if stats[category]['count'] > 0:
+            if category == 'batting':
+                metrics[category] = {
+                    'value': (
+                        (stats[category]['avg'] / stats[category]['count']) * 0.3 +
+                        (stats[category]['obp'] / stats[category]['count']) * 0.35 +
+                        (stats[category]['slg'] / stats[category]['count']) * 0.35
+                    ) * 100
+                }
+            elif category == 'pitching':
+                metrics[category] = {
+                    'value': (
+                        (1 - (stats[category]['era'] / stats[category]['count'])/5.0) * 0.4 +
+                        (1 - (stats[category]['whip'] / stats[category]['count'])/1.5) * 0.3 +
+                        ((stats[category]['k9'] / stats[category]['count'])/9.0) * 0.3
+                    ) * 100
+                }
+            elif category == 'fielding':
+                metrics[category] = {
+                    'value': (stats[category]['fpct'] / stats[category]['count']) * 100
+                }
+            else:  # catching
+                metrics[category] = {
+                    'value': (stats[category]['cs_pct'] / stats[category]['count']) * 100
+                }
+        else:
+            metrics[category] = {'value': 0}
+    
+    return metrics
+
+
+@app.route('/compare', methods=['POST'])
+async def compare_teams():
+    home_team = request.form.get('home_team')
+    away_team = request.form.get('away_team')
+    
+    home_stats, away_stats = await asyncio.gather(
+        get_team_stats_async(home_team),
+        get_team_stats_async(away_team)
+    )
+    
+    return jsonify({
+        'home': home_stats,
+        'away': away_stats
+    })
+
+@app.route('/team_compare')
+def teaam_compare():
+    return render_template('teamcompare.html')
+
+
+
+# @app.route('/')
+# def index():
+#     if 'username' not in session:
+#         return redirect(url_for('login'))
+#     lang = request.args.get('lang', 'en')
+#     upcoming_games = get_schedule()
+#     news = fetch_latest_news()  
+#     return render_template('hometest.html',
+#                          upcoming_games=upcoming_games,
+#                          news=news,
+#                          lang=lang,
+#     )
+
 @app.route('/')
 def index():
     if 'username' not in session:
         return redirect(url_for('login'))
+    
+    username = session['username']
     lang = request.args.get('lang', 'en')
+    
+    # Get user's selected team
+    user_details_path = f'database/details/{username}.json'
+    with open(user_details_path, 'r') as f:
+        user_data = json.load(f)
+    selected_team = user_data.get('selected_team')
+    print(f"Selected Team: {selected_team}")
+    
+    # Get team ID from dataset
+    with open('dataset/team.json', 'r') as f:
+        teams_data = json.load(f)
+    print(f"Teams Data: {teams_data}")
+    
+    team_id = None
+    for team_info in teams_data:
+        if isinstance(team_info, dict) and team_info.get('name') == selected_team:
+            team_id = team_info.get('id')
+            break
+    print(f"Team ID: {team_id}")
+    
+    # Get latest game
+    latest_game = None
+    if team_id:
+        game_pk = statsapi.last_game(team_id)
+        print(f"Game PK: {game_pk}")
+        
+        MLB_API_URL = "https://statsapi.mlb.com/api/v1"
+        response = requests.get(f"{MLB_API_URL}/game/{game_pk}/feed/live")
+        game_data = response.json()
+        print(f"Game Data Keys: {game_data.keys()}")
+        
+        if game_data:
+            try:
+                game = game_data['gameData']
+                teams = game_data['liveData']['boxscore']['teams']
+                
+                latest_game = {
+                    'home_team': game['teams']['home']['name'],
+                    'away_team': game['teams']['away']['name'],
+                    'home_score': teams['home']['teamStats']['batting']['runs'],
+                    'away_score': teams['away']['teamStats']['batting']['runs'],
+                    'game_date': game['datetime']['dateTime'],
+                    'venue': game['venue']['name'],
+                    'game_pk': game_pk,
+                    'home_team_logo': f'https://www.mlbstatic.com/team-logos/{game["teams"]["home"]["id"]}.svg',
+                    'away_team_logo': f'https://www.mlbstatic.com/team-logos/{game["teams"]["away"]["id"]}.svg',
+                    'highlights_url': f"/game/{game_pk}"
+                }
+                print(f"Latest Game Data: {latest_game}")
+            except KeyError as e:
+                print(f"Error accessing game data: {e}")
+    
     upcoming_games = get_schedule()
     news = fetch_latest_news()
     
-    # Translate content if language is not English
-    
-    return render_template('home.html',
+    return render_template('hometest.html',
                          upcoming_games=upcoming_games,
                          news=news,
                          lang=lang,
-    )
+                         latest_game=latest_game)
 
 if __name__ == '__main__':
     app.run(debug=True)

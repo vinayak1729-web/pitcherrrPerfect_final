@@ -1,97 +1,36 @@
 {
-    "Vinayak121_Vishal216": [
+    "NANO_Vinayak9271": [
         {
-            "from": "Vishal216",
-            "message": "hii",
-            "timestamp": "05:53 PM"
+            "from": "NANO",
+            "message": "hello",
+            "timestamp": "10:50 AM"
         },
         {
-            "from": "Vinayak121",
-            "message": "kaisa hai bro",
-            "timestamp": "05:53 PM"
-        },
-        {
-            "from": "Vinayak121",
-            "message": "bol na bhai",
-            "timestamp": "08:22 PM"
-        },
-        {
-            "from": "Vinayak121",
-            "message": "kaisa hai",
-            "timestamp": "08:22 PM"
-        },
-        {
-            "from": "Vinayak121",
-            "message": "bol nn",
-            "timestamp": "08:57 PM"
-        }
-    ],
-    "Nikhil12_Vishal216": [
-        {
-            "from": "Vishal216",
-            "message": "hiiii bro",
-            "timestamp": "05:55 PM"
-        },
-        {
-            "from": "Vishal216",
-            "message": "how re u budy",
-            "timestamp": "05:55 PM"
-        },
-        {
-            "from": "Vishal216",
+            "from": "Vinayak9271",
             "message": "hi",
-            "timestamp": "05:55 PM"
+            "timestamp": "10:50 AM"
         },
         {
-            "from": "Nikhil12",
-            "message": "mast bro",
-            "timestamp": "05:55 PM"
+            "from": "Vinayak9271",
+            "message": "gud",
+            "timestamp": "10:50 AM"
         }
     ],
-    "Nikhil12_Vinayak121": [
+    "Vinayak9271_jj": [
         {
-            "from": "Vinayak121",
-            "message": "hiiii",
-            "timestamp": "08:57 PM"
-        }
-    ],
-    "Vishal216_surya": [
-        {
-            "from": "surya",
-            "message": "ho",
-            "timestamp": "11:55 AM"
+            "from": "jj",
+            "message": "hello",
+            "timestamp": "12:43 PM"
         },
         {
-            "from": "surya",
-            "message": "hi",
-            "timestamp": "11:58 AM"
+            "from": "Vinayak9271",
+            "message": "so what",
+            "timestamp": "12:48 PM"
         },
         {
-            "from": "surya",
-            "message": "hi",
-            "timestamp": "12:00 PM"
-        },
-        {
-            "from": "surya",
-            "message": "hii",
-            "timestamp": "12:02 PM"
-        },
-        {
-            "from": "surya",
-            "message": "kaisa",
-            "timestamp": "12:02 PM"
-        }
-    ],
-    "VinayakShinde_Vishal216": [
-        {
-            "from": "Vishal216",
-            "message": "hiiii",
-            "timestamp": "04:31 PM"
-        },
-        {
-            "from": "VinayakShinde",
-            "message": "wsup",
-            "timestamp": "04:31 PM"
+            "from": "Vinayak9271",
+            "message": "wsuupp",
+            "timestamp": "05:03 PM"
         }
     ]
 }
