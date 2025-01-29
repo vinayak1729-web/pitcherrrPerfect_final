@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,297 +10,716 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <style>
-    /* Neo-brutalist styles */
-.neo-brutal {
-    background: #cbe4f5;
-    border: 4px solid #000;
-    box-shadow: 8px 8px 0 #000;
-    
-}
+    /* Neo-brutalism base styles */
+    :root {
+        --neon-blue: #213a8f;
+        --neon-red: #ff2e2e;
+        --neon-yellow: #ffd100;
+        --baseball-green: #2ecc71;
+    }
 
-.baseball-stitch {
-    position: relative;
-    border: 4px solid #000;
-}
+    body {
+        background: repeating-linear-gradient(45deg,
+                #f0f0f0 0px,
+                #f0f0f0 10px,
+                #ffffff 10px,
+                #ffffff 20px);
+        font-family: 'Bungee', cursive;
+    }
 
-.baseball-stitch::before,
-.baseball-stitch::after {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 4px;
-    background: #ff2e2e;
-    transform: rotate(-45deg);
-}
+    /* Neo-brutal navbar */
+    .navbar.neo-brutal {
+        background: white;
+        border-bottom: 4px solid black;
+        transform-style: preserve-3d;
+        transition: transform 0.3s;
+    }
 
-.nav-item {
-    font-family: 'Bungee', cursive;
-    padding: 0.5rem 1rem;
-    background: #ff2e2e;
-    color: white;
-    border: 3px solid #000;
-    box-shadow: 4px 4px 0 #000;
-    transition: all 0.2s;
-}
+    .nav-item {
+        padding: 0.5rem 1rem;
+        border: 3px solid black;
+        background: white;
+        transform-style: preserve-3d;
+        transition: all 0.2s;
+        position: relative;
+    }
 
-.nav-item:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 #000;
-}
+    .nav-item:hover {
+        transform: translate(-4px, -4px);
+        box-shadow: 4px 4px 0 black;
+    }
 
-.game-card {
-    background: white;
-    border: 4px solid #000;
-    box-shadow: 8px 8px 0 #85aafb;
-    transform: rotate(1deg);
-    transition: all 0.3s;
-}
+    /* Upcoming games section */
+    .upcoming-games {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+    }
 
-.game-card:hover {
-    transform: rotate(-1deg) scale(1.02);
-    box-shadow: 10px 10px 0 #ff2e2e;
-}
+    .game-card {
+        background: white;
+        border: 4px solid black;
+        transform-style: preserve-3d;
+        transition: transform 0.3s;
+        position: relative;
+    }
 
-/* Updated navbar with baseball theme */
-.navbar {
-    background: #85e5fb;
-    padding: 1rem;
-    margin-bottom: 2rem;
-}
+    .game-card:hover {
+        transform: translate(-8px, -8px);
+        box-shadow: 8px 8px 0 var(--neon-red);
+    }
 
-/* Hero section */
-.hero-section {
-    background-image: url('baseball-pattern.png');
-    padding: 4rem 0;
-    position: relative;
-    overflow: hidden;
-}
+    /* Latest highlight section */
+    .highlight-container {
+        background: linear-gradient(135deg, var(--neon-blue), var(--neon-red));
+        border: 4px solid black;
+        padding: 2rem;
+        color: white;
+    }
 
-.hero-section::before {
-    content: '⚾';
-    font-size: 20rem;
-    position: absolute;
-    opacity: 0.1;
-    right: -5rem;
-    top: -5rem;
-    transform: rotate(15deg);
-}
+    /* Team section with FIFA-style shine */
+    .my_team {
+        background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+        border: 4px solid var(--neon-yellow);
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .my_team::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 100%);
+        animation: shine 3s infinite;
+    }
+
+    /* Chat sections */
+    .chat-container {
+        background: white;
+        border: 4px solid black;
+        border-radius: 12px;
+        transform-style: preserve-3d;
+        transition: transform 0.3s;
+    }
+
+    .chat-container:hover {
+        transform: translate(-4px, -4px);
+        box-shadow: 4px 4px 0 var(--baseball-green);
+    }
+
+    /* Animations */
+    @keyframes shine {
+        0% {
+            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+        }
+
+        100% {
+            transform: translateX(100%) translateY(100%) rotate(45deg);
+        }
+    }
+
+    /* Dark mode adjustments */
+    .dark .navbar.neo-brutal {
+        background: #1a1a1a;
+        border-color: var(--neon-blue);
+    }
+
+    .dark .nav-item {
+        background: #2a2a2a;
+        color: white;
+        border-color: var(--neon-blue);
+    }
+
+    .neo-brutal-panel {
+        box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
+        transition: all 0.3s ease;
+    }
+
+    .neo-brutal-panel:hover {
+        box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.8);
+    }
+
+    .neo-brutal-button {
+        border: 3px solid black;
+        box-shadow: 4px 4px 0 black;
+        transition: all 0.2s ease;
+    }
+
+    .neo-brutal-button:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 black;
+    }
+
+    .shadow-brutal {
+        box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8);
+    }
+
+    .neo-brutal-highlight {
+        box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.8);
+        transform-style: preserve-3d;
+        transition: all 0.3s ease;
+    }
+
+    .neo-brutal-highlight:hover {
+        transform: translate(-4px, -4px);
+        box-shadow: 16px 16px 0 rgba(0, 0, 0, 0.8);
+    }
+
+    .shine-effect {
+        position: absolute;
+        top: -100%;
+        left: -100%;
+        width: 300%;
+        height: 300%;
+        background: linear-gradient(45deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 30%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0.1) 70%,
+                transparent 100%);
+        animation: shine 5s infinite;
+    }
+
+    .team-logo-wrapper {
+        background: white;
+        border: 4px solid black;
+        border-radius: 50%;
+        padding: 1rem;
+        box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.8);
+        transition: all 0.3s ease;
+    }
+
+    .team-logo-wrapper:hover {
+        transform: scale(1.05) rotate(-5deg);
+    }
+
+    .neo-brutal-highlight {
+        box-shadow: 16px 16px 0 rgba(0, 0, 0, 0.8);
+        transform-style: preserve-3d;
+    }
+
+    .glowing-border {
+        position: absolute;
+        inset: -2px;
+        border: 4px solid transparent;
+        background: linear-gradient(45deg, #ff2e2e, #213a8f, #ffd100);
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        animation: borderRotate 4s linear infinite;
+    }
+
+    .shine-effect {
+        position: absolute;
+        top: -150%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 30%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0.1) 70%,
+                transparent 100%);
+        animation: shine 3s infinite;
+        transform: rotate(45deg);
+    }
+
+    @keyframes borderRotate {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Make side panels more compact */
+    .col-span-3 .neo-brutal-panel {
+        padding: 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    /* Enhanced center section */
+    .col-span-6 {
+        z-index: 10;
+    }
+
+    .col-span-6 .team-logo-wrapper {
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
+    }
+
+    .versus-badge {
+        transform: scale(1.2);
+        z-index: 20;
+    }
+
+    .shine-text {
+        background: linear-gradient(45deg, #213a8f, #ff2e2e);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .neo-brutal-video {
+        box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
+        transition: all 0.3s ease;
+    }
+
+    .neo-brutal-video:hover {
+        transform: scale(1.02);
+    }
+
+    .neo-brutal-highlight {
+        box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
+    }
+
+    .team-logo-wrapper {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        border-radius: 12px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .team-logo-wrapper:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-4px);
+    }
+
+    .video-wrapper {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .neo-brutal-button {
+        border: 3px solid black;
+        box-shadow: 4px 4px 0 black;
+        transition: all 0.2s ease;
+    }
+
+    .neo-brutal-button:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 black;
+    }
+
+    .shine-effect {
+        position: absolute;
+        top: -100%;
+        left: -100%;
+        width: 250%;
+        height: 250%;
+        background: linear-gradient(45deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.05) 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0.05) 70%,
+                transparent 100%);
+        animation: shine 5s infinite;
+    }
+
+    /* Dark mode styles */
+    .dark body {
+        background: #121212;
+        color: white;
+    }
+
+    .dark .neo-brutal-panel {
+        background: #1a1a1a;
+        border-color: #213a8f;
+    }
+
+    .dark .game-card {
+        background: #1a1a1a;
+        color: white;
+        border-color: #213a8f;
+    }
+
+    .dark .team-logo-wrapper {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: #213a8f;
+    }
+
+    .dark .highlight-container {
+        background: rgba(10, 17, 40, 0.8);
+    }
+
+    .dark .neo-brutal-button {
+        background: #2d4b8e;
+        color: white;
+        border-color: #ffd100;
+    }
+
+    .dark .neo-brutal-highlight {
+        background: linear-gradient(to bottom right, #1a2151, #2d4b8e);
+    }
+
+    .dark .chatbot-container {
+        background: #1a1a1a;
+        border-color: #213a8f;
+    }
+
+    .dark .upcoming-games {
+        background: #121212;
+    }
+
+    .dark .news-section {
+        background: #1a1a1a;
+        color: white;
+    }
+
+    /* News Section Dark Mode */
+    .dark #news-section {
+        background: #1a1a1a;
+        border-color: #ffd700;
+        box-shadow: 8px 8px 0 rgba(255, 215, 0, 0.2);
+    }
+
+    .dark #news-section h2 {
+        color: #ffd700;
+    }
+
+    .dark #news-section a {
+        background: #2a2a2a;
+        border: 1px solid #333;
+    }
+
+    .dark #news-section a:hover {
+        background: #333;
+        border-color: #ffd700;
+    }
+
+    .dark #news-section h3 {
+        color: #fff;
+    }
+
+    .dark #news-section .text-blue-500 {
+        color: #ffd700;
+    }
+
+    .dark #close-news {
+        color: #ff2e2e;
+    }
+
+    .dark input,
+    .dark textarea {
+        background: #2a2a2a;
+        color: white;
+        border-color: #213a8f;
+    }
+
+    /* Left Sidebar Dark Mode Enhancements */
+    .dark .neo-brutal-panel.bg {
+        background: linear-gradient(145deg, #213a8f, #1a2151);
+        border-color: #ffd100;
+        box-shadow: 8px 8px 0 rgba(255, 209, 0, 0.3);
+    }
+
+    .dark .neo-brutal-panel.bg-white {
+        background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+        border-color: #213a8f;
+        box-shadow: 8px 8px 0 rgba(33, 58, 143, 0.3);
+    }
+
+    .dark #friendsList .bg-white {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+    }
+
+    .dark .font-permanent-marker {
+        color: #ffffff;
+    }
+
+    .dark .text-gray-500 {
+        color: #a0aec0;
+    }
+
+    .dark .bg-gray-50 {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .dark .shadow-brutal {
+        box-shadow: 4px 4px 0 rgba(255, 209, 0, 0.3);
+    }
+
+    .dark .neo-brutal-button {
+        border-color: #ffd100;
+        box-shadow: 3px 3px 0 rgba(255, 209, 0, 0.5);
+    }
+
+    .dark .neo-brutal-button:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 5px 5px 0 rgba(255, 209, 0, 0.5);
+    }
+
+    @keyframes shine {
+        0% {
+            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+        }
+
+        100% {
+            transform: translateX(100%) translateY(100%) rotate(45deg);
+        }
+    }
 
 
-/* Layout fixes */
-.upcoming-games {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    padding: 2rem;
-    margin-bottom: 300px; /* Space for news section */
-}
+    @keyframes pulse {
 
-/* Neo-brutalist components */
-.neo-brutal-button {
-    border: 3px solid #000;
-    box-shadow: 4px 4px 0 #000;
-    font-family: 'Bungee', cursive;
-    transition: all 0.2s;
-}
+        0%,
+        100% {
+            transform: scale(1) rotate(12deg);
+        }
 
-.neo-brutal-button:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 #000;
-}
+        50% {
+            transform: scale(1.1) rotate(12deg);
+        }
+    }
 
-.neo-brutal-panel {
-    border: 4px solid #000;
-    box-shadow: 8px 8px 0 #000;
-    background: #fff;
-}
+    .neon-brutal-header {
+        text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+        animation: headerPulse 3s infinite;
+    }
 
-.dark .neo-brutal-panel {
-    background: #1f2937;
-    border-color: #fff;
-    box-shadow: 8px 8px 0 #fff;
-}
+    @keyframes headerPulse {
 
-.neo-brutal-card {
-    border: 3px solid #000;
-    box-shadow: 4px 4px 0 #000;
-    background: #fff;
-}
+        0%,
+        100% {
+            transform: scale(1);
+        }
 
-.dark .neo-brutal-card {
-    background: #1f2937;
-    border-color: #fff;
-    box-shadow: 4px 4px 0 #fff;
-}
+        50% {
+            transform: scale(1.02);
+        }
+    }
 
-.neo-brutal-input {
-    border: 3px solid #000;
-    padding: 0.5rem 1rem;
-    font-family: 'Permanent Marker', cursive;
-    outline: none;
-}
+    .neo-brutal-highlight {
+        box-shadow: 8px 8px 0 rgba(255, 215, 0, 0.3);
+    }
 
-.dark .neo-brutal-input {
-    background: #1f2937;
-    color: #fff;
-    border-color: #fff;
-}
+    .dark .neo-brutal-highlight {
+        box-shadow:
+            8px 8px 0 rgba(255, 215, 0, 0.3),
+            inset 0 0 20px rgba(255, 215, 0, 0.1);
+    }
 
-/* Language options animation */
-.language-options a {
-    position: relative;
-}
+    .team-logo-wrapper img {
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    }
 
-.language-options a::after {
-    content: '⚾';
-    position: absolute;
-    left: -20px;
-    opacity: 0;
-    transition: all 0.3s;
-}
+    .dark .team-logo-wrapper:hover {
+        border-color: #ffd700;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    }
 
-.language-options a:hover::after {
-    opacity: 1;
-    left: 10px;
-}
-.logo-neo {
-    mix-blend-mode: multiply;
-    transform: rotate(-2deg);
-    border: 3px solid #000;
-    padding: 8px;
-    background: white;
-    box-shadow: 4px 4px 0 #000;
-    transition: all 0.3s ease;
-}
+    .dark .video-wrapper {
+        box-shadow:
+            0 4px 20px rgba(0, 0, 0, 0.5),
+            0 0 0 2px rgba(255, 215, 0, 0.3);
+    }
 
-.logo-neo:hover {
-    transform: translate(-4px, -4px) rotate(0deg);
-    box-shadow: 8px 8px 0 #ff2e2e,
-                12px 12px 0 #213a8f;
-    cursor: pointer;
-}
+    .neon-header {
+        color: #213a8f;
+        text-shadow:
+            2px 2px 0px #ff2e2e,
+            -2px -2px 0px #ffd700;
+        transition: all 0.3s ease;
+    }
 
-/* For dark mode */
-.dark .logo-neo {
-    background: #1f2937;
-    border-color: #fff;
-    box-shadow: 4px 4px 0 #fff;
-}
+    .dark .neon-header {
+        color: #ffd700;
+        text-shadow:
+            2px 2px 0px #ff2e2e,
+            -2px -2px 0px #213a8f;
+    }
 
-.dark .logo-neo:hover {
-    box-shadow: 8px 8px 0 #ff2e2e,
-                12px 12px 0 #fff;
-}
-/* News Section Positioning */
-#news-section {
-    position: fixed;
-    bottom: 20px;
-    left: 4px;
-    width: 100%;
-    max-width: 400px;
-    z-index: 40;
-}
-/* Dark Mode Styles */
-.dark {
-    background-color: #1f2937;
-    color: #fff;
-}
+    .neon-header:hover {
+        letter-spacing: 2px;
+        transform: translateY(-2px);
+    }
 
-.dark .game-card {
-    background-color: #374151;
-    border-color: #fff;
-}
+    /* Dark mode styles for Latest Game section */
+    .dark .neo-brutal-highlight {
+        background: linear-gradient(135deg, #000000, #1a1a1a);
+        border-color: #ffd700;
+        box-shadow:
+            0 0 20px rgba(255, 215, 0, 0.2),
+            inset 0 0 50px rgba(255, 215, 0, 0.1);
+    }
 
-.dark .nav-item {
-    background-color: #374151;
-    border-color: #fff;
-    color: #fff;
-}
+    .dark .team-logo-wrapper {
+        background: rgba(255, 215, 0, 0.05);
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+    }
 
-.dark .neo-brutal-button {
-    background-color: #374151;
-    border-color: #fff;
-    color: #fff;
-}
+    .dark .team-logo-wrapper:hover {
+        background: rgba(255, 215, 0, 0.1);
+        transform: translateY(-5px);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
+    }
 
-.dark .neo-brutal-panel {
-    background-color: #1f2937;
-    border-color: #fff;
-}
+    .dark .versus-badge .text {
+        color: #ffd700;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
 
-/* Chatbot positioning */
-#chatbot-container {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    z-index: 50;
-}
+    .dark .highlight-container {
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
 
-/* Sidebar z-index fix */
-#sidebar {
-    z-index: 45;
-}
+    .dark .video-wrapper {
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+    }
 
-/* Button hover states */
-.neo-brutal-button:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 #000;
-}
+    .dark .neo-brutal-button {
+        background: linear-gradient(45deg, #ffd700, #ff9900);
+        border: 2px solid #000;
+        color: #000;
+        font-weight: bold;
+        box-shadow: 4px 4px 0 #000;
+    }
 
-.dark .neo-brutal-button:hover {
-    box-shadow: 6px 6px 0 #fff;
-}
-/* General Neo-Brutal Styles */
-body {
-    background-color: #fefefe;
-    color: #333;
-    font-family: 'Bungee', sans-serif;
-}
+    .dark .neo-brutal-button:hover {
+        background: linear-gradient(45deg, #ff9900, #ffd700);
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 #000;
+    }
 
-/* Title Styling */
-.neo-brutal-title {
-    text-shadow: -2px 2px 0px #000, 2px 2px 0px #000, 2px -2px 0px #000, -2px -2px 0px #000;
-    padding: 1rem;
-    background: linear-gradient(135deg, #ff4081, #2196f3);
-    display: inline-block;
-    border: 4px solid #000;
-    border-radius: 16px;
-    transform: rotate(-1deg);
-}
+    .dark .shine-effect {
+        background: linear-gradient(45deg,
+                transparent 0%,
+                rgba(255, 215, 0, 0.05) 30%,
+                rgba(255, 215, 0, 0.1) 50%,
+                rgba(255, 215, 0, 0.05) 70%,
+                transparent 100%);
+    }
 
-/* Subtitle Styling */
-.neo-brutal-subtitle {
-    background-color: #fff176;
-    border: 4px solid #000;
-    border-radius: 12px;
-    padding: 0.5rem 1rem;
-    display: inline-block;
-    text-shadow: 2px 2px 0px #000;
-    margin-top: 1rem;
-}
+    /* Chatbot Styling */
+    .chatbot-trigger {
+        animation: float 3s ease-in-out infinite;
+    }
 
-.neon-brutal-header {
-    text-align: center; /* Centers the text horizontally */
-    margin: 0 auto; /* Centers the element in its container */
-    display: inline-block; /* Ensures proper visual alignment */
-    text-shadow: 2px 2px 0px #000;
-    background: linear-gradient(90deg, #ff5722, #4caf50, #2196f3);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    border: 4px solid #000;
-    border-radius: 8px;
-    padding: 0.5rem;
-}
+    @keyframes float {
 
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    #chatbot-container {
+        transform-origin: bottom right;
+        animation: slideIn 0.3s ease-out;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        border: 3px solid #000;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .dark #chatbot-container {
+        border-color: #ffd700;
+        box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
+    }
+
+    #chatbot-messages {
+        scrollbar-width: thin;
+        scrollbar-color: #ff2e2e #ffffff;
+    }
+
+    .dark #chatbot-messages {
+        scrollbar-color: #ffd700 #1a1a1a;
+    }
+
+    #chatbot-input {
+        border: 2px solid #000;
+        transition: all 0.3s ease;
+    }
+
+    .dark #chatbot-input {
+        background: #2a2a2a;
+        border-color: #ffd700;
+        color: white;
+    }
+
+    #send-message {
+        position: relative;
+        overflow: hidden;
+    }
+
+    #send-message::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent);
+        transform: rotate(45deg);
+        animation: shine 3s infinite;
+    }
+
+    /* Navbar Logo Dark Mode */
+    .dark .logo-neo {
+        filter: brightness(0) invert(1);
+        opacity: 0.7;
+        mix-blend-mode: overlay;
+        transition: all 0.3s ease;
+    }
+
+    .dark .logo-neo:hover {
+        opacity: 0.9;
+        transform: scale(1.05);
+        filter: brightness(0) invert(1) drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+    }
 </style>
+<div class="decorative-corner top-left"></div>
+<div class="decorative-corner bottom-right"></div>
 <nav class="navbar neo-brutal">
     <div class="max-w-7xl mx-auto px-4">
         <div class="flex justify-between items-center">
             <div class="flex items-center space-x-4">
-                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo-neo h-20 w-50 object-contain filter-none transition-all duration-300">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"
+                    class="logo-neo h-20 w-50 object-contain filter-none transition-all duration-300">
 
             </div>
-            
+
             <div class="flex items-center space-x-6">
                 <a href="/" class="nav-item">
                     <i class="fas fa-home mr-2"></i>Home
@@ -333,15 +753,15 @@ body {
     <div class="neo-brutal-button bg-[#ff2e2e] p-4 rounded-r-lg transform transition-transform hover:translate-x-2">
         <button id="sidebar-toggle" class="text-white text-2xl font-bungee">☰</button>
     </div>
-    
+
     <div id="sidebar" class="hidden neo-brutal-panel bg-white dark:bg-gray-800 w-64 h-screen p-4">
         <div class="mb-6">
             <h3 class="text-xl font-bungee mb-4 text-[#213a8f] dark:text-white">Language</h3>
             <div class="language-options space-y-2">
-                {% for lang, name in [('en', 'English'), ('ja', 'Japanese'), ('es', 'Spanish'), 
-                                    ('de', 'German'), ('ko', 'Korean'), ('fr', 'French'), ('hi', 'Hindi')] %}
-                <a href="?lang={{ lang }}" 
-                   class="neo-brutal-link block px-4 py-2 font-permanent-marker hover:transform hover:-translate-y-1 transition-all">
+                {% for lang, name in [('en', 'English'), ('ja', 'Japanese'), ('es', 'Spanish'),
+                ('de', 'German'), ('ko', 'Korean'), ('fr', 'French'), ('hi', 'Hindi')] %}
+                <a href="?lang={{ lang }}"
+                    class="neo-brutal-link block px-4 py-2 font-permanent-marker hover:transform hover:-translate-y-1 transition-all">
                     {{ name }}
                 </a>
                 {% endfor %}
@@ -349,9 +769,13 @@ body {
         </div>
     </div>
 </div>
-<h1 class="neon-brutal-header text-4xl font-bungee text-[#213a8f] underline" style="text-align: center;">
-    Upcoming Matches
+<h1 class="neon-header text-5xl font-bungee text-center my-8">
+    <span class="relative inline-block">
+        Upcoming Matches
+        <span class="absolute -inset-1 bg-gradient-to-r from-[#213a8f] to-[#ff2e2e] blur opacity-30"></span>
+    </span>
 </h1>
+
 
 </div>
 
@@ -388,7 +812,8 @@ body {
 </div>
 
 <!-- News Section -->
-<div id="news-section" class="fixed bottom-5 left-5 z-40 hidden bg-white border-4 border-black rounded-lg shadow-brutal w-80 max-h-[70vh] overflow-y-auto">
+<div id="news-section"
+    class="fixed bottom-5 left-5 z-40 hidden bg-white border-4 border-black rounded-lg shadow-brutal w-80 max-h-[70vh] overflow-y-auto">
     <div class="p-4">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-bungee text-[#213a8f]">Latest News</h2>
@@ -404,98 +829,494 @@ body {
         </div>
     </div>
 </div>
-{% if latest_game %}
-<div class="latest-game-card p-6 mb-8">
-    <h2 class="text-2xl font-bungee mb-4">Latest Game</h2>
-    <div class="flex justify-between items-center">
-        <div class="team-info">
-            <img src="{{ latest_game.home_team_logo }}" class="w-16 h-16 mb-2">
-            <div class="font-bungee text-xl">{{ latest_game.home_team }}</div>
-            <div class="score text-2xl">{{ latest_game.home_score }}</div>
+<div class="max-w-8xl mx-auto px-4 mt-8">
+    <div class="grid grid-cols-12 gap-6">
+        <!-- Left Side: Teams and Leagues -->
+        <div class="col-span-3 space-y-6">
+            <!-- My Teammate Section -->
+            <div
+                class="neo-brutal-panel bg-[#213a8f] border-4 border-black p-6 transform hover:-rotate-1 transition-all duration-300">
+                <h2 class="text-2xl font-bungee text-white mb-4">MY TEAMMATE</h2>
+                <div id="friendsList" class="space-y-4">
+                    {% for friend in friends %}
+                    <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-brutal">
+                        <div>
+                            <span class="font-permanent-marker">{{ friend }}</span>
+                        </div>
+                        <a href="/chat/{{ friend }}" class="neo-brutal-button bg-indigo-500 text-white px-4 py-1">
+                            Chat
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- My Leagues Section -->
+            <div
+                class="neo-brutal-panel bg-white border-4 border-black p-6 transform hover:rotate-1 transition-all duration-300">
+                <h2 class="text-2xl font-bungee text-[#213a8f] mb-4">MY LEAGUES</h2>
+                <div class="space-y-2">
+                    {% for group in my_groups %}
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-brutal">
+                        <div>
+                            <span class="font-permanent-marker">{{ group.name }}</span>
+                            <p class="text-sm text-gray-500">{{ group.description }}</p>
+                        </div>
+                        <div class="space-x-2">
+                            <a href="/group_chat/{{ group.id }}"
+                                class="neo-brutal-button bg-green-500 text-white px-4 py-1">
+                                Chat
+                            </a>
+
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-        <div class="text-3xl font-permanent-marker text-red-600">VS</div>
-        <div class="team-info text-right">
-            <img src="{{ latest_game.away_team_logo }}" class="w-16 h-16 mb-2">
-            <div class="font-bungee text-xl">{{ latest_game.away_team }}</div>
-            <div class="score text-2xl">{{ latest_game.away_score }}</div>
+
+        {% if latest_game %}
+        <div class="col-span-6">
+            <div
+                class="neo-brutal-highlight p-6 bg-gradient-to-br from-[#1a2151] to-[#2d4b8e] border-4 border-black relative overflow-hidden transform hover:scale-[1.01] transition-all duration-300">
+                <div class="shine-effect"></div>
+
+                <!-- Header with Live Badge -->
+                <div class="relative mb-6">
+                    <h2 class="text-4xl font-bungee text-center text-white mb-2">
+                        Latest Game
+                        <span
+                            class="absolute -right-2 top-0 bg-[#ff2e2e] text-white text-sm px-3 py-1 rotate-12 border-2 border-black">
+                            LIVE
+                        </span>
+                    </h2>
+                </div>
+
+                <!-- Teams Container -->
+                <div class="flex justify-between items-center mb-4 bg-[#0a1128]/40 p-4 rounded-lg backdrop-blur-sm">
+                    <div class="team-info text-center w-1/3">
+                        <div class="team-logo-wrapper inline-block">
+                            <img src="{{ latest_game.home_team_logo }}" alt="{{ latest_game.home_team }}"
+                                class="w-24 h-24 object-contain hover:scale-110 transition-transform duration-300">
+                        </div>
+                        <div class="font-bungee text-xl text-white mt-2">
+                            {{ latest_game.home_team }}
+                        </div>
+                    </div>
+
+                    <div class="versus-badge w-1/3 text-center">
+                        <div class="text-4xl font-permanent-marker text-[#ff2e2e] px-4 py-2">
+                            VS
+                        </div>
+                    </div>
+
+                    <div class="team-info text-center w-1/3">
+                        <div class="team-logo-wrapper inline-block">
+                            <img src="{{ latest_game.away_team_logo }}" alt="{{ latest_game.away_team }}"
+                                class="w-24 h-24 object-contain hover:scale-110 transition-transform duration-300">
+                        </div>
+                        <div class="font-bungee text-xl text-white mt-2">
+                            {{ latest_game.away_team }}
+                        </div>
+                    </div>
+                </div>
+
+                {% if highlight %}
+                <!-- Highlight Section -->
+                <div class="highlight-container bg-[#0a1128]/30 p-4 rounded-lg backdrop-blur-sm">
+                    <h3 class="font-permanent-marker text-2xl mb-3 text-[#ffd700]">
+                        {{ highlight.title }}
+                    </h3>
+                    <p class="text-white/90 mb-4 font-permanent-marker text-lg">
+                        {{ highlight.description }}
+                    </p>
+
+                    <!-- Video Container -->
+                    <div class="video-wrapper mb-4">
+                        <video controls class="w-full rounded-lg border-2 border-white/20 aspect-video">
+                            <source src="{{ highlight.video_url }}" type="video/mp4">
+                        </video>
+                    </div>
+
+                    <a href="/game/{{ latest_game.game_pk }}"
+                        class="inline-block w-full text-center neo-brutal-button bg-[#ff2e2e] text-white px-6 py-3 font-bungee hover:bg-[#ff4444] transition-colors">
+                        View Complete Match Highlights →
+                    </a>
+                </div>
+                {% else %}
+                <div class="text-center p-6 bg-[#0a1128]/30 rounded-lg">
+                    <p class="font-permanent-marker text-2xl text-[#ffd700]">
+                        No highlights available for this game yet. Check back later! ⚾
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Right Side: My Team -->
+        <div class="col-span-3">
+            <div
+                class="my_team neo-brutal-panel bg-gradient-to-br from-[#213a8f] to-[#ff2e2e] border-4 border-black p-6 text-white">
+                <h2 class="text-2xl font-bungee mb-4">Your Team 👀</h2>
+                <div class="space-y-4">
+                    {% for team_name, ovr in team_ovrs.items() %}
+                    <div class="flex justify-between items-center bg-white/10 p-4 rounded-lg backdrop-blur-sm">
+                        <span class="font-permanent-marker">team name</span>
+
+                        <span class="font-permanent-marker">{{team_name}}</span>
+                        <span class="text-xl font-bungee text-[#ffd100]">team ovr</span>
+                        <span class="text-xl font-bungee text-[#ffd100]">{{ovr}}</span>
+                    </div>
+                    {% endfor %}
+                    <a href="/my_team"
+                        class="neo-brutal-button bg-white text-[#213a8f] block text-center mt-4 py-2 font-bungee transform hover:-translate-y-1 transition-all">
+                        View Your Team
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="venue-info mt-4 font-permanent-marker">
-        <i class="fas fa-map-marker-alt text-red-600 mr-2"></i>
-        {{ latest_game.venue }}
-    </div>
-    <div class="game-time mt-2 font-permanent-marker">
-        <i class="fas fa-clock text-blue-600 mr-2"></i>
-        {{ latest_game.game_date|replace("T", " ")|replace("Z", "") }}
-    </div>
-    <a href="{{ latest_game.highlights_url }}" class="block mt-4 text-blue-600 hover:text-blue-800">
-        View Highlights →
-    </a>
-</div>
-{% endif %}
 
-<!-- Chatbot -->
-<div class="fixed bottom-4 right-4 z-50">
-    <button id="chatbot-trigger" class="neo-brutal-button w-14 h-14 bg-[#ff2e2e] dark:bg-red-500 rounded-full">
-        <span class="text-2xl">⚾</span>
-    </button>
-    <div id="chatbot-container" class="hidden absolute bottom-16 right-0 w-96 neo-brutal-panel">
-        <div class="p-4 bg-[#ff2e2e] dark:bg-red-500 rounded-t-lg flex justify-between items-center">
-            <h5 class="font-bungee text-white">Pitcher Perfect Chatbot ⚾</h5>
-            <button id="close-chatbot" class="neo-brutal-button text-white">✖</button>
-        </div>
-        <div id="chatbot-messages" class="h-96 p-4 overflow-y-auto bg-white dark:bg-gray-800"></div>
-        <div class="p-4 border-t-4 border-black flex">
-            <input type="text" id="chatbot-input" class="neo-brutal-input flex-1" placeholder="Type your message..." />
-            <button id="send-message" class="neo-brutal-button ml-2 bg-[#ff2e2e] text-white">Send</button>
+    <!-- Chatbot -->
+    <div class="fixed bottom-4 right-4 z-50">
+        <button id="chatbot-trigger" class="neo-brutal-button w-14 h-14 bg-[#ff2e2e] dark:bg-red-500 rounded-full">
+            <span class="text-2xl">⚾</span>
+        </button>
+        <div id="chatbot-container" class="hidden absolute bottom-16 right-0 w-96 neo-brutal-panel">
+            <div class="p-4 bg-[#ff2e2e] dark:bg-red-500 rounded-t-lg flex justify-between items-center">
+                <h5 class="font-bungee text-white">Pitcher Perfect Chatbot ⚾</h5>
+                <button id="close-chatbot" class="neo-brutal-button text-white">✖</button>
+            </div>
+            <div id="chatbot-messages" class="h-96 p-4 overflow-y-auto bg-white dark:bg-gray-800"></div>
+            <div class="p-4 border-t-4 border-black flex">
+                <input type="text" id="chatbot-input" class="neo-brutal-input flex-1"
+                    placeholder="Type your message..." />
+                <button id="send-message" class="neo-brutal-button ml-2 bg-[#ff2e2e] text-white">Send</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-      document.getElementById('news-toggle').addEventListener('click', () => {
-        document.getElementById('news-section').classList.toggle('hidden');
-    });
-document.addEventListener('DOMContentLoaded', function() {
-    // Dark Mode Toggle
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const html = document.documentElement;
-    
-    darkModeToggle.addEventListener('click', () => {
-        html.classList.toggle('dark');
-        localStorage.setItem('darkMode', html.classList.contains('dark'));
-    });
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            let searchTimeout;
 
-    // Sidebar Toggle
-    const sidebarToggle = document.getElementById('sidebar-toggle');
-    const sidebar = document.getElementById('sidebar');
-    
-    sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('hidden');
-    });
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                if (searchInput.value.length < 2) {
+                    searchResults.innerHTML = '';
+                    searchResults.classList.add('hidden');
+                    return;
+                }
 
-    // News Section Toggle
-    const closeNews = document.getElementById('close-news');
-    const newsSection = document.getElementById('news-section');
-    
-    closeNews.addEventListener('click', () => {
-        newsSection.classList.add('hidden');
-    });
+                // Add debounce to prevent too many requests
+                searchTimeout = setTimeout(async () => {
+                    try {
+                        const response = await fetch(`/search_users?query=${encodeURIComponent(searchInput.value)}`);
+                        const data = await response.json();
 
-    // Chatbot Toggle
-    const chatbotTrigger = document.getElementById('chatbot-trigger');
-    const chatbotContainer = document.getElementById('chatbot-container');
-    const closeChatbot = document.getElementById('close-chatbot');
-    
-    chatbotTrigger.addEventListener('click', () => {
-        chatbotContainer.classList.toggle('hidden');
-    });
-    
-    closeChatbot.addEventListener('click', () => {
-        chatbotContainer.classList.add('hidden');
-    });
-});
+                        if (!data.success && data.error) {
+                            throw new Error(data.error);
+                        }
+
+                        let resultsHTML = '';
+
+                        // Add users results
+                        if (data.users && data.users.length > 0) {
+                            resultsHTML += '<div class="p-2 bg-gray-100 font-semibold">Users</div>';
+                            data.users.forEach(user => {
+                                resultsHTML += `
+                            <div class="flex items-center justify-between p-4 hover:bg-gray-50">
+                                <span>${user}</span>
+                                <button 
+                                    onclick="sendRequest('${user}')"
+                                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                                >
+                                    Add Friend
+                                </button>
+                            </div>
+                        `;
+                            });
+                        }
+
+                        // Add groups results
+                        if (data.groups && data.groups.length > 0) {
+                            resultsHTML += '<div class="p-2 bg-gray-100 font-semibold">Groups</div>';
+                            data.groups.forEach(group => {
+                                resultsHTML += `
+                            <div class="flex items-center justify-between p-4 hover:bg-gray-50">
+                                <div>
+                                    <div class="font-medium">${group.group_name}</div>
+                                    <div class="text-sm text-gray-600">${group.description}</div>
+                                </div>
+                                <button 
+                                    onclick="joinGroup('${group.group_id}')"
+                                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
+                                >
+                                    Join Group
+                                </button>
+                            </div>
+                        `;
+                            });
+                        }
+
+                        if (!resultsHTML) {
+                            resultsHTML = '<div class="p-4 text-gray-500">No results found</div>';
+                        }
+
+                        searchResults.innerHTML = resultsHTML;
+                        searchResults.classList.remove('hidden');
+                    } catch (error) {
+                        console.error('Search error:', error);
+                        searchResults.innerHTML = '<div class="p-4 text-red-500">Error performing search</div>';
+                    }
+                }, 300);
+            });
+
+            // Close search results when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.classList.add('hidden');
+                }
+            });
+
+            // Friend request functions
+            window.sendRequest = async function (toUser) {
+                try {
+                    const formData = new FormData();
+                    formData.append('to_user', toUser);
+
+                    const response = await fetch('/send_request', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Show success message
+                        const toast = document.createElement('div');
+                        toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg';
+                        toast.textContent = `Friend request sent to ${toUser}`;
+                        document.body.appendChild(toast);
+
+                        // Remove toast after 3 seconds
+                        setTimeout(() => toast.remove(), 3000);
+                    } else {
+                        throw new Error('Failed to send request');
+                    }
+                } catch (error) {
+                    console.error('Error sending friend request:', error);
+                    alert('Failed to send friend request. Please try again.');
+                }
+            };
+
+            window.acceptRequest = async function (fromUser) {
+                try {
+                    const formData = new FormData();
+                    formData.append('from_user', fromUser);
+
+                    const response = await fetch('/accept_request', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        throw new Error('Failed to accept request');
+                    }
+                } catch (error) {
+                    console.error('Error accepting friend request:', error);
+                    alert('Failed to accept friend request. Please try again.');
+                }
+            };
+
+            window.startChat = function (friendName) {
+                // Implement chat functionality or redirect to chat page
+                alert('Chat functionality coming soon!');
+            };
+
+            window.joinGroup = function (groupId) {
+                // Implement group join functionality
+                fetch(`/join_group/${groupId}`, {
+                    method: 'POST'
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            throw new Error(data.error || 'Failed to join group');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error joining group:', error);
+                        alert('Failed to join group. Please try again.');
+                    });
+            };
+        });
+
+        async function createGroup() {
+            const groupName = document.getElementById('groupName').value;
+            const groupDescription = document.getElementById('groupDescription').value;
+
+            if (!groupName) {
+                alert("Group name is required!");
+                return;
+            }
+
+            const response = await axios.post('/create_group', {
+                group_name: groupName,
+                description: groupDescription
+            });
+
+            if (response.data.success) {
+                alert('Group created successfully');
+                window.location.href = `/group_chat/${response.data.group_id}`;
+            } else {
+                alert('Failed to create group: ' + response.data.error);
+            }
+        }
+
+        async function joinGroup(groupId) {
+            try {
+                const response = await axios.post(`/join_group/${groupId}`);
+                if (response.data.success) {
+                    alert('Joined group successfully!');
+                    location.reload();
+                } else {
+                    alert('Failed to join group: ' + response.data.error);
+                }
+            } catch (error) {
+                console.error('Error joining group:', error);
+                alert('Failed to join group');
+            }
+        }
+
+        async function leaveGroup(groupId) {
+            if (!confirm('Are you sure you want to leave this group?')) {
+                return;
+            }
+
+            try {
+                const response = await axios.post(`/leave_group/${groupId}`);
+                if (response.data.success) {
+                    alert('Left group successfully!');
+                    location.reload();
+                } else {
+                    alert('Failed to leave group: ' + response.data.error);
+                }
+            } catch (error) {
+                console.error('Error leaving group:', error);
+                alert('Failed to leave group');
+            }
+        }
+        // Sidebar Toggle
+        document.getElementById('sidebar-toggle').addEventListener('click', function () {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hidden');
+        });
+
+        // News Toggle
+        document.getElementById('news-toggle').addEventListener('click', function () {
+            const newsSection = document.getElementById('news-section');
+            newsSection.classList.toggle('hidden');
+        });
+
+        document.getElementById('close-news').addEventListener('click', function () {
+            document.getElementById('news-section').classList.add('hidden');
+        });
+
+        // Chatbot Toggle
+        document.getElementById('chatbot-trigger').addEventListener('click', function () {
+            const chatbotContainer = document.getElementById('chatbot-container');
+            chatbotContainer.classList.toggle('hidden');
+        });
+
+        document.getElementById('close-chatbot').addEventListener('click', function () {
+            document.getElementById('chatbot-container').classList.add('hidden');
+        });
+
+        // Dark Mode Toggle
+        document.getElementById('darkModeToggle').addEventListener('click', function () {
+            document.documentElement.classList.toggle('dark');
+
+            // Update icon
+            const icon = this.querySelector('i');
+            if (document.documentElement.classList.contains('dark')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+
+            // Save preference
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark);
+        });
+
+        // Initialize dark mode from saved preference
+        document.addEventListener('DOMContentLoaded', function () {
+            const isDark = localStorage.getItem('darkMode') === 'true';
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                const icon = document.querySelector('#darkModeToggle i');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        });
+
+        // Team dropdown hover
+        const teamDropdown = document.querySelector('.group');
+        teamDropdown.addEventListener('mouseenter', function () {
+            this.querySelector('div').classList.remove('hidden');
+        });
+        teamDropdown.addEventListener('mouseleave', function () {
+            this.querySelector('div').classList.add('hidden');
+        });
+
+        // Chatbot send message functionality
+        document.getElementById('send-message').addEventListener('click', sendChatMessage);
+        document.getElementById('chatbot-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendChatMessage();
+            }
+        });
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatbot-input');
+            const message = input.value.trim();
+            if (message) {
+                const messagesContainer = document.getElementById('chatbot-messages');
+
+                // Add user message
+                const userMessage = document.createElement('div');
+                userMessage.className = 'mb-4 text-right';
+                userMessage.innerHTML = `
+            <span class="inline-block bg-[#213a8f] text-white rounded-lg py-2 px-4 max-w-[80%]">
+                ${message}
+            </span>
+        `;
+                messagesContainer.appendChild(userMessage);
+
+                // Clear input
+                input.value = '';
+
+                // Auto scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                // Here you would typically send the message to your backend
+                // and handle the response
+            }
+        }
 
 
-</script>
+    </script>
+
 </html>

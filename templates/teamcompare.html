@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Team Comparison</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
     <style>
             /* Font Import */
             @import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
@@ -155,6 +158,18 @@
             }
 
 
+            .overall-score {
+                font-family: 'Bungee', cursive;
+                font-size: 2.5rem;
+                text-align: center;
+                margin-bottom: 20px;
+                padding: 15px;
+                background: var(--neo-white);
+                border: 4px solid var(--neo-black);
+                box-shadow: var(--neo-shadow);
+            }            
+
+
 
             .visualization-buttons {
                 display: flex;
@@ -198,28 +213,25 @@
         <div class="team-select-container">
             <div class="team-select">
                 <h2>Home Team</h2>
-                <img id="homeLogo" class="team-logo" src="" alt="Home Team Logo">
+                <img id="homeLogo" class="team-logo" src="" alt="Logo">
                 <select id="homeTeam"></select>
             </div>
 
             <div class="team-select">
                 <h2>Away Team</h2>
-                <img id="awayLogo" class="team-logo" src="" alt="Away Team Logo">
+                <img id="awayLogo" class="team-logo" src="" alt="Logo">
                 <select id="awayTeam"></select>
             </div>
         </div>
 
         <button class="compare-btn" onclick="compareTeams()">Compare Teams</button>
 
-        <div class="visualization-buttons" id="vizButtons" style="display: none;">
-            <button class="viz-btn active" onclick="switchVisualization('bar')">Bar Chart</button>
-            <button class="viz-btn" onclick="switchVisualization('hexagon')">Hexagon Battle</button>
-            <button class="viz-btn" onclick="switchVisualization('diamond')">Diamond Meter</button>
-            <button class="viz-btn" onclick="switchVisualization('duel')">Pitcher Duel</button>
-            <button class="viz-btn" onclick="switchVisualization('scoreboard')">Scoreboard</button>
-        </div>
-
         <div class="comparison-container">
+            <div class="overall-score">
+                <span id="homeScore" style="color: var(--mlb-blue)">0</span>
+                <span style="color: var(--neo-black)">-</span>
+                <span id="awayScore" style="color: var(--mlb-red)">0</span>
+            </div>
             <canvas id="comparisonChart"></canvas>
         </div>
     </div>
@@ -276,49 +288,90 @@
 
         let chart = null;
 
-        //visualizationfunctions
-        // Main visualization switcher function
-        function updateVisualization(data) {
-            const container = document.querySelector('.comparison-container');
-            container.style.height = '700px';
+        function calculateTeamScore(stats) {
+            // Calculate batting and pitching out of 50 points each
+            const battingScore = Math.abs(stats.batting / 100) * 50;
+            const pitchingScore = Math.abs(stats.pitching / 100) * 50;
             
-            switch(currentViz) {
-                case 'bar':
-                    updateBarChart(data);
-                    break;
-                case 'hexagon':
-                    updateHexagonBattle(data);
-                    break;
-                case 'diamond':
-                    updateDiamondMeter(data);
-                    break;
-                case 'duel':
-                    updatePitcherDuel(data);
-                    break;
-                case 'scoreboard':
-                    updateScoreboard(data);
-                    break;
-            }
+            return {
+                batting: battingScore,
+                pitching: pitchingScore,
+                overall: battingScore + pitchingScore // This gives us a score out of 100
+            };
         }
 
+        async function compareTeams() {
+            const homeTeam = document.getElementById('homeTeam').value;
+            const awayTeam = document.getElementById('awayTeam').value;
+            
+            const formData = new FormData();
+            formData.append('home_team', homeTeam);
+            formData.append('away_team', awayTeam);
+        
+            try {
+                const response = await fetch('/compare', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                
+                // Transform the API data for visualization
+                const transformedData = {
+                    home: {
+                        batting: data.home.batting.value,
+                        pitching: data.home.pitching.value,
+                        overall: (data.home.batting.value + data.home.pitching.value)
+                    },
+                    away: {
+                        batting: data.away.pitching.value,
+                        pitching: data.away.pitching.value,
+                        overall: (data.away.batting.value + data.away.pitching.value)
+                    }
+                };
+        
+                // Update scores and chart
+                document.getElementById('homeScore').textContent = Math.round(transformedData.home.overall);
+                document.getElementById('awayScore').textContent = Math.round(transformedData.away.overall);
+                
+                // Update chart
+                updateBarChart(transformedData);
+                
+                // Scroll to comparison
+                document.querySelector('.comparison-container').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+                
+            } catch (error) {
+                console.error('Error comparing teams:', error);
+                alert('Error comparing teams. Please try again.');
+            }
+        }     
+
+        //visualizationfunctions
         // 1. Enhanced Bar Chart
         function updateBarChart(data) {
+            document.getElementById('homeScore').textContent = data.home.overall.toFixed(1);
+            document.getElementById('awayScore').textContent = data.away.overall.toFixed(1);
+
             if (chart) chart.destroy();
             
             const ctx = document.getElementById('comparisonChart').getContext('2d');
             chart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Batting', 'Pitching'],
+                    labels: ['Batting (50)', 'Pitching (50)'],
                     datasets: [{
                         label: 'Home Team',
-                        data: [data.home.batting.value, data.home.pitching.value],
+                        data: [data.home.batting, data.home.pitching, data.home.overall],
                         backgroundColor: 'rgba(0, 45, 114, 0.8)',
                         borderColor: '#000000',
                         borderWidth: 4
                     }, {
                         label: 'Away Team',
-                        data: [data.away.batting.value, data.away.pitching.value],
+                        data: [data.away.batting, data.away.pitching, data.away.overall],
                         backgroundColor: 'rgba(227, 24, 55, 0.8)',
                         borderColor: '#000000',
                         borderWidth: 4
@@ -333,13 +386,25 @@
                                 font: { family: 'Bungee', size: 16 },
                                 color: '#000000'
                             }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw.toFixed(1)}`;
+                                }
+                            }
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
-                            max: 100,
-                            grid: { color: '#000000', lineWidth: 2 }
+                            max: 50,
+                            grid: { color: '#000000', lineWidth: 2 },
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toFixed(0);
+                                }
+                            }
                         }
                     },
                     animation: {
@@ -349,225 +414,35 @@
                 }
             });
         }
-
-        // 2. Hexagon Battle
-        function updateHexagonBattle(data) {
-            if (chart) chart.destroy();
-            
-            const canvas = document.getElementById('comparisonChart');
-            const ctx = canvas.getContext('2d');
-            
-            function drawHexagon(x, y, size, stats, teamColor) {
-                ctx.beginPath();
-                for (let i = 0; i < 6; i++) {
-                    const angle = (i * Math.PI) / 3;
-                    const statValue = stats[i % 2] / 100 * size;
-                    const px = x + Math.cos(angle) * statValue;
-                    const py = y + Math.sin(angle) * statValue;
-                    if (i === 0) ctx.moveTo(px, py);
-                    else ctx.lineTo(px, py);
-                }
-                ctx.closePath();
-                ctx.fillStyle = teamColor;
-                ctx.fill();
-                ctx.strokeStyle = '#000';
-                ctx.lineWidth = 4;
-                ctx.stroke();
-            }
-            
-            gsap.to({}, {
-                duration: 1.5,
-                onUpdate: () => {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    drawHexagon(canvas.width/3, canvas.height/2, 150,
-                        [data.home.batting.value, data.home.pitching.value],
-                        'rgba(0, 45, 114, 0.8)');
-                    drawHexagon(2*canvas.width/3, canvas.height/2, 150,
-                        [data.away.batting.value, data.away.pitching.value],
-                        'rgba(227, 24, 55, 0.8)');
-                }
-            });
-        }
-
-        // 3. Diamond Meter
-        function updateDiamondMeter(data) {
-            if (chart) chart.destroy();
-            
-            const canvas = document.getElementById('comparisonChart');
-            const ctx = canvas.getContext('2d');
-            
-            function drawDiamond(x, y, size, battingValue, pitchingValue, color) {
-                const points = [
-                    [x, y - size * (battingValue/100)],  // Top
-                    [x + size * (pitchingValue/100), y], // Right
-                    [x, y + size * (battingValue/100)],  // Bottom
-                    [x - size * (pitchingValue/100), y]  // Left
-                ];
-                
-                ctx.beginPath();
-                ctx.moveTo(points[0][0], points[0][1]);
-                for (let i = 1; i < points.length; i++) {
-                    ctx.lineTo(points[i][0], points[i][1]);
-                }
-                ctx.closePath();
-                ctx.fillStyle = color;
-                ctx.fill();
-                ctx.strokeStyle = '#000';
-                ctx.lineWidth = 4;
-                ctx.stroke();
-            }
-            
-            gsap.to({}, {
-                duration: 1.5,
-                onUpdate: () => {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    drawDiamond(canvas.width/3, canvas.height/2, 100,
-                        data.home.batting.value, data.home.pitching.value,
-                        'rgba(0, 45, 114, 0.8)');
-                    drawDiamond(2*canvas.width/3, canvas.height/2, 100,
-                        data.away.batting.value, data.away.pitching.value,
-                        'rgba(227, 24, 55, 0.8)');
-                }
-            });
-        }
-
-        // 4. Pitcher Duel
-        function updatePitcherDuel(data) {
-            if (chart) chart.destroy();
-            
-            const canvas = document.getElementById('comparisonChart');
-            const ctx = canvas.getContext('2d');
-            
-            function drawPitcher(x, y, size, stats, isHome) {
-                // Draw mound
-                ctx.beginPath();
-                ctx.arc(x, y, size, 0, Math.PI * 2);
-                ctx.fillStyle = '#8B4513';
-                ctx.fill();
-                ctx.strokeStyle = '#000';
-                ctx.lineWidth = 4;
-                ctx.stroke();
-                
-                // Draw power meter
-                const meterHeight = size * 2;
-                const meterWidth = 30;
-                ctx.fillStyle = isHome ? 'rgba(0, 45, 114, 0.8)' : 'rgba(227, 24, 55, 0.8)';
-                ctx.fillRect(x - meterWidth/2,
-                    y - meterHeight/2,
-                    meterWidth,
-                    meterHeight * (stats.pitching.value/100));
-            }
-            
-            gsap.to({}, {
-                duration: 2,
-                onUpdate: () => {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    drawPitcher(canvas.width/3, canvas.height/2, 50, data.home, true);
-                    drawPitcher(2*canvas.width/3, canvas.height/2, 50, data.away, false);
-                }
-            });
-        }
-
-        // 5. Scoreboard
-        function updateScoreboard(data) {
-            if (chart) chart.destroy();
-            
-            const canvas = document.getElementById('comparisonChart');
-            const ctx = canvas.getContext('2d');
-            
-            function drawScoreboard() {
-                // Background
-                ctx.fillStyle = '#000';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                // LED display style text
-                ctx.font = '40px Bungee';
-                ctx.textAlign = 'center';
-                
-                // Home Team
-                ctx.fillStyle = 'rgba(0, 45, 114, 1)';
-                ctx.fillText('HOME', canvas.width/4, 100);
-                ctx.fillStyle = '#fff';
-                ctx.fillText(`BAT: ${Math.round(data.home.batting.value)}`, canvas.width/4, 200);
-                ctx.fillText(`PIT: ${Math.round(data.home.pitching.value)}`, canvas.width/4, 300);
-                
-                // Away Team
-                ctx.fillStyle = 'rgba(227, 24, 55, 1)';
-                ctx.fillText('AWAY', 3*canvas.width/4, 100);
-                ctx.fillStyle = '#fff';
-                ctx.fillText(`BAT: ${Math.round(data.away.batting.value)}`, 3*canvas.width/4, 200);
-                ctx.fillText(`PIT: ${Math.round(data.away.pitching.value)}`, 3*canvas.width/4, 300);
-            }
-            
-            gsap.to({}, {
-                duration: 0.5,
-                onUpdate: drawScoreboard,
-                ease: "steps(1)",
-                repeat: -1,
-                yoyo: true
-            });
-        }
-
-
-        let currentViz = 'bar';
-        let lastData = null;
-
-        async function compareTeams() {
-            const homeTeam = document.getElementById('homeTeam').value;
-            const awayTeam = document.getElementById('awayTeam').value;
-            
-            const formData = new FormData();
-            formData.append('home_team', homeTeam);
-            formData.append('away_team', awayTeam);
-
-            try {
-                const response = await fetch('/compare', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json'
-                    },
-                    body: formData
-                });
-                
-                const data = await response.json();
-                lastData = data;
-                
-                // Show visualization buttons after comparison
-                document.getElementById('vizButtons').style.display = 'flex';
-                
-                // Update the current visualization
-                updateVisualization(data);
-            } catch (error) {
-                console.error('Error comparing teams:', error);
-            }
-        }
-
-        function switchVisualization(type) {
-            currentViz = type;
-            document.querySelectorAll('.viz-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.viz-btn[onclick*="${type}"]`).classList.add('active');
-            if (lastData) {
-                updateVisualization(lastData);
-            }
-        }
         
 
         function populateTeamSelects() {
             const homeSelect = document.getElementById('homeTeam');
             const awaySelect = document.getElementById('awayTeam');
-
+            
+            // Clear existing options
+            homeSelect.innerHTML = '';
+            awaySelect.innerHTML = '';
+        
+            // Add a default option
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'Select a team';
+            homeSelect.appendChild(defaultOption.cloneNode(true));
+            awaySelect.appendChild(defaultOption.cloneNode(true));
+        
             for (const league in teams) {
                 for (const division in teams[league]) {
                     const optgroup = document.createElement('optgroup');
                     optgroup.label = `${league} ${division}`;
-
+        
                     teams[league][division].forEach(team => {
                         const option = document.createElement('option');
                         option.value = team.id;
                         option.textContent = team.name;
                         optgroup.appendChild(option.cloneNode(true));
                     });
-
+        
                     homeSelect.appendChild(optgroup.cloneNode(true));
                     awaySelect.appendChild(optgroup);
                 }
@@ -586,8 +461,14 @@
             const select = document.getElementById(selectId);
             const logoId = selectId === 'homeTeam' ? 'homeLogo' : 'awayLogo';
             const teamId = select.value;
+            // Updated URL format for MLB team logos
             const logoUrl = `https://www.mlbstatic.com/team-logos/${teamId}.svg`;
-            document.getElementById(logoId).src = logoUrl;
+            const logoImg = document.getElementById(logoId);
+            logoImg.src = logoUrl;
+            logoImg.onerror = function() {
+                // Fallback if the logo fails to load
+                this.src = 'https://www.mlbstatic.com/team-logos/league-on-dark/1.svg';
+            };
         }
 
         document.getElementById('homeTeam').addEventListener('change', () => updateTeamLogo('homeTeam'));

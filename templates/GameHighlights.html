@@ -163,6 +163,8 @@
         <div class="tabs">
             <button class="tab" data-tab="video">Video Highlights</button>
             <button class="tab active" data-tab="text">Text Highlights</button>
+            <button class="tab active" data-tab="text">Game Box score</button>
+
             
         </div>
 <br>
@@ -224,9 +226,90 @@
             </div>
             {% endfor %}
         </div>
+        <div id="boxscore-highlights" class="highlight-content" style="display: none;">
+            <h2 class="text-2xl font-bold text-center text-blue-800">Game Box Score</h2>
+        
+            <div class="team-boxscore">
+                <h3 class="text-xl font-semibold text-red-500">{{ game_data.home_team }} Stats</h3>
+                <table class="w-full border-collapse border border-black">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border border-black px-4 py-2">Player</th>
+                            <th class="border border-black px-4 py-2">Position</th>
+                            <th class="border border-black px-4 py-2">AB</th>
+                            <th class="border border-black px-4 py-2">H</th>
+                            <th class="border border-black px-4 py-2">R</th>
+                            <th class="border border-black px-4 py-2">RBI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in home_players %}
+                        <tr>
+                            <td class="border border-black px-4 py-2">{{ player.name }}</td>
+                            <td class="border border-black px-4 py-2">{{ player.position }}</td>
+                            <td class="border border-black px-4 py-2">{{ player.at_bats }}</td>
+                            <td class="border border-black px-4 py-2">{{ player.hits }}</td>
+                            <td class="border border-black px-4 py-2">{{ player.runs }}</td>
+                            <td class="border border-black px-4 py-2">{{ player.rbis }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        
+            <br>
+        
+            <div class="team-boxscore">
+                <h3 class="text-xl font-semibold text-blue-500">{{ game_data.away_team }} Stats</h3>
+                <table class="w-full border-collapse border border-black">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border border-black px-4 py-2">Player</th>
+                            <th class="border border-black px-4 py-2">Position</th>
+                            <th class="border border-black px-4 py-2">AB</th>
+                            <th class="border border-black px-4 py-2">H</th>
+                            <th class="border border-black px-4 py-2">R</th>
+                            <th class="border border-black px-4 py-2">RBI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in away_players %}
+                        <tr>
+                            <td class="border border-black px-4 py-2">{{ player.name }}</td>
+                            <td class="border border-black px-4 py-2">{{ player.position }}</td>
+                            <td class="border border-black px-4 py-2">{{ player.at_bats }}</td>
+                            <td class="border border-black px-4 py-2">{{ player.hits }}</td>
+                            <td class="border border-black px-4 py-2">{{ player.runs }}</td>
+                            <td class="border border-black px-4 py-2">{{ player.rbis }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
     </div>
 </body>
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.highlight-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove active class from all tabs
+            tabs.forEach(t => t.classList.remove('active'));
+            // Add active class to clicked tab
+            tab.classList.add('active');
+            
+            // Hide all content sections
+            contents.forEach(content => content.style.display = 'none');
+            // Show selected content
+            document.getElementById(`${tab.dataset.tab}-highlights`).style.display = 'block';
+        });
+    });
+});
+
     function shareVideo(title, description, videoUrl) {
     if (navigator.share) {
         navigator.share({

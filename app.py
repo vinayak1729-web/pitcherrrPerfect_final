@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify,send_from_directory
 from concurrent.futures import ThreadPoolExecutor
 import json
 import os
@@ -10,13 +10,212 @@ from bs4 import BeautifulSoup
 from googletrans import Translator
 import requests
 import csv 
-from features.sendemail import send_email_function
+from features.send_signup_email import send_sign_up_email
 import statsapi
 import json
 import asyncio
 import aiohttp
 from functools import lru_cache
 from features.ovrCalculation import calculate_ovr
+from features.signupEmailBody import Sign_up_email_body_template
+import smtplib
+import ssl
+import random 
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from dotenv import load_dotenv
+from personalizedEmailContent import personalizedEmail
+from werkzeug.utils import secure_filename
+load_dotenv()
+
+email_sender = os.getenv('EMAIL_USER')
+sender_password = os.getenv('EMAIL_PASS')
+
+def generate_user_email_data():
+    """
+    Generates email data for each user based on their profile questions.
+    """
+    user_email_data = {}
+    with open("database/users.json", "r") as user_file:
+        users = json.load(user_file)
+    for user in users:
+        username = user["username"]
+        details_path = f"database/details/{username}.json"
+        if os.path.exists(details_path):
+            with open(details_path, "r") as details_file:
+                user_details = json.load(details_file)
+            eligible_questions = [q for q in user_details["questions"] if q["id"] != "notifications"]
+            if not eligible_questions:
+                print(f"No eligible questions found for user '{username}'. Skipping.")
+                continue
+            random_question = random.choice(eligible_questions)
+            question_id = random_question["id"]
+            print(question_id)
+            if question_id in ["favorite_teams", "favorite_players"]:
+                 if not random_question["answer"]: # handle case of no favorite_teams or no favorite_player
+                  print(f"No favorite teams/players found, skipping email sending to '{username}'.")
+                  continue 
+                 answer = random.choice(random_question["answer"])
+            else:
+                 answer = random_question["answer"]
+            notification_answer = next(q["answer"] for q in user_details["questions"] if q["id"] == "notifications")
+            selected_team = next((q["answer"] for q in user_details["questions"] if q["id"] == "selected_team"), None)
+            user_email_data[username] = {
+                "question_id": question_id,
+                "answer": answer,
+                "notification_frequency": notification_answer,
+                "selected_team": selected_team,
+            }
+        else:
+            print(f"Details file for user '{username}' does not exist.\n")
+            user_email_data[username] = None
+    return user_email_data
+
+
+def load_users():
+    """Loads user data from database/users.json."""
+    with open("database/users.json", "r") as user_file:
+        return json.load(user_file)
+
+def load_email_notification_history():
+    """Loads the email notification history for all users."""
+    history_path = "database/details/email/notification.json"
+    if os.path.exists(history_path):
+      with open(history_path, "r") as f:
+        history = json.load(f)
+      print(f"Loaded existing email history: {history}")  
+      return history
+
+    else:
+       print("No existing notification.json,  creating")
+       return {}
+
+
+def save_email_notification_history(history):
+    """Saves the email notification history for all users."""
+    history_path = "database/details/email/notification.json"
+    os.makedirs(os.path.dirname(history_path), exist_ok=True)
+    with open(history_path, "w") as f:
+        json.dump(history, f, indent=4)
+    print(f"Email history saved to {history_path}: {history}")
+
+
+
+def check_due_email_notification(username, user_data, email_history):
+    """Checks if a user is due for an email notification based on their history and frequency."""
+    print(f"Checking if email is due for user: {username}, with data: {user_data}")
+
+    if not user_data:
+        print(f"Skipping due check as no user_data")
+        return False
+
+
+    notification_frequency = user_data["notification_frequency"].lower()
+    print(f"Notification frequency for {username}: {notification_frequency}")
+
+    if username not in email_history:
+       print(f"no previous history exists for {username}, first time email due")
+       return True
+       
+
+    last_notification_str = email_history[username].get("last_sent_date")
+    
+    if not last_notification_str:
+      print(f"Last sent notification data not available, {username} emails due now ")
+      return True
+
+    if notification_frequency == "never":
+        print(f"Notification is 'never' for {username}, skipping due check.")
+        return False
+    
+
+    last_notification = datetime.fromisoformat(last_notification_str)
+    now = datetime.now()
+
+    if notification_frequency == "daily":
+      print (f"Last sent at:{last_notification}, Now: {now} : diff={(now - last_notification) >= timedelta(days=1)}, frequency daily check result ")
+      return (now - last_notification) >= timedelta(days=1)
+    elif notification_frequency == "weekly":
+        print(f"Last sent at:{last_notification}, Now: {now} : diff={(now - last_notification) >= timedelta(weeks=1)}, frequency weekly check result")
+        return (now - last_notification) >= timedelta(weeks=1)
+    elif notification_frequency == "monthly":
+        print(f"Last sent at:{last_notification}, Now: {now} : diff={(now - last_notification) >= timedelta(days=30)}, frequency monthly check result")
+        return (now - last_notification) >= timedelta(days=30) #Approximate
+
+    print(f"Invalid Notification Frequency skipping for user: {username}")
+    return False
+
+def send_email(recipient_email, username, sender_email, sender_password, subject, body):
+    """Sends a formatted HTML email."""
+    
+    message = MIMEMultipart()
+    message["From"] = sender_email
+    message["To"] = recipient_email
+    message["Subject"] = subject
+    message.attach(MIMEText(body, "html"))
+    try:
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
+            smtp.login(sender_email, sender_password)
+            smtp.sendmail(sender_email, recipient_email, message.as_string())
+        print(f"Email sent successfully to {username}!")
+        return True
+    except Exception as e:
+        print(f"Error sending email to {username}: {e}")
+        return False
+
+
+def personailzednofity():
+    user_email_data = generate_user_email_data()
+    email_history = load_email_notification_history()
+    users = load_users()
+
+    for username, user_data in user_email_data.items():
+        if user_data:
+            if check_due_email_notification(username, user_data, email_history):
+                 print(f" Email due check returned true: will process email send for {username} user")
+                # Fetch email for the recipient
+                 recipient_email = None
+                 for user in users:
+                    if user['username'] == username:
+                         recipient_email = user['email']
+                         break
+                 if recipient_email:
+                    question_id = user_data["question_id"]
+                    answer = user_data["answer"]
+                    selected_team = user_data["selected_team"]
+                    
+                    subject, body = personalizedEmail(username, question_id, answer, selected_team)
+
+                    if send_email(recipient_email, username, email_sender, sender_password, subject, body):
+                        # Update Email history
+                       if username not in email_history:
+                          print(f"Creating new notification record for {username}")
+                          email_history[username] = {
+                               "notification_history":[],
+                             "last_sent_date" : datetime.now().isoformat(),
+                            }
+                       else :
+                           email_history[username]["last_sent_date"] = datetime.now().isoformat()
+                           print(f"updating sent date for {username}: {email_history[username]['last_sent_date']}")
+                       email_history[username]["notification_history"].append({
+                                  "question_id": question_id,
+                                  "timestamp": datetime.now().isoformat(),
+                       })
+
+                       save_email_notification_history(email_history)
+                    else:
+                       print(f"email sending failed to {username}")
+
+                 else:
+                      print(f"Could not find email address for user {username}")
+
+            else:
+               print(f"Email notification not due for {username} yet based on  check_due_email_notification method")
+        else:
+           print(f"No user data for {username}, skipping process user email  process")
+
+personailzednofity()
 def strftime(date, format_string):
     return date.strftime(format_string)
 # Load the JSON data from a file
@@ -24,7 +223,6 @@ with open('dataset/team.json', 'r') as file:
     teams_name_id = json.load(file)
 
 from pathlib import Path
-from features.signupEmailBody import Sign_up_email_body_template
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 app.jinja_env.filters['strftime'] = strftime
@@ -32,6 +230,7 @@ MLB_API_URL = 'https://statsapi.mlb.com/api/v1/schedule'
 # Ensure database directories exist
 os.makedirs('database/fanlink', exist_ok=True)
 os.makedirs('database', exist_ok=True)
+
 
 def load_json(filename, base_path='database/fanlink'):
     filepath = f'{base_path}/{filename}'
@@ -90,7 +289,8 @@ def save_questionnaire_json(username, data):
             {
                 "id": "selected_team",
                 "question": "Which team do you want to select?",
-                "answer": data.get('selected_team', '')
+                "answer": data.get('selected_team')
+
             },
             {
                 "id": "favorite_match",
@@ -113,6 +313,7 @@ def save_questionnaire_json(username, data):
         json.dump(questionnaire_data, f, indent=4)
     
     return json_path
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -184,19 +385,14 @@ def questionnaire():
             email = user_data['email']
 
             save_questionnaire_json(username, data)
-
-            # Send a confirmation email after questionnaire completion
-            subject = "Welcome to Pitcher Perfect! ⚾"
             body = Sign_up_email_body_template(username)
-            send_email_function(email, subject, body)
-
+            # Send a confirmation email after questionnaire completion
+            send_sign_up_email(email,username,body,email_sender,sender_password)
             return jsonify({'success': True, 'redirect': '/login'})
         except Exception as e:
             print(f"Error during questionnaire: {str(e)}")
             return jsonify({'success': False, 'error': 'An error occurred'}), 500
-
-            
-            
+       
 @app.route('/profile')
 def view_profile():
     # Check if user is logged in
@@ -512,6 +708,57 @@ def chat(friend):
     return render_template('chat.html', 
                          friend=friend, 
                          messages=chats[chat_id])
+@app.route('/uploads/<filename>')
+def serve_file(filename):
+    """Serve uploaded files"""
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+import os
+from werkzeug.utils import secure_filename
+
+
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/upload_file', methods=['POST'])
+def upload_file():
+    try:
+        if 'file' not in request.files:
+            return jsonify({'success': False, 'error': 'No file part'}), 400
+        
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'success': False, 'error': 'No selected file'}), 400
+        
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            # Add timestamp to filename to prevent duplicates
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S_')
+            filename = timestamp + filename
+            
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+            
+            # Return the complete URL path
+            file_url = url_for('static', filename=f'uploads/{filename}')
+            return jsonify({
+                'success': True,
+                'file_url': file_url
+            })
+        
+        return jsonify({'success': False, 'error': 'Invalid file type'}), 400
+    
+    except Exception as e:
+        print(f"Error uploading file: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 
 @app.route('/send_message', methods=['POST'])
@@ -520,13 +767,11 @@ def send_message():
         return jsonify({'success': False, 'error': 'Not authenticated'}), 401
     
     try:
-        data = request.get_json()
+        data = request.json
         friend = data.get('friend')
-        message = data.get('message')
-        
-        if not friend or not message:
-            return jsonify({'success': False, 'error': 'Missing required fields'}), 400
-        
+        message = data.get('message', '')
+        file_url = data.get('file_url')  # Get file_url from the request
+
         # Load existing chats
         chats = load_json('chats.json')
         chat_id = '_'.join(sorted([session['username'], friend]))
@@ -534,21 +779,26 @@ def send_message():
         if chat_id not in chats:
             chats[chat_id] = []
         
-        # Add new message
+        # Create new message
         new_message = {
             'from': session['username'],
             'message': message,
-            'timestamp': datetime.now().strftime('%I:%M %p')  # 12-hour format with AM/PM
+            'timestamp': datetime.now().strftime('%I:%M %p')
         }
+
+        # Add file URL if it exists
+        if file_url:
+            new_message['file_url'] = file_url
         
+        # Add message to chat
         chats[chat_id].append(new_message)
         save_json(chats, 'chats.json')
-        
+
         return jsonify({'success': True, 'message': new_message})
-        
+
     except Exception as e:
         print(f"Error sending message: {str(e)}")
-        return jsonify({'success': False, 'error': 'Failed to send message'}), 500
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/get_new_messages/<friend>')
 def get_new_messages(friend):
@@ -608,8 +858,6 @@ def typing_status():
     except Exception as e:
         print(f"Error updating typing status: {str(e)}")
         return jsonify({'success': False, 'error': 'Failed to update typing status'}), 500
-
-
 # New group-related routes
 @app.route('/create_group', methods=['POST'])
 def create_group():
@@ -1243,50 +1491,6 @@ def view_shared_team(share_token):
                          team_ovrs=int(team_ovr),
                          profile_username=username)
 
-# @app.route('/<username>/get_position_headshots/<team_name>/<position>')
-# def get_position_headshots(username, team_name, position):
-#     # Check if user is logged in
-#     if 'username' not in session:
-#         return jsonify({'error': 'Not authenticated'}), 401
-    
-#     # Load users data to check friendship
-#     users = load_json('users.json')
-    
-#     # Check if the requested username exists
-#     if username not in users:
-#         return jsonify({'error': 'User not found'}), 404
-    
-#     # Check if the viewer is the profile owner or a friend
-#     current_user = session['username']
-#     if current_user != username and current_user not in users[username]['friends']:
-#         return jsonify({'error': 'Access denied'}), 403
-
-#     user_data = load_user_team_data()
-    
-#     # Get the specific team data
-#     team_data = user_data[username][team_name]
-    
-#     # Filter players by position and get their headshot URLs along with OVR
-#     position_headshots = []
-#     for player in team_data['selected_players']:
-#         if player['position'].upper() == position.upper():
-#             # Calculate OVR for each player
-#             ovr_data = calculate_ovr(player['id'], player['position'])
-#             ovr_rating = ovr_data['overall_rating'] if isinstance(ovr_data, dict) else 'N/A'
-            
-#             position_headshots.append({
-#                 'name': player['name'],
-#                 'position': player['position'],
-#                 'headshot_url': player['headshot_url'],
-#                 'ovr': ovr_rating
-#             })
-    
-#     return jsonify({
-#         'team_name': team_name,
-#         'position': position,
-#         'players': position_headshots
-#     })
-
 @app.route('/highlights', methods=['GET', 'POST'])
 def highlights():
     season = request.form.get('season', 2024)  # Default season
@@ -1332,6 +1536,7 @@ def highlights():
 
 
     return render_template('highlight.html', matches=matches, teams_data=teams_name_id)
+
 @app.route('/game/<int:game_pk>', methods=['GET'])
 def game_details(game_pk):
     response = requests.get(f"{MLB_API_URL}?gamePk={game_pk}")
@@ -1592,87 +1797,189 @@ def teaam_compare():
     return render_template('teamcompare.html')
 
 
+def fetch_first_highlight(game_pk):
+    highlights = []
+    raw_highlights = statsapi.game_highlights(game_pk)
+    lines = raw_highlights.split('\n')
+    current_title, current_description = None, None
+    
+    for line in lines:
+        if not line.strip():
+            continue
+        if line.startswith('https://') and line.endswith('.mp4'):
+            if current_title and current_description:
+                highlights.append({
+                    'title': current_title,
+                    'description': current_description,
+                    'video_url': line.strip()
+                })
+            break  # Only need the first highlight
+        elif '(' in line and ')' in line and any(x in line for x in ['00:', '01:', '02:']):
+            current_title = line.strip()
+        elif current_title and not current_description:
+            current_description = line.strip()
+    
+    return highlights[0] if highlights else None
 
-# @app.route('/')
-# def index():
-#     if 'username' not in session:
-#         return redirect(url_for('login'))
-#     lang = request.args.get('lang', 'en')
-#     upcoming_games = get_schedule()
-#     news = fetch_latest_news()  
-#     return render_template('hometest.html',
-#                          upcoming_games=upcoming_games,
-#                          news=news,
-#                          lang=lang,
-#     )
+# def get_game_info(team_id,game_pk):
+    
+#     game_data = statsapi.get('game', {'gamePk': game_pk})
+#     teams = game_data.get('gameData', {}).get('teams', {})
+#     home_team = teams.get('home', {}).get('name', 'Unknown')
+#     away_team = teams.get('away', {}).get('name', 'Unknown')
+#     first_highlight = fetch_first_highlight(game_pk)
+    
+#     return home_team, away_team, first_highlight
 
+def get_latest_completed_game():
+    # Fetch schedule data
+    schedule_data = statsapi.get('schedule', {'sportId': 1, 'season': 2024, 'gameType': 'R'})
+    
+    # Get dates array
+    dates = schedule_data.get('dates', [])
+    
+    # Sort dates in reverse order to get most recent first
+    dates.sort(key=lambda x: x['date'], reverse=True)
+    
+    for date in dates:
+        games = date.get('games', [])
+        for game in games:
+            # Check if game is completed
+            if game.get('status', {}).get('statusCode') == 'F':
+                return game.get('gamePk')
+    
+    return None
+def get_game_info():
+    schedule_data = statsapi.get('schedule', {'sportId': 1, 'season': 2024, 'gameType': 'R'})
+    dates = sorted(schedule_data.get('dates', []), key=lambda x: x['date'], reverse=True)
+    
+    for date in dates:
+        games = date.get('games', [])
+        for game in games:
+            if game.get('status', {}).get('statusCode') == 'F':
+                game_pk = game.get('gamePk')
+                game_data = statsapi.get('game', {'gamePk': game_pk})
+                teams = game_data.get('gameData', {}).get('teams', {})
+                
+                home_team = teams.get('home', {})
+                away_team = teams.get('away', {})
+                
+                home_team_name = home_team.get('name', 'Unknown')
+                away_team_name = away_team.get('name', 'Unknown')
+                home_team_id = home_team.get('id')
+                away_team_id = away_team.get('id')
+                first_highlight = fetch_first_highlight(game_pk)
+                
+                return home_team_name, away_team_name, first_highlight, game_data, home_team_id, away_team_id ,game_pk
+    
+    return None, None, None, None, None, None,None
 @app.route('/')
 def index():
     if 'username' not in session:
         return redirect(url_for('login'))
     
-    username = session['username']
+    # Get MLB data
     lang = request.args.get('lang', 'en')
-    
-    # Get user's selected team
-    user_details_path = f'database/details/{username}.json'
-    with open(user_details_path, 'r') as f:
-        user_data = json.load(f)
-    selected_team = user_data.get('selected_team')
-    print(f"Selected Team: {selected_team}")
-    
-    # Get team ID from dataset
-    with open('dataset/team.json', 'r') as f:
-        teams_data = json.load(f)
-    print(f"Teams Data: {teams_data}")
-    
-    team_id = None
-    for team_info in teams_data:
-        if isinstance(team_info, dict) and team_info.get('name') == selected_team:
-            team_id = team_info.get('id')
-            break
-    print(f"Team ID: {team_id}")
-    
-    # Get latest game
-    latest_game = None
-    if team_id:
-        game_pk = statsapi.last_game(team_id)
-        print(f"Game PK: {game_pk}")
-        
-        MLB_API_URL = "https://statsapi.mlb.com/api/v1"
-        response = requests.get(f"{MLB_API_URL}/game/{game_pk}/feed/live")
-        game_data = response.json()
-        print(f"Game Data Keys: {game_data.keys()}")
-        
-        if game_data:
-            try:
-                game = game_data['gameData']
-                teams = game_data['liveData']['boxscore']['teams']
-                
-                latest_game = {
-                    'home_team': game['teams']['home']['name'],
-                    'away_team': game['teams']['away']['name'],
-                    'home_score': teams['home']['teamStats']['batting']['runs'],
-                    'away_score': teams['away']['teamStats']['batting']['runs'],
-                    'game_date': game['datetime']['dateTime'],
-                    'venue': game['venue']['name'],
-                    'game_pk': game_pk,
-                    'home_team_logo': f'https://www.mlbstatic.com/team-logos/{game["teams"]["home"]["id"]}.svg',
-                    'away_team_logo': f'https://www.mlbstatic.com/team-logos/{game["teams"]["away"]["id"]}.svg',
-                    'highlights_url': f"/game/{game_pk}"
-                }
-                print(f"Latest Game Data: {latest_game}")
-            except KeyError as e:
-                print(f"Error accessing game data: {e}")
-    
     upcoming_games = get_schedule()
     news = fetch_latest_news()
+    home_team, away_team, highlight, game_data, home_team_id, away_team_id, game_pk = get_game_info()
+    
+    latest_game = {
+        'home_team': home_team,
+        'away_team': away_team,
+        'home_team_logo': f"https://www.mlbstatic.com/team-logos/{home_team_id}.svg" if home_team_id else None,
+        'away_team_logo': f"https://www.mlbstatic.com/team-logos/{away_team_id}.svg" if away_team_id else None,
+        'highlights_url': highlight['video_url'] if highlight else None,
+        'venue': game_data.get('venue', {}).get('name', 'Unknown Stadium') if game_data else 'Unknown Stadium',
+        'game_date': game_data.get('gameDate', '') if game_data else '',
+        'game_pk': game_pk
+    }
+    
+    # Get social data
+    users = load_json('users.json')
+    requests = load_json('friend_requests.json')
+    groups = load_json('groups.json')
+    
+    pending_requests = [req for req in requests.get(session['username'], [])]
+    friends = users[session['username']]['friends']
+    
+    # Get team data
+    user_data = load_user_team_data()
+    username = session['username']
+    
+    if username in user_data:
+        user_teams = user_data[username]
+        team_names = list(user_teams.keys())
+        teams_players = {}
+        team_ovrs = {}
+
+        for team_name, team_data in user_teams.items():
+            players = []
+            total_weighted_ovr = 0
+            total_weights = 0
+
+            for player in team_data['selected_players']:
+                ovr_data = calculate_ovr(player['id'], player['position'])
+                ovr_rating = int(ovr_data['overall_rating'] if isinstance(ovr_data, dict) else 0)
+                position_weight = POSITION_WEIGHTS.get(player['position'], 0)
+                
+                total_weighted_ovr += ovr_rating * position_weight
+                total_weights += position_weight
+                
+                player_info = {
+                    'name': player['name'],
+                    'position': player['position'],
+                    'headshot_url': player['headshot_url'],
+                    'ovr': int(ovr_rating)
+                }
+                players.append(player_info)
+
+            team_ovr = int(total_weighted_ovr / total_weights if total_weights else 0)
+            teams_players[team_name] = players
+            team_ovrs[team_name] = team_ovr
+    else:
+        team_names = []
+        teams_players = {}
+        team_ovrs = {}
+    
+    # Process groups
+    my_groups = []
+    available_groups = []
+    
+    for group_id, group_data in groups.items():
+        group_info = {
+            'id': group_id,
+            'name': group_data['name'],
+            'description': group_data['description'],
+            'member_count': len(group_data['members']),
+            'creator': group_data['creator'],
+            'created_at': group_data['created_at']
+        }
+        
+        if session['username'] in group_data['members']:
+            if session['username'] != group_data['creator']:
+                group_info['joined_at'] = group_data['created_at']
+            my_groups.append(group_info)
+        else:
+            available_groups.append(group_info)
+    
+    my_groups.sort(key=lambda x: x['created_at'], reverse=True)
+    available_groups.sort(key=lambda x: x['created_at'], reverse=True)
     
     return render_template('hometest.html',
                          upcoming_games=upcoming_games,
                          news=news,
                          lang=lang,
-                         latest_game=latest_game)
+                         latest_game=latest_game,
+                         highlight=highlight,
+                         pending_requests=pending_requests,
+                         friends=friends,
+                         my_groups=my_groups,
+                         available_groups=available_groups,
+                         team_names=team_names,
+                         teams_players=teams_players,
+                         team_ovrs=team_ovrs,
+                         profile_username=username)
 
 if __name__ == '__main__':
     app.run(debug=True)

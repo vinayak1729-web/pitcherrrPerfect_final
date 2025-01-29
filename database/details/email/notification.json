@@ -1,0 +1,54 @@
+{
+    "Vinayak9271": {
+        "notification_history": [
+            {
+                "question_id": "favorite_players",
+                "timestamp": "2025-01-27T10:50:59.124028"
+            },
+            {
+                "question_id": "fan_duration",
+                "timestamp": "2025-01-28T10:53:48.453742"
+            },
+            {
+                "question_id": "favorite_teams",
+                "timestamp": "2025-01-29T11:27:48.799921"
+            }
+        ],
+        "last_sent_date": "2025-01-29T11:27:48.798920"
+    },
+    "jj": {
+        "notification_history": [
+            {
+                "question_id": "favorite_players",
+                "timestamp": "2025-01-27T10:51:09.978130"
+            },
+            {
+                "question_id": "favorite_match",
+                "timestamp": "2025-01-28T10:53:58.532169"
+            },
+            {
+                "question_id": "favorite_match",
+                "timestamp": "2025-01-29T11:27:59.190946"
+            }
+        ],
+        "last_sent_date": "2025-01-29T11:27:59.190946"
+    },
+    "hopper": {
+        "notification_history": [
+            {
+                "question_id": "favorite_players",
+                "timestamp": "2025-01-29T11:33:43.891139"
+            }
+        ],
+        "last_sent_date": "2025-01-29T11:33:43.891139"
+    },
+    "vinayak1729": {
+        "notification_history": [
+            {
+                "question_id": "favorite_players",
+                "timestamp": "2025-01-29T21:52:31.985309"
+            }
+        ],
+        "last_sent_date": "2025-01-29T21:52:31.984682"
+    }
+}

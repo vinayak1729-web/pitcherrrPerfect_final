@@ -20,7 +20,24 @@
         "email": "vishal213.mishra@gmail.com",
         "password": "123",
         "friends": [
-            "Vinayak9271"
+            "Vinayak9271",
+            "vinayak1729"
+        ],
+        "profile_pic": "/static/default.png"
+    },
+    "hopper": {
+        "user_id": "d0196ed2-e1c0-486c-967f-b47f9e0363c1",
+        "email": "paraggurav65@gmail.com",
+        "password": "Parag@123",
+        "friends": [],
+        "profile_pic": "/static/default.png"
+    },
+    "vinayak1729": {
+        "user_id": "0049943f-a116-45de-8771-17ddf743a400",
+        "email": "shindevinayak233@gmail.com",
+        "password": "123",
+        "friends": [
+            "jj"
         ],
         "profile_pic": "/static/default.png"
     }

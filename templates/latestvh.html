@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MLB Game Highlight</title>
+</head>
+<body>
+    <h1>{{ home_team }} vs {{ away_team }}</h1>
+    {% if highlight %}
+        <h2>{{ highlight.title }}</h2>
+        <p>{{ highlight.description }}</p>
+        <video width="640" height="360" controls>
+            <source src="{{ highlight.video_url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    {% else %}
+        <p>No highlights available.</p>
+    {% endif %}
+</body>
+</html>

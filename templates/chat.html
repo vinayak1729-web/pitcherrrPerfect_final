@@ -96,40 +96,58 @@
                 </a>
             </div>
 
-            <!-- Messages Container -->
             <div id="messages" class="flex-grow overflow-y-auto p-6 space-y-4 messages-container bg-gray-50">
                 {% for message in messages %}
-                <div class="flex {% if message.from == session.username %}justify-end{% endif %}">
-                    <div class="max-w-sm {% if message.from == session.username %}bg-indigo-500 text-white{% else %}bg-white border border-gray-200{% endif %} rounded-lg px-4 py-2 shadow">
-                        <div class="text-sm">{{ message.message }}</div>
-                        <div class="text-xs mt-1 {% if message.from == session.username %}text-indigo-200{% else %}text-gray-500{% endif %}">
-                            {{ message.timestamp }}
+                    <div class="flex {% if message.from == session.username %}justify-end{% else %}justify-start{% endif %}">
+                        <div class="max-w-sm {% if message.from == session.username %}bg-indigo-500 text-white{% else %}bg-white border border-gray-200{% endif %} rounded-lg px-4 py-2 shadow">
+                            <div class="text-sm">
+                                {{ message.message }}
+                                {% if message.file_url %}
+                                    <div class="mt-2">
+                                        <img src="{{ message.file_url }}" alt="Sent file" class="max-w-xs rounded-lg" />
+                                        <div class="mt-2">
+                                            <a href="{{ message.file_url }}" download class="text-indigo-600 hover:text-indigo-800">Download</a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="text-xs mt-1 {% if message.from == session.username %}text-indigo-200{% else %}text-gray-500{% endif %}">
+                                {{ message.timestamp }}
+                            </div>
                         </div>
                     </div>
-                </div>
                 {% endfor %}
             </div>
-
-            <!-- Message Input -->
-            <div class="bg-white border-t border-gray-200 p-4">
-                <form id="messageForm" class="flex items-center space-x-4">
-                    <div class="flex-grow relative">
-                        <input type="text" 
-                               id="messageInput"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                               placeholder="Type your message..."
-                               autocomplete="off">
-                        <div id="sendingIndicator" class="absolute right-3 top-1/2 transform -translate-y-1/2 hidden">
-                            <div class="animate-spin rounded-full h-4 w-4 border-2 border-indigo-500 border-t-transparent"></div>
+                <!-- Message Input and Send Button -->
+                <div class="bg-white border-t border-gray-200 p-4">
+                    <form id="messageForm" class="flex items-center space-x-4">
+                        <div class="flex-grow relative">
+                            <input type="text" 
+                                   id="messageInput"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                   placeholder="Type your message..."
+                                   autocomplete="off">
+                            <div id="sendingIndicator" class="absolute right-3 top-1/2 transform -translate-y-1/2 hidden">
+                                <div class="animate-spin rounded-full h-4 w-4 border-2 border-indigo-500 border-t-transparent"></div>
+                            </div>
                         </div>
-                    </div>
-                    <button type="submit"
-                            class="px-6 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                            id="sendButton">
-                        Send
-                    </button>
-                </form>
+                        <button type="submit"
+                                class="px-6 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                id="sendButton">
+                            Send
+                        </button>
+                        <label for="fileInput" class="px-4 py-2 bg-indigo-500 text-white rounded-lg cursor-pointer hover:bg-indigo-600 transition-colors">
+                            Upload
+                            <input type="file" 
+                                   id="fileInput" 
+                                   name="file" 
+                                   class="hidden" 
+                                   accept="image/*,application/pdf">
+                        </label>
+                    </form>
+                </div>
             </div>
+            
         </div>
     </div>
 
@@ -139,80 +157,125 @@
         const messagesContainer = document.getElementById('messages');
         const sendButton = document.getElementById('sendButton');
         const sendingIndicator = document.getElementById('sendingIndicator');
+        const fileInput = document.getElementById('fileInput');
         let lastMessageTime = '{{ messages[-1].timestamp if messages else "" }}';
-        let isTyping = false;
-        let typingTimeout;
+        
+        // Add file input change handler to show selected file name
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                console.log('File selected:', file.name);
+            }
+        });
 
-        // Function to format timestamp
-        function formatTimestamp(date) {
-            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        }
-
-        // Function to create message element
-        function createMessageElement(message, timestamp, isOwn = true) {
-            const div = document.createElement('div');
-            div.className = `flex ${isOwn ? 'justify-end' : 'justify-start'}`;
-            div.innerHTML = `
-                <div class="max-w-sm ${isOwn ? 'bg-indigo-500 text-white' : 'bg-white border border-gray-200'} rounded-lg px-4 py-2 shadow">
-                    <div class="text-sm">${message}</div>
-                    <div class="text-xs mt-1 ${isOwn ? 'text-indigo-200' : 'text-gray-500'}">${timestamp}</div>
-                </div>
-            `;
-            return div;
-        }
-
-        // Function to scroll to bottom
-        function scrollToBottom() {
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        // Initial scroll
-        scrollToBottom();
-
-        // Handle message submission
         messageForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const message = messageInput.value.trim();
-            if (!message) return;
+            const file = fileInput.files[0];
+            
+            if (!message && !file) {
+                alert('Please enter a message or select a file');
+                return;
+            }
 
-            // Disable input and button while sending
+            // Disable inputs and show loading state
             messageInput.disabled = true;
             sendButton.disabled = true;
             sendingIndicator.classList.remove('hidden');
 
             try {
+                let fileUrl = null;
+                
+                // Handle file upload first if there's a file
+                if (file) {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    
+                    try {
+                        const uploadResponse = await axios.post('/upload_file', formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        });
+                        
+                        if (uploadResponse.data.success) {
+                            fileUrl = uploadResponse.data.file_url;
+                            console.log('File uploaded successfully:', fileUrl);
+                        } else {
+                            throw new Error('File upload failed');
+                        }
+                    } catch (error) {
+                        console.error('File upload error:', error);
+                        alert('Failed to upload file. Please try again.');
+                        return;
+                    }
+                }
+
+                // Send message with or without file URL
                 const response = await axios.post('/send_message', {
                     friend: '{{ friend }}',
-                    message: message
+                    message: message,
+                    file_url: fileUrl
                 });
 
                 if (response.data.success) {
-                    // Add message to UI
-                    const messageElement = createMessageElement(
-                        message,
-                        formatTimestamp(new Date()),
-                        true
-                    );
-                    messagesContainer.appendChild(messageElement);
-                    scrollToBottom();
-                    
-                    // Clear input
+                    displayMessage(response.data.message);
                     messageInput.value = '';
+                    fileInput.value = '';
+                } else {
+                    throw new Error('Message sending failed');
                 }
             } catch (error) {
-                console.error('Error sending message:', error);
+                console.error('Error:', error);
                 alert('Failed to send message. Please try again.');
             } finally {
-                // Re-enable input and button
+                // Re-enable inputs and hide loading state
                 messageInput.disabled = false;
                 sendButton.disabled = false;
                 sendingIndicator.classList.add('hidden');
-                messageInput.focus();
             }
         });
 
-        // Handle typing indicator
+        function displayMessage(msg) {
+            const div = document.createElement('div');
+            div.className = `flex ${msg.from === '{{ session.username }}' ? 'justify-end' : 'justify-start'}`;
+            
+            let content = `
+                <div class="max-w-sm ${msg.from === '{{ session.username }}' ? 'bg-indigo-500 text-white' : 'bg-white border border-gray-200'} rounded-lg px-4 py-2 shadow">
+                    ${msg.message ? `<div class="text-sm">${msg.message}</div>` : ''}
+            `;
+
+            if (msg.file_url) {
+                if (msg.file_url.toLowerCase().endsWith('.pdf')) {
+                    content += `
+                        <div class="mt-2">
+                            <a href="${msg.file_url}" target="_blank" class="text-blue-500 hover:text-blue-700 underline">View PDF</a>
+                        </div>
+                    `;
+                } else {
+                    content += `
+                        <div class="mt-2">
+                            <img src="${msg.file_url}" class="max-w-full h-auto rounded-lg" alt="Uploaded Image">
+                            <a href="${msg.file_url}" download class="text-indigo-600 hover:text-indigo-800 mt-2 inline-block">Download</a>
+                        </div>
+                    `;
+                }
+            }
+
+            content += `
+                    <div class="text-xs mt-1 ${msg.from === '{{ session.username }}' ? 'text-indigo-200' : 'text-gray-500'}">${msg.timestamp}</div>
+                </div>
+            `;
+
+            div.innerHTML = content;
+            messagesContainer.appendChild(div);
+            scrollToBottom();
+        }
+        
+        function scrollToBottom() {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
         messageInput.addEventListener('input', () => {
             if (!isTyping) {
                 axios.post('/typing_status', {
@@ -221,7 +284,7 @@
                 });
                 isTyping = true;
             }
-
+        
             clearTimeout(typingTimeout);
             typingTimeout = setTimeout(() => {
                 axios.post('/typing_status', {
@@ -231,14 +294,13 @@
                 isTyping = false;
             }, 1000);
         });
-
-        // Fetch new messages periodically
+        
         async function fetchNewMessages() {
             try {
                 const response = await axios.get(`/get_new_messages/${encodeURIComponent('{{ friend }}')}`, {
                     params: { last_timestamp: lastMessageTime }
                 });
-
+        
                 if (response.data.messages && response.data.messages.length > 0) {
                     response.data.messages.forEach(msg => {
                         const messageElement = createMessageElement(
@@ -251,8 +313,7 @@
                     });
                     scrollToBottom();
                 }
-
-                // Update typing status
+        
                 if (response.data.typing_status) {
                     document.getElementById('typingIndicator').textContent = 'typing...';
                 } else {
@@ -262,7 +323,19 @@
                 console.error('Error fetching messages:', error);
             }
         }
-
+        
+        function createMessageElement(message, timestamp, isOwn = true) {
+            const div = document.createElement('div');
+            div.className = `flex ${isOwn ? 'justify-end' : 'justify-start'}`;
+            div.innerHTML = `
+                <div class="max-w-sm ${isOwn ? 'bg-indigo-500 text-white' : 'bg-white border border-gray-200'} rounded-lg px-4 py-2 shadow">
+                    <div class="text-sm">${message}</div>
+                    <div class="text-xs mt-1 ${isOwn ? 'text-indigo-200' : 'text-gray-500'}">${timestamp}</div>
+                </div>
+            `;
+            return div;
+        }
+        
     </script>
 </body>
 </html>
