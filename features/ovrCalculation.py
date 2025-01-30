@@ -70,8 +70,8 @@ import statsapi
 
 def calculate_ovr(player_id, position):
     # Fetch player stats from statsapi
-    player_data = statsapi.player_stat_data(player_id)
-
+    player_data = statsapi.player_stat_data(player_id)  
+        
     # Ensure stats are available
     if not player_data or 'stats' not in player_data:
         return f"No stats available for player ID {player_id}."

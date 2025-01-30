@@ -181,6 +181,22 @@
                     "strike_zone_top": 3.67,
                     "type": "Infielder",
                     "weight": 201
+                },
+                {
+                    "bat_side": "Right",
+                    "dob": "1990-09-08",
+                    "headshot_url": "https://securea.mlb.com/mlb/images/players/head_shot/543037.jpg",
+                    "height": "6' 4\"",
+                    "id": 543037,
+                    "jersey_number": "45",
+                    "name": "Gerrit Cole",
+                    "pitch_side": "Right",
+                    "position": "Pitcher",
+                    "status": "Active",
+                    "strike_zone_bottom": 1.627,
+                    "strike_zone_top": 3.549,
+                    "type": "Pitcher",
+                    "weight": 220
                 }
             ]
         },
@@ -629,6 +645,76 @@
                     "strike_zone_top": 3.4,
                     "type": "Two-Way Player",
                     "weight": 210
+                }
+            ]
+        }
+    },
+    "NANO": {
+        "banda": {
+            "selected_players": [
+                {
+                    "bat_side": "Right",
+                    "dob": "1990-03-15",
+                    "headshot_url": "https://securea.mlb.com/mlb/images/players/head_shot/605113.jpg",
+                    "height": "6' 2\"",
+                    "id": 605113,
+                    "jersey_number": "12",
+                    "name": "Nick Ahmed",
+                    "pitch_side": "Right",
+                    "position": "Shortstop",
+                    "status": "Minor League Contract",
+                    "strike_zone_bottom": 1.75,
+                    "strike_zone_top": 3.67,
+                    "type": "Infielder",
+                    "weight": 201
+                },
+                {
+                    "bat_side": "Left",
+                    "dob": "1993-08-10",
+                    "headshot_url": "https://securea.mlb.com/mlb/images/players/head_shot/607455.jpg",
+                    "height": "6' 2\"",
+                    "id": 607455,
+                    "jersey_number": "43",
+                    "name": "Anthony Banda",
+                    "pitch_side": "Left",
+                    "position": "Pitcher",
+                    "status": "Active",
+                    "strike_zone_bottom": 1.589,
+                    "strike_zone_top": 3.467,
+                    "type": "Pitcher",
+                    "weight": 221
+                },
+                {
+                    "bat_side": "Right",
+                    "dob": "1989-12-28",
+                    "headshot_url": "https://securea.mlb.com/mlb/images/players/head_shot/605131.jpg",
+                    "height": "5' 10\"",
+                    "id": 605131,
+                    "jersey_number": "15",
+                    "name": "Austin Barnes",
+                    "pitch_side": "Right",
+                    "position": "Catcher",
+                    "status": "Active",
+                    "strike_zone_bottom": 1.46,
+                    "strike_zone_top": 3.21,
+                    "type": "Catcher",
+                    "weight": 187
+                },
+                {
+                    "bat_side": "Right",
+                    "dob": "1992-10-07",
+                    "headshot_url": "https://securea.mlb.com/mlb/images/players/head_shot/605141.jpg",
+                    "height": "5' 9\"",
+                    "id": 605141,
+                    "jersey_number": "50",
+                    "name": "Mookie Betts",
+                    "pitch_side": "Right",
+                    "position": "Shortstop",
+                    "status": "Active",
+                    "strike_zone_bottom": 1.46,
+                    "strike_zone_top": 3.14,
+                    "type": "Infielder",
+                    "weight": 180
                 }
             ]
         }

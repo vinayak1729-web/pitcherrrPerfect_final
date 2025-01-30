@@ -12,9 +12,13 @@
             {
                 "question_id": "favorite_teams",
                 "timestamp": "2025-01-29T11:27:48.799921"
+            },
+            {
+                "question_id": "favorite_players",
+                "timestamp": "2025-01-30T11:31:21.858905"
             }
         ],
-        "last_sent_date": "2025-01-29T11:27:48.798920"
+        "last_sent_date": "2025-01-30T11:31:21.858905"
     },
     "jj": {
         "notification_history": [
@@ -29,26 +33,38 @@
             {
                 "question_id": "favorite_match",
                 "timestamp": "2025-01-29T11:27:59.190946"
+            },
+            {
+                "question_id": "fan_duration",
+                "timestamp": "2025-01-30T11:31:27.820287"
             }
         ],
-        "last_sent_date": "2025-01-29T11:27:59.190946"
+        "last_sent_date": "2025-01-30T11:31:27.820287"
     },
     "hopper": {
         "notification_history": [
             {
                 "question_id": "favorite_players",
                 "timestamp": "2025-01-29T11:33:43.891139"
+            },
+            {
+                "question_id": "favorite_teams",
+                "timestamp": "2025-01-30T14:40:38.490065"
             }
         ],
-        "last_sent_date": "2025-01-29T11:33:43.891139"
+        "last_sent_date": "2025-01-30T14:40:38.490065"
     },
     "vinayak1729": {
         "notification_history": [
             {
                 "question_id": "favorite_players",
                 "timestamp": "2025-01-29T21:52:31.985309"
+            },
+            {
+                "question_id": "selected_team",
+                "timestamp": "2025-01-30T22:02:23.411657"
             }
         ],
-        "last_sent_date": "2025-01-29T21:52:31.984682"
+        "last_sent_date": "2025-01-30T22:02:23.410638"
     }
 }

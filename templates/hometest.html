@@ -8,7 +8,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Permanent+Marker&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<!-- Add this in your HTML head section -->
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,ja,es,hi,de,fr,ko',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        }, 'google_translate_element');
+    }
+</script>
+
 <style>
     /* Neo-brutalism base styles */
     :root {
@@ -20,10 +31,10 @@
 
     body {
         background: repeating-linear-gradient(45deg,
-                #f0f0f0 0px,
-                #f0f0f0 10px,
+                #ffffff 0px,
+                #d7f1ff 10px,
                 #ffffff 10px,
-                #ffffff 20px);
+                #e9f2ff 20px);
         font-family: 'Bungee', cursive;
     }
 
@@ -708,7 +719,86 @@
         transform: scale(1.05);
         filter: brightness(0) invert(1) drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
     }
+    .navbar {
+    background-color: white;
+    border-bottom: 4px solid #000;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.nav-item {
+    position: relative;
+    color: #E53E3E;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.nav-item:hover {
+    color: #C53030;
+    transform: translateY(-2px);
+}
+
+.nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #E53E3E;
+    transition: width 0.3s ease;
+}
+
+.nav-item:hover::after {
+    width: 100%;
+}
+
+.dropdown-item {
+    color: #E53E3E;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease;
+    display: block;
+    text-decoration: none;
+}
+
+.dropdown-item:hover {
+    background-color: #FED7D7;
+    transform: translateX(4px);
+}
+
+.shadow-brutal {
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+}
+
+/* Dark mode styles */
+.dark .navbar {
+    background-color: #1A202C;
+    border-bottom: 4px solid #E53E3E;
+}
+
+.dark .nav-item {
+    color: #FC8181;
+}
+
+.dark .nav-item:hover {
+    color: #FED7D7;
+}
+
+.dark .dropdown-item {
+    background-color: #2D3748;
+    color: #FC8181;
+}
+
+.dark .dropdown-item:hover {
+    background-color: #4A5568;
+}
+
+
 </style>
+</head>
 <div class="decorative-corner top-left"></div>
 <div class="decorative-corner bottom-right"></div>
 <nav class="navbar neo-brutal">
@@ -727,9 +817,12 @@
                 <a href="/Chat_dashboard" class="nav-item">
                     <i class="fas fa-users mr-2"></i>Fan Link
                 </a>
+                <a href="/highlights" class="nav-item">
+                    <i class="fas fa-fire mr-2"></i> Highlights
+                </a>
                 <div class="relative group">
                     <button class="nav-item">
-                        <i class="fas fa-baseball-ball mr-2"></i>Your Team
+                        <i class="fas fa-crown mr-2"></i>Your Team
                         <i class="fas fa-chevron-down ml-2"></i>
                     </button>
                     <div class="absolute hidden group-hover:block w-48 bg-white border-4 border-black shadow-brutal">
@@ -747,28 +840,7 @@
             </div>
         </div>
     </div>
-</nav><br>
-<!-- Left Sidebar -->
-<div class="fixed left-0 top-5 z-40">
-    <div class="neo-brutal-button bg-[#ff2e2e] p-4 rounded-r-lg transform transition-transform hover:translate-x-2">
-        <button id="sidebar-toggle" class="text-white text-2xl font-bungee">☰</button>
-    </div>
-
-    <div id="sidebar" class="hidden neo-brutal-panel bg-white dark:bg-gray-800 w-64 h-screen p-4">
-        <div class="mb-6">
-            <h3 class="text-xl font-bungee mb-4 text-[#213a8f] dark:text-white">Language</h3>
-            <div class="language-options space-y-2">
-                {% for lang, name in [('en', 'English'), ('ja', 'Japanese'), ('es', 'Spanish'),
-                ('de', 'German'), ('ko', 'Korean'), ('fr', 'French'), ('hi', 'Hindi')] %}
-                <a href="?lang={{ lang }}"
-                    class="neo-brutal-link block px-4 py-2 font-permanent-marker hover:transform hover:-translate-y-1 transition-all">
-                    {{ name }}
-                </a>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-</div>
+</nav>
 <h1 class="neon-header text-5xl font-bungee text-center my-8">
     <span class="relative inline-block">
         Upcoming Matches
@@ -998,7 +1070,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('searchInput');
             const searchResults = document.getElementById('searchResults');
             let searchTimeout;
@@ -1242,36 +1314,64 @@
             document.getElementById('chatbot-container').classList.add('hidden');
         });
 
-        // Dark Mode Toggle
-        document.getElementById('darkModeToggle').addEventListener('click', function () {
-            document.documentElement.classList.toggle('dark');
+        // Dark mode toggle functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const icon = darkModeToggle.querySelector('i');
+    
+    // Function to update toggle button appearance
+    function updateToggleButton(isDark) {
+        if (isDark) {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        } else {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+        }
+    }
 
-            // Update icon
-            const icon = this.querySelector('i');
-            if (document.documentElement.classList.contains('dark')) {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            } else {
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
-            }
+    // Function to set dark mode
+    function setDarkMode(isDark) {
+        if (isDark) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+        updateToggleButton(isDark);
+        localStorage.setItem('darkMode', isDark);
+    }
 
-            // Save preference
-            const isDark = document.documentElement.classList.contains('dark');
-            localStorage.setItem('darkMode', isDark);
-        });
+    // Initialize dark mode from saved preference
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    setDarkMode(savedDarkMode);
 
-        // Initialize dark mode from saved preference
-        document.addEventListener('DOMContentLoaded', function () {
-            const isDark = localStorage.getItem('darkMode') === 'true';
-            if (isDark) {
-                document.documentElement.classList.add('dark');
-                const icon = document.querySelector('#darkModeToggle i');
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            }
-        });
+    // Toggle dark mode on button click
+    darkModeToggle.addEventListener('click', function() {
+        const isDark = document.documentElement.classList.contains('dark');
+        setDarkMode(!isDark);
+        
+        // Apply smooth transition to all elements
+        document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+        setTimeout(() => {
+            document.body.style.transition = '';
+        }, 300);
+    });
 
+    // Add system preference detection
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    // Set initial dark mode if no saved preference
+    if (localStorage.getItem('darkMode') === null) {
+        setDarkMode(prefersDark.matches);
+    }
+
+    // Listen for system dark mode changes
+    prefersDark.addEventListener('change', (e) => {
+        if (localStorage.getItem('darkMode') === null) {
+            setDarkMode(e.matches);
+        }
+    });
+});
         // Team dropdown hover
         const teamDropdown = document.querySelector('.group');
         teamDropdown.addEventListener('mouseenter', function () {

@@ -7,10 +7,11 @@
     <title>Pitcher Perfect - Baseball Team Selector</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-     <link href="https://fonts.googleapis.com/css2?family=Graduate&display=swap" rel="stylesheet">
-     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-   
+    <link href="https://fonts.googleapis.com/css2?family=Graduate&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -29,6 +30,99 @@
         }
     </script>
     <style>
+        * {
+        font-family: 'Bungee', cursive !important;
+    }
+    /* First, ensure Bungee font is properly imported and applied globally */
+@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+
+/* Global font settings */
+body, button, input, select, .player-name, .player-position, .team-name, .ovr-rating {
+    font-family: 'Bungee', cursive !important;
+}
+
+/* Enhanced Navbar Styles */
+.navbar-brutal {
+    background: linear-gradient(to right, #0F172A, #1E293B);
+    border-bottom: 4px solid #000;
+    box-shadow: 8px 8px 0 #000;
+    padding: 1rem 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    padding: 0.75rem 1.25rem;
+    border: 3px solid transparent;
+    transition: all 0.2s ease;
+    color: white;
+}
+
+.nav-link:hover {
+    transform: translate(-2px, -2px);
+    border: 3px solid #FF0000;
+    box-shadow: 4px 4px 0 #000;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.brand-logo {
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 
+        2px 2px 0 #000,
+        4px 4px 0 #FF0000;
+    padding: 0.5rem;
+    border: 4px solid #000;
+    background: linear-gradient(45deg, #FF0000, #0066ff);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+        .shadow-brutal {
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-200%);
+            }
+
+            100% {
+                transform: translateX(200%);
+            }
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .animate-shine {
+            animation: shine 3s ease-in-out infinite;
+        }
+
+        .animate-gradient-x {
+            background-size: 200% 200%;
+            animation: gradient 8s ease infinite;
+        }
+
+        /* Custom color */
+        .golden {
+            --tw-gradient-stops: #ffd700;
+        }
+
         .field-player {
             position: relative;
             width: 80px;
@@ -112,6 +206,7 @@
             bottom: -50px;
             transform: translateX(-50%) scale(1.1);
         }
+
         .download-btn {
             display: block;
             margin: 20px auto;
@@ -268,6 +363,7 @@
                 0 0 5px rgba(255, 255, 255, 0.8),
                 0 0 10px rgba(255, 255, 255, 0.4);
         }
+
         button {
             margin-top: 20px;
             padding: 10px 20px;
@@ -278,59 +374,239 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0056b3;
+        }
+
+        :root {
+            --neo-blue: #2D3250;
+            --neo-red: #FF4B91;
+            --neo-yellow: #FFB000;
+            --neo-green: #7ED7C1;
+            --neo-black: #1a1a1a;
+            --neo-white: #F7F7F7;
+        }
+
+        body {
+            background: repeating-linear-gradient(45deg,
+                    var(--neo-white) 0px,
+                    var(--neo-white) 10px,
+                    #eee 10px,
+                    #eee 20px);
+            font-family: 'Bungee', cursive;
+        }
+
+        .dark body {
+            background: repeating-linear-gradient(45deg,
+                    var(--neo-black) 0px,
+                    var(--neo-black) 10px,
+                    #2a2a2a 10px,
+                    #2a2a2a 20px);
+        }
+
+        nav {
+            border-bottom: 8px solid var(--neo-red);
+            
+            margin-bottom: 2rem;
+        }
+
+        .baseball-font {
+            font-family: 'Pacifico', cursive;
+            text-shadow: 4px 4px 0px var(--neo-black);
+            transform: rotate(-2deg);
+        }
+
+        .neo-container {
+            background: var(--neo-white);
+            border: 4px solid var(--neo-black);
+            box-shadow: 8px 8px 0px var(--neo-black);
+            transform: rotate(1deg);
+            transition: all 0.3s ease;
+        }
+
+        .neo-container:hover {
+            transform: rotate(-1deg) translateY(-5px);
+        }
+
+        .neo-select {
+            border: 4px solid var(--neo-black);
+            box-shadow: 6px 6px 0px var(--neo-black);
+            transform: rotate(-1deg);
+            font-family: 'Bungee', cursive;
+        }
+
+        .neo-button {
+            background: var(--neo-red);
+            border: 4px solid var(--neo-black);
+            box-shadow: 6px 6px 0px var(--neo-black);
+            transform: rotate(2deg);
+            transition: all 0.2s ease;
+        }
+
+        .neo-button:hover {
+            transform: rotate(-1deg) translateY(-3px);
+            box-shadow: 8px 8px 0px var(--neo-black);
+        }
+
+        .player-card {
+            background: var(--neo-white);
+            border: 4px solid var(--neo-black);
+            box-shadow: 8px 8px 0px var(--neo-black);
+            transform: rotate(random(-2deg, 2deg));
+            transition: all 0.3s ease;
+            padding: 1.5rem;
+        }
+
+        .player-card:hover {
+            transform: rotate(0deg) translateY(-10px);
+            box-shadow: 12px 12px 0px var(--neo-black);
+        }
+
+        /* Dark mode overrides */
+        .dark .neo-container,
+        .dark .player-card {
+            background: var(--neo-blue);
+            border-color: var(--neo-red);
+            box-shadow: 8px 8px 0px var(--neo-red);
+        }
+
+        .dark .neo-select,
+        .dark .neo-button {
+            background: var(--neo-red);
+            border-color: var(--neo-yellow);
+            box-shadow: 6px 6px 0px var(--neo-yellow);
+            color: var(--neo-white);
+        }
+
+        .navbar-brutal {
+            background: #0F172A;
+            border-bottom: 4px solid #000;
+            box-shadow: 8px 8px 0 #000;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-link {
+            font-family: 'Bungee', sans-serif;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            position: relative;
+            border: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            transform: translate(-2px, -2px);
+            border: 3px solid #FF0000;
+            box-shadow: 4px 4px 0 #000;
+            background: #1E293B;
+        }
+
+        .brand-text {
+            font-family: 'Bungee', sans-serif;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow:
+                2px 2px 0 #000,
+                4px 4px 0 #FF0000;
+        }
+
+        .dark-mode-btn {
+            background: #fff;
+            border: 3px solid #000;
+            padding: 0.5rem;
+            box-shadow: 4px 4px 0 #000;
+            transition: all 0.2s ease;
+        }
+
+        .dark-mode-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #000;
         }
     </style>
 </head>
 
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white font-sans" >
-    <!-- Navbar -->
-    <nav class="bg-lexus-blue dark:bg-gray-800 shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="baseball-font text-3xl neon-text">
-                        <span class="text-lexus-red dark:text-lexus-red">Pitcher</span>
-                        <span class="text-white dark:text-white">Perfect</span>
-                    </div>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white font-sans">
+   
+    <nav class="navbar-brutal sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-center h-20">
+                <!-- Brand Logo -->
+                <div class="brand-logo flex items-center gap-2">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M15.5 2A2.5 2.5 0 0118 4.5v11a2.5 2.5 0 01-2.5 2.5h-11A2.5 2.5 0 012 15.5v-11A2.5 2.5 0 014.5 2h11z"/>
+                    </svg>
+                    <span class="text-red-600">Pitcher</span>
+                    <span class="text-white">Perfect</span>
                 </div>
-                <div class="flex items-center space-x-8">
-                    <a href="/"
-                        class="text-white dark:text-white hover:text-lexus-red dark:hover:text-lexus-red transition-colors">Home</a>
-                    <a href="/Chat_dashboard"
-                        class="text-white dark:text-white hover:text-lexus-red dark:hover:text-lexus-red transition-colors">Fan
-                        Link</a>
-                    <a href="/yourteam"
-                        class="text-white dark:text-white hover:text-lexus-red dark:hover:text-lexus-red transition-colors">Your
-                        Team</a>
-                    <a href="/profile"
-                        class="text-white dark:text-white hover:text-lexus-red dark:hover:text-lexus-red transition-colors">Profile</a>
-                    <button id="darkModeToggle"
-                        class="text-white dark:text-white hover:text-lexus-red dark:hover:text-lexus-red transition-colors">
+                
+                <!-- Navigation Links -->
+                <div class="flex items-center gap-6">
+                    <a href="/" class="nav-link">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        HOME
+                    </a>
+                    
+                    <a href="/Chat_dashboard" class="nav-link">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
+                        </svg>
+                        FAN LINK
+                    </a>
+                    
+                    <a href="/team_players" class="nav-link">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        BUILD TEAM
+                    </a>
+                    
+                    <a href="/team_compare" class="nav-link">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                        COMPARE
+                    </a>
+                    
+                    <!-- Dark Mode Toggle -->
+                    <button id="darkModeToggle" class="nav-link">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                                clip-rule="evenodd" />
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
                         </svg>
                     </button>
                 </div>
             </div>
         </div>
     </nav>
- 
+    
+
     <div class="container mx-auto px-4 py-8">
         <div id="bodymain">
             <div class="team-ovr-container text-center mb-8">
-                <div class="inline-block bg-gradient-to-r from-lexus-red to-lexus-blue p-1 rounded-xl">
-                    <div class="bg-white dark:bg-gray-900 px-8 py-4 rounded-lg">
-                        <span
-                            class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-lexus-red to-lexus-blue">
-                            OVR: {{team_ovrs}}
-                        </span>
+                <div class="inline-block relative overflow-hidden">
+                    <!-- Outer gradient border with shine effect -->
+                    <div class="bg-gradient-to-r from-lexus-red via-golden to-lexus-blue p-[3px] rounded-2xl 
+                                animate-gradient-x relative shadow-brutal">
+                        <!-- Inner container -->
+                        <div class="bg-white dark:bg-gray-900 px-12 py-6 rounded-xl relative overflow-hidden">
+                            <!-- Shine overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20 
+                                        translate-x-[-200%] animate-shine"></div>
+                            <!-- OVR Text -->
+                            <span class="text-5xl font-bungee bg-clip-text text-transparent bg-gradient-to-r 
+                                       from-lexus-red via-golden to-lexus-blue relative z-10">
+                                OVR: {{team_ovrs}}
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
+
 
             <div class="field-container max-w-5xl mx-auto relative">
                 <!-- Baseball Field Image -->
@@ -373,33 +649,33 @@
             </div>
         </div>
 
-   
-    <div class="max-w-xl mx-auto mt-8 flex space-x-4">
-        <select id="teamSelect" class="flex-grow bg-white dark:bg-gray-800 text-lexus-blue dark:text-white 
+
+        <div class="max-w-xl mx-auto mt-8 flex space-x-4">
+            <select id="teamSelect" class="flex-grow bg-white dark:bg-gray-800 text-lexus-blue dark:text-white 
                        p-3 rounded-lg border-4 border-lexus-blue dark:border-lexus-blue 
                        focus:ring-2 focus:ring-lexus-red transition shadow-player-card">
-            <option value="">-- Select a Team --</option>
-            {% for team_name in team_names %}
-            <option value="{{ team_name }}">{{ team_name }}</option>
-            {% endfor %}
-        </select>
-        <button id="selectTeamBtn" class="bg-lexus-red hover:bg-lexus-red/80 text-white font-bold py-3 px-6 
+                <option value="">-- Select a Team --</option>
+                {% for team_name in team_names %}
+                <option value="{{ team_name }}">{{ team_name }}</option>
+                {% endfor %}
+            </select>
+            <button id="selectTeamBtn" class="bg-lexus-red hover:bg-lexus-red/80 text-white font-bold py-3 px-6 
                        rounded-lg transition transform hover:-translate-y-1 
                        shadow-player-card border-4 border-lexus-blue 
                        dark:border-lexus-blue active:translate-y-1">
-            Select Team
-        </button>
-    </div>
-
-    <!-- Player Bench -->
-    <div class="mt-8 max-w-6xl mx-auto">
-        <h2 class="text-3xl font-bold mb-6 text-center text-lexus-red dark:text-lexus-red">
-            <div class="team-name">{{team_name}}</div>
-        </h2>
-        <div id="playerContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            <!-- Players will be loaded here dynamically -->
+                Select Team
+            </button>
         </div>
-    </div>
+
+        <!-- Player Bench -->
+        <div class="mt-8 max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold mb-6 text-center text-lexus-red dark:text-lexus-red">
+                <div class="team-name">{{team_name}}</div>
+            </h2>
+            <div id="playerContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                <!-- Players will be loaded here dynamically -->
+            </div>
+        </div>
     </div>
     </div>
     <script>
@@ -851,10 +1127,10 @@
                     playerCard.innerHTML = `
                         <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-tr from-white/10 to-transparent opacity-20 pointer-events-none"></div>
                         <div class="flex flex-col items-center">
-                            <div class="text-yellow-400 font-bold text-xl mb-2">OVR: ${ovrDisplay}</div>
+                            <div class="text-red-400 font-bold text-xl mb-2">OVR: ${ovrDisplay}</div>
                             <img src="${player.headshot_url}" alt="${player.name}" class="w-32 h-32 rounded-full object-cover border-4 border-yellow-400 mb-3 shadow-lg">
-                            <div class="text-lg font-bold text-white mb-2">${player.name}</div>
-                            <div class="bg-black/30 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider">${player.position}</div>
+                            <div class="text-blue-400 font-bold text-white mb-2">${player.name}</div>
+                            <div class="bg-black/30 text-red px-3 py-1 rounded-full text-xs uppercase tracking-wider">${player.position}</div>
                         </div>
                     `;
 

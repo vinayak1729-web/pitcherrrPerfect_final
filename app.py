@@ -1163,6 +1163,32 @@ def check_session():
 
 @app.route('/team_players', methods=['GET', 'POST'])
 def team_players():
+    user_data = load_user_team_data()
+    username = session['username']
+    
+    # Get team names and overviews if user exists
+    if username in user_data:
+        user_teams = user_data[username]
+        team_names = list(user_teams.keys())
+        team_ovrs = {}
+        
+        for team_name, team_data in user_teams.items():
+            total_weighted_ovr = 0
+            total_weights = 0
+            
+            for player in team_data['selected_players']:
+                ovr_data = calculate_ovr(player['id'], player['position'])
+                ovr_rating = int(ovr_data['overall_rating'] if isinstance(ovr_data, dict) else 0)
+                position_weight = POSITION_WEIGHTS.get(player['position'], 0)
+                
+                total_weighted_ovr += ovr_rating * position_weight
+                total_weights += position_weight
+            
+            team_ovr = int(total_weighted_ovr / total_weights if total_weights else 0)
+            team_ovrs[team_name] = team_ovr
+    else:
+        team_names = []
+        team_ovrs = {}
     team_id = request.args.get('team_id') or session.get('team_id')
     if not team_id:
         team_id = 119  # Default to Dodgers
@@ -1240,7 +1266,9 @@ def team_players():
         selected_status=status_filter,
         selected_roles=role_filters,
         selected_players=selected_player_names,
-        selected_players_count=len(selected_player_names)
+        selected_players_count=len(selected_player_names),
+        team_ovrs=team_ovrs,
+        team_names=team_names  # Added team names to template
     )
 
 def load_user_team_data():
@@ -1583,6 +1611,89 @@ def game_details(game_pk):
                          previous_away_score=0,
                          previous_home_score=0)
 
+
+# def generate_full_baseball_commentary(game_data):
+#     # Parse scores and teams
+#     away_score, home_score = map(int, game_data['final_score'].split(' - '))
+#     teams = game_data['teams'].split(' vs ')
+#     winning_team = teams[0] if away_score > home_score else teams[1]
+    
+#     commentary = []
+    
+#     # Pre-game hype
+#     commentary.append(f"⚾ WELCOME TO {game_data['venue'].upper()}! ⚾")
+#     commentary.append(f"Today's matchup: {game_data['teams']} on {game_data['date']}")
+#     commentary.append("=" * 50)
+    
+#     # Early innings
+#     current_inning = ""
+#     for play in game_data['plays']:
+#         if play['inning'] != current_inning:
+#             current_inning = play['inning']
+#             commentary.append(f"\n🎯 {current_inning.upper()}")
+        
+#         # Add extra flair for scoring plays
+#         if any(score != '0' for score in play['score'].split('-')):
+#             commentary.append(f"💥 SCORING PLAY: {play['description']}")
+#             commentary.append(f"Score Update: {play['score']}")
+#         else:
+#             commentary.append(f"• {play['description']}")
+    
+#     # Game wrap-up
+#     commentary.append("\n🏆 FINAL WRAP")
+#     commentary.append("=" * 50)
+#     commentary.append(f"{winning_team} takes this one!")
+#     commentary.append(f"Final Score: {game_data['final_score']}")
+    
+#     # Game stats summary
+#     commentary.append("\n📊 GAME HIGHLIGHTS")
+#     commentary.append(f"Venue: {game_data['venue']}")
+#     commentary.append(f"Matchup: {game_data['teams']}")
+#     commentary.append(f"Date: {game_data['date']}")
+    
+#     return commentary
+
+# @app.route('/game/<int:game_pk>', methods=['GET'])
+# def game_details(game_pk):
+#     # Fetch game data
+#     response = requests.get(f"{MLB_API_URL}?gamePk={game_pk}")
+#     game_info = response.json().get("dates", [])[0].get("games", [])[0]
+    
+#     # Process game data
+#     game_data = {
+#         'home_team': game_info['teams']['home']['team']['name'],
+#         'away_team': game_info['teams']['away']['team']['name'],
+#         'home_score': game_info['teams']['home'].get('score', 0),
+#         'away_score': game_info['teams']['away'].get('score', 0),
+#         'game_date': game_info['gameDate'],
+#         'venue': game_info.get('venue', {}).get('name', 'N/A'),
+#         'home_team_logo': f'https://www.mlbstatic.com/team-logos/{game_info["teams"]["home"]["team"]["id"]}.svg',
+#         'away_team_logo': f'https://www.mlbstatic.com/team-logos/{game_info["teams"]["away"]["team"]["id"]}.svg',
+#         'status': game_info.get('status', {}).get('detailedState', 'N/A')
+#     }
+    
+#     # Get highlights and process scores
+#     highlights_data = extract_highlights(game_pk)
+#     video_highlights = fetch_video_highlights(game_pk)
+    
+#     # Generate commentary for TTS
+#     commentary = generate_full_baseball_commentary({
+#         'teams': f"{game_data['away_team']} vs {game_data['home_team']}",
+#         'venue': game_data['venue'],
+#         'date': game_data['game_date'],
+#         'plays': highlights_data,
+#         'final_score': f"{game_data['away_score']} - {game_data['home_score']}"
+#     })
+    
+#     return render_template('GameHighlights.html', 
+#                          game_pk=game_pk,
+#                          game_data=game_data,
+#                          highlights_data=highlights_data, 
+#                          video_highlights=video_highlights,
+#                          commentary=commentary,
+#                          previous_away_score=0,
+#                          previous_home_score=0)
+
 def fetch_video_highlights(game_pk):
     video_highlights = []
     
@@ -1873,17 +1984,59 @@ def get_game_info():
                 return home_team_name, away_team_name, first_highlight, game_data, home_team_id, away_team_id ,game_pk
     
     return None, None, None, None, None, None,None
+
+
+from deep_translator import GoogleTranslator
+
+
+def translate_text(text, target_language):
+    try:
+        translated = GoogleTranslator(target=target_language).translate(text)
+        return translated
+    except Exception as e:
+        return f"Error: {e}"
 @app.route('/')
 def index():
     if 'username' not in session:
         return redirect(url_for('login'))
     
     # Get MLB data
+    languages = [
+        ('en', 'English'),
+        ('ja', 'Japanese'),
+        ('es', 'Spanish'),
+        ('de', 'German'),
+        ('ko', 'Korean'),
+        ('fr', 'French'),
+        ('hi', 'Hindi')
+    ]
+    
+    # Get selected language
+    lang = request.args.get('lang', 'en')
+   
     lang = request.args.get('lang', 'en')
     upcoming_games = get_schedule()
     news = fetch_latest_news()
     home_team, away_team, highlight, game_data, home_team_id, away_team_id, game_pk = get_game_info()
-    
+    if lang != 'en':
+        # Translate news
+        for article in news:
+            article['title'] = translate_text(article['title'], lang)
+        
+        # Translate highlight if exists
+        if highlight:
+            highlight['title'] = translate_text(highlight['title'], lang)
+            highlight['description'] = translate_text(highlight['description'], lang)
+        
+        # Translate group info
+        for group in my_groups:
+            group['name'] = translate_text(group['name'], lang)
+            group['description'] = translate_text(group['description'], lang)
+        
+        for group in available_groups:
+            group['name'] = translate_text(group['name'], lang)
+            group['description'] = translate_text(group['description'], lang)
+
     latest_game = {
         'home_team': home_team,
         'away_team': away_team,

@@ -137,9 +137,94 @@
             color: #1e3d59;
             font-size: 0.8rem;
         }
+        .shadow-brutal {
+    box-shadow: 8px 8px 0px rgba(0, 0, 0, 1);
+}
+
+.bg-baseball-red {
+    background-color: #E31937;
+}
+
+.bg-baseball-blue {
+    background-color: #002D72;
+}
+
+/* Button hover animations */
+.transform {
+    transition: all 0.2s ease-in-out;
+}
+
+.hover\:rotate-1:hover {
+    transform: rotate(2deg);
+}
+
+.hover\:-rotate-1:hover {
+    transform: rotate(-2deg);
+}
+
+/* Button base styles */
+button {
+    font-family: 'Bungee', cursive;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+}
+
+button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 1);
+}
+.tab {
+    background-color: #f0f0f0;
+    padding: 10px 20px;
+    border: 2px solid black;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab.active {
+    background-color: #2563eb;
+    color: white;
+}
+
+.commentary-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+#audio-highlights {
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 2px solid black;
+}
+
+.commentary p {
+    padding: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
     </style>
     
 <body>
+    <div class="container mx-auto px-8 pt-8 flex justify-between">
+        <!-- Left Button - See Your Team -->
+        <button onclick="history.back()"
+            class="bg-baseball-red border-4 border-black p-4 shadow-brutal transform hover:-rotate-1 transition-transform font-bungee text-white">
+            Watch Some Other Highlights 👀
+        </button>
+        <!-- Right Button - Back to Home -->
+        <button onclick="location.href='/Chat_dashboard'" 
+        class="bg-baseball-blue border-4 border-black p-4 shadow-brutal transform hover:rotate-1 transition-transform font-bungee text-white flex flex-col items-center gap-2">
+        <i class="fas fa-users text-2xl"></i>
+        <span>⚾Fan Link🤝</span>
+      </button>
+        
+    </div>
     <div class="neo-brutal-container">
         <h1 class="game-details text-4xl font-extrabold text-blue-800">{{ game_data.home_team }} vs {{ game_data.away_team }} Highlights</h1>
         <div class="score-display">
@@ -163,7 +248,7 @@
         <div class="tabs">
             <button class="tab" data-tab="video">Video Highlights</button>
             <button class="tab active" data-tab="text">Text Highlights</button>
-            <button class="tab active" data-tab="text">Game Box score</button>
+            <button class="tab active" data-tab="text">Audio Highlights</button>
 
             
         </div>
