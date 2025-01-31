@@ -13,30 +13,20 @@
             "id": "favorite_teams",
             "question": "Name 5 teams you like",
             "answer": [
-                "Baltimore Orioles",
-                "Toronto Blue Jays",
-                "Boston Red Sox",
-                "Tampa Bay Rays",
-                "New York Yankees"
+                "Baltimore Orioles, Toronto Blue Jays, Boston Red Sox, Tampa Bay Rays, New York Yankees"
             ]
         },
         {
             "id": "favorite_players",
             "question": "Name 5 favorite players",
             "answer": [
-                "Shohei Ohtani",
-                "Mike Trout",
-                "Aaron Judge",
-                "Mookie Betts",
-                "Ronald Acuña Jr."
+                "Shohei Ohtani, Mike Trout, Aaron Judge, Mookie Betts, Ronald Acu\u00c3\u00b1a Jr."
             ]
         },
         {
             "id": "selected_team",
             "question": "Which team do you want to select?",
-            "answer": [
-                "Boston Red Sox"
-            ]
+            "answer": "['Boston Red Sox']"
         },
         {
             "id": "favorite_match",
@@ -46,7 +36,7 @@
         {
             "id": "notifications",
             "question": "Select notification frequency",
-            "answer": "daily"
+            "answer": "monthly"
         }
     ]
 }

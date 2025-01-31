@@ -13,30 +13,20 @@
             "id": "favorite_teams",
             "question": "Name 5 teams you like",
             "answer": [
-                "New York Yankees",
-                "Tampa Bay Rays",
-                "Boston Red Sox",
-                "Toronto Blue Jays",
-                "Baltimore Orioles"
+                "New York Yankees, Tampa Bay Rays, Boston Red Sox, Toronto Blue Jays, Baltimore Orioles"
             ]
         },
         {
             "id": "favorite_players",
             "question": "Name 5 favorite players",
             "answer": [
-                "Babe Ruth",
-                "Willie Mays",
-                "Hank Aaron",
-                "Barry Bonds",
-                "Shohei Ohtani"
+                "Babe Ruth, Willie Mays, Hank Aaron, Barry Bonds, Shohei Ohtani"
             ]
         },
         {
             "id": "selected_team",
             "question": "Which team do you want to select?",
-            "answer": [
-                "New York Yankees"
-            ]
+            "answer": "['New York Yankees']"
         },
         {
             "id": "favorite_match",
@@ -46,7 +36,7 @@
         {
             "id": "notifications",
             "question": "Select notification frequency",
-            "answer": "daily"
+            "answer": "weekly"
         }
     ]
 }

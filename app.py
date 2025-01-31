@@ -27,6 +27,49 @@ from dotenv import load_dotenv
 from personalizedEmailContent import personalizedEmail
 from werkzeug.utils import secure_filename
 load_dotenv()
+import google.generativeai as genai
+genai.configure(api_key=os.getenv("API_KEY"))
+app = Flask(__name__)
+
+baseball_prompt = """
+You are BaseballBuddy, a highly knowledgeable baseball enthusiast and mental performance coach with deep expertise in:
+- MLB history, statistics, and analytics from the past decade
+- Team building strategies and lineup optimization
+- Player development and performance psychology
+- Baseball mental training and sports psychology
+- Current MLB trends, trades, and team dynamics
+
+Your personality:
+- Friendly and approachable like a dugout buddy
+- Passionate about baseball strategy and player development
+- Empathetic and understanding of fan emotions
+- Quick with relevant baseball analogies and stories
+- Able to break down complex baseball concepts
+
+Use your extensive knowledge to:
+- Analyze team strategies and lineup decisions
+- Share relevant historical comparisons and statistics
+- Provide mental performance insights
+- Discuss team chemistry and clubhouse dynamics
+- Offer baseball-specific emotional support and motivation
+
+Keep responses conversational but insightful, like talking baseball with a knowledgeable friend in the bleachers.
+"""
+
+generation_config = {
+    "temperature": 0.9,
+    "top_p": 0.95,
+    "top_k": 64,
+    "max_output_tokens": 8192,
+}
+
+model = genai.GenerativeModel(
+    model_name="gemini-2.0-flash-exp",
+    generation_config=generation_config,
+    system_instruction=baseball_prompt
+)
+
+
 
 email_sender = os.getenv('EMAIL_USER')
 sender_password = os.getenv('EMAIL_PASS')
@@ -223,7 +266,7 @@ with open('dataset/team.json', 'r') as file:
     teams_name_id = json.load(file)
 
 from pathlib import Path
-app = Flask(__name__)
+
 app.secret_key = secrets.token_hex(16)
 app.jinja_env.filters['strftime'] = strftime
 MLB_API_URL = 'https://statsapi.mlb.com/api/v1/schedule'
@@ -1612,87 +1655,6 @@ def game_details(game_pk):
                          previous_home_score=0)
 
 
-# def generate_full_baseball_commentary(game_data):
-#     # Parse scores and teams
-#     away_score, home_score = map(int, game_data['final_score'].split(' - '))
-#     teams = game_data['teams'].split(' vs ')
-#     winning_team = teams[0] if away_score > home_score else teams[1]
-    
-#     commentary = []
-    
-#     # Pre-game hype
-#     commentary.append(f"⚾ WELCOME TO {game_data['venue'].upper()}! ⚾")
-#     commentary.append(f"Today's matchup: {game_data['teams']} on {game_data['date']}")
-#     commentary.append("=" * 50)
-    
-#     # Early innings
-#     current_inning = ""
-#     for play in game_data['plays']:
-#         if play['inning'] != current_inning:
-#             current_inning = play['inning']
-#             commentary.append(f"\n🎯 {current_inning.upper()}")
-        
-#         # Add extra flair for scoring plays
-#         if any(score != '0' for score in play['score'].split('-')):
-#             commentary.append(f"💥 SCORING PLAY: {play['description']}")
-#             commentary.append(f"Score Update: {play['score']}")
-#         else:
-#             commentary.append(f"• {play['description']}")
-    
-#     # Game wrap-up
-#     commentary.append("\n🏆 FINAL WRAP")
-#     commentary.append("=" * 50)
-#     commentary.append(f"{winning_team} takes this one!")
-#     commentary.append(f"Final Score: {game_data['final_score']}")
-    
-#     # Game stats summary
-#     commentary.append("\n📊 GAME HIGHLIGHTS")
-#     commentary.append(f"Venue: {game_data['venue']}")
-#     commentary.append(f"Matchup: {game_data['teams']}")
-#     commentary.append(f"Date: {game_data['date']}")
-    
-#     return commentary
-
-# @app.route('/game/<int:game_pk>', methods=['GET'])
-# def game_details(game_pk):
-#     # Fetch game data
-#     response = requests.get(f"{MLB_API_URL}?gamePk={game_pk}")
-#     game_info = response.json().get("dates", [])[0].get("games", [])[0]
-    
-#     # Process game data
-#     game_data = {
-#         'home_team': game_info['teams']['home']['team']['name'],
-#         'away_team': game_info['teams']['away']['team']['name'],
-#         'home_score': game_info['teams']['home'].get('score', 0),
-#         'away_score': game_info['teams']['away'].get('score', 0),
-#         'game_date': game_info['gameDate'],
-#         'venue': game_info.get('venue', {}).get('name', 'N/A'),
-#         'home_team_logo': f'https://www.mlbstatic.com/team-logos/{game_info["teams"]["home"]["team"]["id"]}.svg',
-#         'away_team_logo': f'https://www.mlbstatic.com/team-logos/{game_info["teams"]["away"]["team"]["id"]}.svg',
-#         'status': game_info.get('status', {}).get('detailedState', 'N/A')
-#     }
-    
-#     # Get highlights and process scores
-#     highlights_data = extract_highlights(game_pk)
-#     video_highlights = fetch_video_highlights(game_pk)
-    
-#     # Generate commentary for TTS
-#     commentary = generate_full_baseball_commentary({
-#         'teams': f"{game_data['away_team']} vs {game_data['home_team']}",
-#         'venue': game_data['venue'],
-#         'date': game_data['game_date'],
-#         'plays': highlights_data,
-#         'final_score': f"{game_data['away_score']} - {game_data['home_score']}"
-#     })
-    
-#     return render_template('GameHighlights.html', 
-#                          game_pk=game_pk,
-#                          game_data=game_data,
-#                          highlights_data=highlights_data, 
-#                          video_highlights=video_highlights,
-#                          commentary=commentary,
-#                          previous_away_score=0,
-#                          previous_home_score=0)
 
 def fetch_video_highlights(game_pk):
     video_highlights = []
@@ -1931,17 +1893,6 @@ def fetch_first_highlight(game_pk):
             current_description = line.strip()
     
     return highlights[0] if highlights else None
-
-# def get_game_info(team_id,game_pk):
-    
-#     game_data = statsapi.get('game', {'gamePk': game_pk})
-#     teams = game_data.get('gameData', {}).get('teams', {})
-#     home_team = teams.get('home', {}).get('name', 'Unknown')
-#     away_team = teams.get('away', {}).get('name', 'Unknown')
-#     first_highlight = fetch_first_highlight(game_pk)
-    
-#     return home_team, away_team, first_highlight
-
 def get_latest_completed_game():
     # Fetch schedule data
     schedule_data = statsapi.get('schedule', {'sportId': 1, 'season': 2024, 'gameType': 'R'})
@@ -1995,6 +1946,18 @@ def translate_text(text, target_language):
         return translated
     except Exception as e:
         return f"Error: {e}"
+    
+@app.route('/geminichat', methods=['POST'])
+def gemini_chat():  # Renamed the function to avoid conflicts
+    data = request.json
+    user_message = data.get('message')
+    
+    try:
+        chat_session = model.start_chat()
+        response = chat_session.send_message(user_message)
+        return jsonify({"response": response.text})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 @app.route('/')
 def index():
     if 'username' not in session:

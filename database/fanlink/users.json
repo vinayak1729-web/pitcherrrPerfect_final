@@ -4,7 +4,8 @@
         "email": "vs8879785320@gmail.com",
         "password": "123",
         "friends": [
-            "jj"
+            "jj",
+            "gg"
         ],
         "profile_pic": "/static/default.png"
     },
@@ -38,6 +39,15 @@
         "password": "123",
         "friends": [
             "jj"
+        ],
+        "profile_pic": "/static/default.png"
+    },
+    "gg": {
+        "user_id": "462f6245-eda6-427b-b463-832115fd9b42",
+        "email": "vishal213.mishra@gmail.com",
+        "password": "123",
+        "friends": [
+            "Vinayak9271"
         ],
         "profile_pic": "/static/default.png"
     }

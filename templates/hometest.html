@@ -44,6 +44,8 @@
         border-bottom: 4px solid black;
         transform-style: preserve-3d;
         transition: transform 0.3s;
+        position: relative;
+        z-index: 50;
     }
 
     .nav-item {
@@ -520,6 +522,70 @@
         }
     }
 
+
+    /* Add this to your existing style section */
+    .dark-mode-logo {
+        position: absolute;
+        left: 0;
+        opacity: 0;
+        transform: translateY(-50%) rotate(-3deg);
+        transition: all 0.3s ease;
+        font-family: 'Bungee', cursive;
+        font-size: 1.875rem;
+        background: linear-gradient(
+            45deg, 
+            #ffd700, 
+            #ff9900, 
+            #ffd700, 
+            #ffb347, 
+            #ffd700
+        );
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        animation: shimmer 3s linear infinite;
+    }
+    .dark-mode-logo:hover {
+        animation: shimmerAndFloat 3s linear infinite;
+        transform: translateY(-5px) rotate(-3deg);
+    }
+
+
+    @keyframes shimmer {
+        to {
+            background-position: 200% center;
+        }
+    }
+
+    @keyframes shimmerAndFloat {
+        0%, 100% {
+            transform: translateY(-5px) rotate(-3deg);
+            background-position: 0% center;
+        }
+        50% {
+            transform: translateY(-10px) rotate(-3deg);
+            background-position: 100% center;
+        }
+    }
+
+
+
+    @keyframes floatText {
+        0%, 100% {
+            transform: rotate(-3deg) translateY(0px);
+        }
+        50% {
+            transform: rotate(-3deg) translateY(-5px);
+        }
+    }
+
+    /* Import Bungee font if not already imported */
+    @import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&display=swap');
+
+
+
     .neo-brutal-highlight {
         box-shadow: 8px 8px 0 rgba(255, 215, 0, 0.3);
     }
@@ -546,6 +612,8 @@
     }
 
     .neon-header {
+        position: relative;
+        z-index: 10;
         color: #213a8f;
         text-shadow:
             2px 2px 0px #ff2e2e,
@@ -553,11 +621,28 @@
         transition: all 0.3s ease;
     }
 
+    /* Add specific z-index for dropdown */
+    .nav-item .group-hover\:block {
+        z-index: 50;
+    }
+
+    .absolute.group-hover\:block {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 50;
+    }
+
     .dark .neon-header {
         color: #ffd700;
         text-shadow:
             2px 2px 0px #ff2e2e,
             -2px -2px 0px #213a8f;
+    }
+
+    /* Ensure dropdown is positioned correctly */
+    .relative.group {
+        position: relative;
     }
 
     .neon-header:hover {
@@ -647,6 +732,9 @@
         animation: slideIn 0.3s ease-out;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         border: 3px solid #000;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
     }
 
     @keyframes slideIn {
@@ -664,6 +752,7 @@
     .dark #chatbot-container {
         border-color: #ffd700;
         box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
+        background: #1a1a1a;
     }
 
     #chatbot-messages {
@@ -707,11 +796,30 @@
     }
 
     /* Navbar Logo Dark Mode */
+    .logo-neo {
+        width: auto;
+        height: 80px;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Logo and text container styles */
+    .logo-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
     .dark .logo-neo {
         filter: brightness(0) invert(1);
-        opacity: 0.7;
+        opacity: 0;
         mix-blend-mode: overlay;
         transition: all 0.3s ease;
+        transform: scale(0.8);
+    }
+
+    .dark .dark-mode-logo {
+        opacity: 1;
+        transform: translateY(0) rotate(-3deg);
     }
 
     .dark .logo-neo:hover {
@@ -757,7 +865,7 @@
 }
 
 .dropdown-item {
-    color: #E53E3E;
+    color: #ff0000;
     padding: 0.75rem 1rem;
     transition: all 0.2s ease;
     display: block;
@@ -765,7 +873,7 @@
 }
 
 .dropdown-item:hover {
-    background-color: #FED7D7;
+    background-color: #ff0000;
     transform: translateX(4px);
 }
 
@@ -784,290 +892,299 @@
 }
 
 .dark .nav-item:hover {
-    color: #FED7D7;
+    color: #ff0000;
 }
 
 .dark .dropdown-item {
-    background-color: #2D3748;
-    color: #FC8181;
+    background-color: #367efa;
+    color: #ff0000;
 }
 
 .dark .dropdown-item:hover {
-    background-color: #4A5568;
+    background-color: #327cfb;
 }
 
 
 </style>
 </head>
-<div class="decorative-corner top-left"></div>
-<div class="decorative-corner bottom-right"></div>
-<nav class="navbar neo-brutal">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"
-                    class="logo-neo h-20 w-50 object-contain filter-none transition-all duration-300">
+<body>
+    <div class="decorative-corner top-left"></div>
+    <div class="decorative-corner bottom-right"></div>
+    <nav class="navbar neo-brutal">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <div class="logo-container">
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"
+                            class="logo-neo h-20 w-50 object-contain filter-none ">
 
-            </div>
+                        <h1 class="dark-mode-logo ">
+                            Pitcher Perfect
+                        </h1>
+                    </div>
+                </div>
 
-            <div class="flex items-center space-x-6">
-                <a href="/" class="nav-item">
-                    <i class="fas fa-home mr-2"></i>Home
-                </a>
-                <a href="/Chat_dashboard" class="nav-item">
-                    <i class="fas fa-users mr-2"></i>Fan Link
-                </a>
-                <a href="/highlights" class="nav-item">
-                    <i class="fas fa-fire mr-2"></i> Highlights
-                </a>
-                <div class="relative group">
-                    <button class="nav-item">
-                        <i class="fas fa-crown mr-2"></i>Your Team
-                        <i class="fas fa-chevron-down ml-2"></i>
+                <div class="flex items-center space-x-6">
+                    <a href="/" class="nav-item">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="/Chat_dashboard" class="nav-item">
+                        <i class="fas fa-users mr-2"></i>Fan Link
+                    </a>
+                    <a href="/highlights" class="nav-item">
+                        <i class="fas fa-fire mr-2"></i> Highlights
+                    </a>
+                    <div class="relative group">
+                        <button class="nav-item">
+                            <i class="fas fa-crown mr-2"></i>Your Team
+                            <i class="fas fa-chevron-down ml-2"></i>
+                        </button>
+                        <div class="absolute hidden group-hover:block w-48 bg-white dark:bg-gray-800 border-4 border-black dark:border-[#213a8f] shadow-brutal">
+                            <a href="/team_players" class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-red-100 dark:hover:bg-red-900 transition-colors">Players</a>
+                            <a href="/my_team" class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-red-100 dark:hover:bg-red-900 transition-colors">My Team</a>
+                            <a href="/team_compare" class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-red-100 dark:hover:bg-red-900 transition-colors">Team Compare</a>
+                        </div>
+                    </div>
+                    <a href="/profile" class="nav-item">
+                        <i class="fas fa-user mr-2"></i>Profile
+                    </a>
+                    <button id="darkModeToggle" class="nav-item">
+                        <i class="fas fa-moon"></i>
                     </button>
-                    <div class="absolute hidden group-hover:block w-48 bg-white border-4 border-black shadow-brutal">
-                        <a href="/my_team" class="block px-4 py-2 hover:bg-red-100">My Team</a>
-                        <a href="/team_players" class="block px-4 py-2 hover:bg-red-100">Players</a>
-                        <a href="/team_compare" class="block px-4 py-2 hover:bg-red-100">Team Compare</a>
-                    </div>
                 </div>
-                <a href="/profile" class="nav-item">
-                    <i class="fas fa-user mr-2"></i>Profile
+            </div>
+        </div>
+    </nav>
+    <h1 class="neon-header text-5xl font-bungee text-center my-8">
+        <span class="relative inline-block">
+            Upcoming Matches
+            <span class="absolute -inset-1 bg-gradient-to-r from-[#213a8f] to-[#ff2e2e] blur opacity-30"></span>
+        </span>
+    </h1>
+
+
+    </div>
+
+    <div class="upcoming-games">
+        {% for game in upcoming_games %}
+        <div class="game-card p-6">
+            <div class="flex justify-between items-center mb-4">
+                <div class="team-info">
+                    <img src="{{ game.homeTeamLogo }}" class="w-16 h-16 mb-2">
+                    <div class="font-bungee text-xl">{{ game.homeTeam }}</div>
+                </div>
+                <div class="text-3xl font-permanent-marker text-red-600">VS</div>
+                <div class="team-info text-right">
+                    <img src="{{ game.awayTeamLogo }}" class="w-16 h-16 mb-2">
+                    <div class="font-bungee text-xl">{{ game.awayTeam }}</div>
+                </div>
+            </div>
+            <div class="venue-info mt-4 font-permanent-marker">
+                <i class="fas fa-map-marker-alt text-red-600 mr-2"></i>
+                {{ game.venue }}
+            </div>
+            <div class="game-time mt-2 font-permanent-marker">
+                <i class="fas fa-clock text-blue-600 mr-2"></i>
+                {{ game.gameDate|replace("T", " ")|replace("Z", "") }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div id="news-toggle" class="fixed bottom-5 left-5 z-50">
+        <button class="neo-brutal-button bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition">
+            <i class="fas fa-newspaper text-2xl"></i>
+        </button>
+    </div>
+
+    <!-- News Section -->
+    <div id="news-section" class="fixed bottom-5 left-5 z-40 hidden bg-white border-4 border-black rounded-lg shadow-brutal w-80 max-h-[70vh] overflow-y-auto">
+        <div class="p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bungee text-[#213a8f]">Latest News</h2>
+                <button id="close-news" class="text-red-500 text-2xl font-bold hover:text-red-700 transition">✖</button>
+            </div>
+            <div>
+                {% for article in news %}
+                <a href="{{ article.link }}" target="_blank" class="block p-3 mb-3 rounded-lg hover:bg-gray-100">
+                    <h3 class="text-lg font-permanent-marker text-black">{{ article.title }}</h3>
+                    <span class="text-sm text-blue-500">Read more →</span>
                 </a>
-                <button id="darkModeToggle" class="nav-item">
-                    <i class="fas fa-moon"></i>
-                </button>
+                {% endfor %}
             </div>
         </div>
     </div>
-</nav>
-<h1 class="neon-header text-5xl font-bungee text-center my-8">
-    <span class="relative inline-block">
-        Upcoming Matches
-        <span class="absolute -inset-1 bg-gradient-to-r from-[#213a8f] to-[#ff2e2e] blur opacity-30"></span>
-    </span>
-</h1>
-
-
-</div>
-
-<div class="upcoming-games">
-    {% for game in upcoming_games %}
-    <div class="game-card p-6">
-        <div class="flex justify-between items-center mb-4">
-            <div class="team-info">
-                <img src="{{ game.homeTeamLogo }}" class="w-16 h-16 mb-2">
-                <div class="font-bungee text-xl">{{ game.homeTeam }}</div>
-            </div>
-            <div class="text-3xl font-permanent-marker text-red-600">VS</div>
-            <div class="team-info text-right">
-                <img src="{{ game.awayTeamLogo }}" class="w-16 h-16 mb-2">
-                <div class="font-bungee text-xl">{{ game.awayTeam }}</div>
-            </div>
-        </div>
-        <div class="venue-info mt-4 font-permanent-marker">
-            <i class="fas fa-map-marker-alt text-red-600 mr-2"></i>
-            {{ game.venue }}
-        </div>
-        <div class="game-time mt-2 font-permanent-marker">
-            <i class="fas fa-clock text-blue-600 mr-2"></i>
-            {{ game.gameDate|replace("T", " ")|replace("Z", "") }}
-        </div>
-    </div>
-    {% endfor %}
-</div>
-
-<div id="news-toggle" class="fixed bottom-5 left-5 z-50">
-    <button class="neo-brutal-button bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition">
-        <i class="fas fa-newspaper text-2xl"></i>
-    </button>
-</div>
-
-<!-- News Section -->
-<div id="news-section"
-    class="fixed bottom-5 left-5 z-40 hidden bg-white border-4 border-black rounded-lg shadow-brutal w-80 max-h-[70vh] overflow-y-auto">
-    <div class="p-4">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bungee text-[#213a8f]">Latest News</h2>
-            <button id="close-news" class="text-red-500 text-2xl font-bold hover:text-red-700 transition">✖</button>
-        </div>
-        <div>
-            {% for article in news %}
-            <a href="{{ article.link }}" target="_blank" class="block p-3 mb-3 rounded-lg hover:bg-gray-100">
-                <h3 class="text-lg font-permanent-marker text-black">{{ article.title }}</h3>
-                <span class="text-sm text-blue-500">Read more →</span>
-            </a>
-            {% endfor %}
-        </div>
-    </div>
-</div>
-<div class="max-w-8xl mx-auto px-4 mt-8">
-    <div class="grid grid-cols-12 gap-6">
-        <!-- Left Side: Teams and Leagues -->
-        <div class="col-span-3 space-y-6">
-            <!-- My Teammate Section -->
-            <div
-                class="neo-brutal-panel bg-[#213a8f] border-4 border-black p-6 transform hover:-rotate-1 transition-all duration-300">
-                <h2 class="text-2xl font-bungee text-white mb-4">MY TEAMMATE</h2>
-                <div id="friendsList" class="space-y-4">
-                    {% for friend in friends %}
-                    <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-brutal">
-                        <div>
-                            <span class="font-permanent-marker">{{ friend }}</span>
-                        </div>
-                        <a href="/chat/{{ friend }}" class="neo-brutal-button bg-indigo-500 text-white px-4 py-1">
-                            Chat
-                        </a>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- My Leagues Section -->
-            <div
-                class="neo-brutal-panel bg-white border-4 border-black p-6 transform hover:rotate-1 transition-all duration-300">
-                <h2 class="text-2xl font-bungee text-[#213a8f] mb-4">MY LEAGUES</h2>
-                <div class="space-y-2">
-                    {% for group in my_groups %}
-                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-brutal">
-                        <div>
-                            <span class="font-permanent-marker">{{ group.name }}</span>
-                            <p class="text-sm text-gray-500">{{ group.description }}</p>
-                        </div>
-                        <div class="space-x-2">
-                            <a href="/group_chat/{{ group.id }}"
-                                class="neo-brutal-button bg-green-500 text-white px-4 py-1">
+    <div class="max-w-8xl mx-auto px-4 mt-8">
+        <div class="grid grid-cols-12 gap-6">
+            <!-- Left Side: Teams and Leagues -->
+            <div class="col-span-3 space-y-6">
+                <!-- My Teammate Section -->
+                <div
+                    class="neo-brutal-panel bg-[#213a8f] border-4 border-black p-6 transform hover:-rotate-1 transition-all duration-300">
+                    <h2 class="text-2xl font-bungee text-white mb-4">MY TEAMMATE</h2>
+                    <div id="friendsList" class="space-y-4">
+                        {% for friend in friends %}
+                        <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-brutal">
+                            <div>
+                                <span class="font-permanent-marker">{{ friend }}</span>
+                            </div>
+                            <a href="/chat/{{ friend }}" class="neo-brutal-button bg-indigo-500 text-white px-4 py-1">
                                 Chat
                             </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
 
+                <!-- My Leagues Section -->
+                <div
+                    class="neo-brutal-panel bg-white border-4 border-black p-6 transform hover:rotate-1 transition-all duration-300">
+                    <h2 class="text-2xl font-bungee text-[#213a8f] mb-4">MY LEAGUES</h2>
+                    <div class="space-y-2">
+                        {% for group in my_groups %}
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-brutal">
+                            <div>
+                                <span class="font-permanent-marker">{{ group.name }}</span>
+                                <p class="text-sm text-gray-500">{{ group.description }}</p>
+                            </div>
+                            <div class="space-x-2">
+                                <a href="/group_chat/{{ group.id }}"
+                                    class="neo-brutal-button bg-green-500 text-white px-4 py-1">
+                                    Chat
+                                </a>
+
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {% if latest_game %}
+            <div class="col-span-6">
+                <div
+                    class="neo-brutal-highlight p-6 bg-gradient-to-br from-[#1a2151] to-[#2d4b8e] border-4 border-black relative overflow-hidden transform hover:scale-[1.01] transition-all duration-300">
+                    <div class="shine-effect"></div>
+
+                    <!-- Header with Live Badge -->
+                    <div class="relative mb-6">
+                        <h2 class="text-4xl font-bungee text-center text-white mb-2">
+                            Latest Game
+                            <span
+                                class="absolute -right-2 top-0 bg-[#ff2e2e] text-white text-sm px-3 py-1 rotate-12 border-2 border-black">
+                                LIVE
+                            </span>
+                        </h2>
+                    </div>
+
+                    <!-- Teams Container -->
+                    <div class="flex justify-between items-center mb-4 bg-[#0a1128]/40 p-4 rounded-lg backdrop-blur-sm">
+                        <div class="team-info text-center w-1/3">
+                            <div class="team-logo-wrapper inline-block">
+                                <img src="{{ latest_game.home_team_logo }}" alt="{{ latest_game.home_team }}"
+                                    class="w-24 h-24 object-contain hover:scale-110 transition-transform duration-300">
+                            </div>
+                            <div class="font-bungee text-xl text-white mt-2">
+                                {{ latest_game.home_team }}
+                            </div>
+                        </div>
+
+                        <div class="versus-badge w-1/3 text-center">
+                            <div class="text-4xl font-permanent-marker text-[#ff2e2e] px-4 py-2">
+                                VS
+                            </div>
+                        </div>
+
+                        <div class="team-info text-center w-1/3">
+                            <div class="team-logo-wrapper inline-block">
+                                <img src="{{ latest_game.away_team_logo }}" alt="{{ latest_game.away_team }}"
+                                    class="w-24 h-24 object-contain hover:scale-110 transition-transform duration-300">
+                            </div>
+                            <div class="font-bungee text-xl text-white mt-2">
+                                {{ latest_game.away_team }}
+                            </div>
                         </div>
                     </div>
-                    {% endfor %}
+
+                    {% if highlight %}
+                    <!-- Highlight Section -->
+                    <div class="highlight-container bg-[#0a1128]/30 p-4 rounded-lg backdrop-blur-sm">
+                        <h3 class="font-permanent-marker text-2xl mb-3 text-[#ffd700]">
+                            {{ highlight.title }}
+                        </h3>
+                        <p class="text-white/90 mb-4 font-permanent-marker text-lg">
+                            {{ highlight.description }}
+                        </p>
+
+                        <!-- Video Container -->
+                        <div class="video-wrapper mb-4">
+                            <video controls class="w-full rounded-lg border-2 border-white/20 aspect-video">
+                                <source src="{{ highlight.video_url }}" type="video/mp4">
+                            </video>
+                        </div>
+
+                        <a href="/game/{{ latest_game.game_pk }}"
+                            class="inline-block w-full text-center neo-brutal-button bg-[#ff2e2e] text-white px-6 py-3 font-bungee hover:bg-[#ff4444] transition-colors">
+                            View Complete Match Highlights →
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="text-center p-6 bg-[#0a1128]/30 rounded-lg">
+                        <p class="font-permanent-marker text-2xl text-[#ffd700]">
+                            No highlights available for this game yet. Check back later! ⚾
+                        </p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Right Side: My Team -->
+            <div class="col-span-3">
+                <div
+                    class="my_team neo-brutal-panel bg-gradient-to-br from-[#213a8f] to-[#ff2e2e] border-4 border-black p-6 text-white">
+                    <h2 class="text-2xl font-bungee mb-4">Your Team 👀</h2>
+                    <div class="space-y-4">
+                        {% for team_name, ovr in team_ovrs.items() %}
+                        <div class="flex justify-between items-center bg-white/10 p-4 rounded-lg backdrop-blur-sm">
+                            <span class="font-permanent-marker">team name</span>
+
+                            <span class="font-permanent-marker">{{team_name}}</span>
+                            <span class="text-xl font-bungee text-[#ffd100]">team ovr</span>
+                            <span class="text-xl font-bungee text-[#ffd100]">{{ovr}}</span>
+                        </div>
+                        {% endfor %}
+                        <a href="/my_team"
+                            class="neo-brutal-button bg-white text-[#213a8f] block text-center mt-4 py-2 font-bungee transform hover:-translate-y-1 transition-all">
+                            View Your Team
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        {% if latest_game %}
-        <div class="col-span-6">
-            <div
-                class="neo-brutal-highlight p-6 bg-gradient-to-br from-[#1a2151] to-[#2d4b8e] border-4 border-black relative overflow-hidden transform hover:scale-[1.01] transition-all duration-300">
-                <div class="shine-effect"></div>
-
-                <!-- Header with Live Badge -->
-                <div class="relative mb-6">
-                    <h2 class="text-4xl font-bungee text-center text-white mb-2">
-                        Latest Game
-                        <span
-                            class="absolute -right-2 top-0 bg-[#ff2e2e] text-white text-sm px-3 py-1 rotate-12 border-2 border-black">
-                            LIVE
-                        </span>
-                    </h2>
+        <!-- Chatbot -->
+        <div class="fixed bottom-4 right-4 z-50">
+            <button id="chatbot-trigger" class="neo-brutal-button w-14 h-14 bg-[#ff2e2e] dark:bg-red-500 rounded-full">
+                <span class="text-2xl">⚾</span>
+            </button>
+            <div id="chatbot-container" class="hidden absolute bottom-16 right-0 w-96 neo-brutal-panel">
+                <div class="p-4 bg-[#ff2e2e] dark:bg-red-500 rounded-t-lg flex justify-between items-center">
+                    <h5 class="font-bungee text-white">Pitcher Perfect Chatbot ⚾</h5>
+                    <button id="close-chatbot" class="neo-brutal-button text-white">✖</button>
                 </div>
-
-                <!-- Teams Container -->
-                <div class="flex justify-between items-center mb-4 bg-[#0a1128]/40 p-4 rounded-lg backdrop-blur-sm">
-                    <div class="team-info text-center w-1/3">
-                        <div class="team-logo-wrapper inline-block">
-                            <img src="{{ latest_game.home_team_logo }}" alt="{{ latest_game.home_team }}"
-                                class="w-24 h-24 object-contain hover:scale-110 transition-transform duration-300">
-                        </div>
-                        <div class="font-bungee text-xl text-white mt-2">
-                            {{ latest_game.home_team }}
-                        </div>
-                    </div>
-
-                    <div class="versus-badge w-1/3 text-center">
-                        <div class="text-4xl font-permanent-marker text-[#ff2e2e] px-4 py-2">
-                            VS
-                        </div>
-                    </div>
-
-                    <div class="team-info text-center w-1/3">
-                        <div class="team-logo-wrapper inline-block">
-                            <img src="{{ latest_game.away_team_logo }}" alt="{{ latest_game.away_team }}"
-                                class="w-24 h-24 object-contain hover:scale-110 transition-transform duration-300">
-                        </div>
-                        <div class="font-bungee text-xl text-white mt-2">
-                            {{ latest_game.away_team }}
-                        </div>
-                    </div>
-                </div>
-
-                {% if highlight %}
-                <!-- Highlight Section -->
-                <div class="highlight-container bg-[#0a1128]/30 p-4 rounded-lg backdrop-blur-sm">
-                    <h3 class="font-permanent-marker text-2xl mb-3 text-[#ffd700]">
-                        {{ highlight.title }}
-                    </h3>
-                    <p class="text-white/90 mb-4 font-permanent-marker text-lg">
-                        {{ highlight.description }}
-                    </p>
-
-                    <!-- Video Container -->
-                    <div class="video-wrapper mb-4">
-                        <video controls class="w-full rounded-lg border-2 border-white/20 aspect-video">
-                            <source src="{{ highlight.video_url }}" type="video/mp4">
-                        </video>
-                    </div>
-
-                    <a href="/game/{{ latest_game.game_pk }}"
-                        class="inline-block w-full text-center neo-brutal-button bg-[#ff2e2e] text-white px-6 py-3 font-bungee hover:bg-[#ff4444] transition-colors">
-                        View Complete Match Highlights →
-                    </a>
-                </div>
-                {% else %}
-                <div class="text-center p-6 bg-[#0a1128]/30 rounded-lg">
-                    <p class="font-permanent-marker text-2xl text-[#ffd700]">
-                        No highlights available for this game yet. Check back later! ⚾
-                    </p>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Right Side: My Team -->
-        <div class="col-span-3">
-            <div
-                class="my_team neo-brutal-panel bg-gradient-to-br from-[#213a8f] to-[#ff2e2e] border-4 border-black p-6 text-white">
-                <h2 class="text-2xl font-bungee mb-4">Your Team 👀</h2>
-                <div class="space-y-4">
-                    {% for team_name, ovr in team_ovrs.items() %}
-                    <div class="flex justify-between items-center bg-white/10 p-4 rounded-lg backdrop-blur-sm">
-                        <span class="font-permanent-marker">team name</span>
-
-                        <span class="font-permanent-marker">{{team_name}}</span>
-                        <span class="text-xl font-bungee text-[#ffd100]">team ovr</span>
-                        <span class="text-xl font-bungee text-[#ffd100]">{{ovr}}</span>
-                    </div>
-                    {% endfor %}
-                    <a href="/my_team"
-                        class="neo-brutal-button bg-white text-[#213a8f] block text-center mt-4 py-2 font-bungee transform hover:-translate-y-1 transition-all">
-                        View Your Team
-                    </a>
+                <div id="chatbot-messages" class="h-96 p-4 overflow-y-auto bg-white dark:bg-gray-800"></div>
+                <div class="p-4 border-t-4 border-black flex">
+                    <input type="text" id="chatbot-input" class="neo-brutal-input flex-1"
+                        placeholder="Type your message..." />
+                    <button id="send-message" class="neo-brutal-button ml-2 bg-[#ff2e2e] text-white">Send</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Chatbot -->
-    <div class="fixed bottom-4 right-4 z-50">
-        <button id="chatbot-trigger" class="neo-brutal-button w-14 h-14 bg-[#ff2e2e] dark:bg-red-500 rounded-full">
-            <span class="text-2xl">⚾</span>
-        </button>
-        <div id="chatbot-container" class="hidden absolute bottom-16 right-0 w-96 neo-brutal-panel">
-            <div class="p-4 bg-[#ff2e2e] dark:bg-red-500 rounded-t-lg flex justify-between items-center">
-                <h5 class="font-bungee text-white">Pitcher Perfect Chatbot ⚾</h5>
-                <button id="close-chatbot" class="neo-brutal-button text-white">✖</button>
-            </div>
-            <div id="chatbot-messages" class="h-96 p-4 overflow-y-auto bg-white dark:bg-gray-800"></div>
-            <div class="p-4 border-t-4 border-black flex">
-                <input type="text" id="chatbot-input" class="neo-brutal-input flex-1"
-                    placeholder="Type your message..." />
-                <button id="send-message" class="neo-brutal-button ml-2 bg-[#ff2e2e] text-white">Send</button>
-            </div>
-        </div>
-    </div>
+    <!-- Add this before closing </body> tag -->
+    <script src="{{ url_for('static', filename='js/toggles.js') }}"></script>
+</body>
 
     <script>
   document.addEventListener('DOMContentLoaded', function () {
@@ -1288,11 +1405,6 @@
                 alert('Failed to leave group');
             }
         }
-        // Sidebar Toggle
-        document.getElementById('sidebar-toggle').addEventListener('click', function () {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('hidden');
-        });
 
         // News Toggle
         document.getElementById('news-toggle').addEventListener('click', function () {
@@ -1380,43 +1492,138 @@ document.addEventListener('DOMContentLoaded', function() {
         teamDropdown.addEventListener('mouseleave', function () {
             this.querySelector('div').classList.add('hidden');
         });
-
-        // Chatbot send message functionality
-        document.getElementById('send-message').addEventListener('click', sendChatMessage);
-        document.getElementById('chatbot-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                sendChatMessage();
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatbotTrigger = document.getElementById('chatbot-trigger');
+            const chatbotContainer = document.getElementById('chatbot-container');
+            const closeChatbot = document.getElementById('close-chatbot');
+            const chatMessages = document.getElementById('chatbot-messages');
+            const chatInput = document.getElementById('chatbot-input');
+            const sendButton = document.getElementById('send-message');
+        
+            chatbotTrigger.addEventListener('click', () => {
+                chatbotContainer.classList.toggle('hidden');
+            });
+        
+            closeChatbot.addEventListener('click', () => {
+                chatbotContainer.classList.add('hidden');
+            });
+        
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `mb-4 ${isUser ? 'text-right' : 'text-left'}`;
+                messageDiv.innerHTML = `
+                    <div class="inline-block p-3 rounded-lg ${isUser ? 'bg-[#ff2e2e] text-white' : 'bg-gray-100 dark:bg-gray-700'}">
+                        ${message}
+                    </div>
+                `;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
             }
+        
+            async function sendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+        
+                addMessage(message, true);
+                chatInput.value = '';
+        
+                try {
+                    const response = await fetch('/geminichat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: message })
+                    });
+        
+                    const data = await response.json();
+                    addMessage(data.response);
+                } catch (error) {
+                    addMessage('Sorry, there was an error processing your message.');
+                }
+            }
+        
+            sendButton.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
         });
-
-        function sendChatMessage() {
-            const input = document.getElementById('chatbot-input');
-            const message = input.value.trim();
-            if (message) {
-                const messagesContainer = document.getElementById('chatbot-messages');
-
-                // Add user message
-                const userMessage = document.createElement('div');
-                userMessage.className = 'mb-4 text-right';
-                userMessage.innerHTML = `
-            <span class="inline-block bg-[#213a8f] text-white rounded-lg py-2 px-4 max-w-[80%]">
-                ${message}
-            </span>
-        `;
-                messagesContainer.appendChild(userMessage);
-
-                // Clear input
-                input.value = '';
-
-                // Auto scroll to bottom
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-                // Here you would typically send the message to your backend
-                // and handle the response
+        const chatbotToggle = {
+            elements: {
+                trigger: document.getElementById('chatbot-trigger'),
+                container: document.getElementById('chatbot-container'),
+                closeBtn: document.getElementById('close-chatbot')
+            },
+        
+            init() {
+                this.setupEventListeners();
+                this.setupAnimations();
+            },
+        
+            setupEventListeners() {
+                this.elements.trigger.addEventListener('click', () => {
+                    this.toggleChatbot();
+                    this.animateTriggerButton();
+                });
+        
+                this.elements.closeBtn.addEventListener('click', () => {
+                    this.closeChatbot();
+                });
+        
+                // Close chatbot when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!this.elements.container.contains(e.target) && 
+                        !this.elements.trigger.contains(e.target)) {
+                        this.closeChatbot();
+                    }
+                });
+            },
+        
+            setupAnimations() {
+                this.elements.trigger.style.transition = 'transform 0.3s ease';
+                this.elements.container.style.transition = 'all 0.3s ease';
+            },
+        
+            toggleChatbot() {
+                const isHidden = this.elements.container.classList.contains('hidden');
+                
+                if (isHidden) {
+                    this.elements.container.classList.remove('hidden');
+                    this.elements.container.style.opacity = '1';
+                    this.elements.container.style.transform = 'translateY(0)';
+                } else {
+                    this.closeChatbot();
+                }
+            },
+        
+            closeChatbot() {
+                this.elements.container.style.opacity = '0';
+                this.elements.container.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    this.elements.container.classList.add('hidden');
+                }, 300);
+            },
+        
+            animateTriggerButton() {
+                this.elements.trigger.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.elements.trigger.style.transform = 'scale(1)';
+                }, 200);
             }
-        }
-
-
+        };
+        
+        // Initialize the chatbot toggle functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            chatbotToggle.init();
+        });
+        
+        
+           
+        
     </script>
 
 </html>

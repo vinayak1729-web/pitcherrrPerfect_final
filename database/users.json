@@ -26,5 +26,12 @@
         "email": "shindevinayak233@gmail.com",
         "password": "123",
         "signup_date": "2025-01-29 21:46:40"
+    },
+    {
+        "user_id": "462f6245-eda6-427b-b463-832115fd9b42",
+        "username": "gg",
+        "email": "vishal213.mishra@gmail.com",
+        "password": "123",
+        "signup_date": "2025-01-31 10:30:00"
     }
 ]

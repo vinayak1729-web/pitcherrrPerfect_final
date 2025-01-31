@@ -1,42 +1,52 @@
 {
-    "user_id": "-6502940114445056616",
-    "username": "Vinayak9271",
+    "user_id": "1888656757667918649",
+    "username": "gg",
     "email": "",
-    "submission_date": "2025-01-28 10:45:11",
+    "submission_date": "2025-01-31 10:31:32",
     "questions": [
         {
             "id": "fan_duration",
             "question": "For how long have you been a fan of MLB?",
-            "answer": "5"
+            "answer": "3"
         },
         {
             "id": "favorite_teams",
             "question": "Name 5 teams you like",
             "answer": [
-                "New York Yankees, Tampa Bay Rays, Boston Red Sox, Toronto Blue Jays, Baltimore Orioles"
+                "Toronto Blue Jays",
+                "Baltimore Orioles",
+                "Boston Red Sox",
+                "Tampa Bay Rays",
+                "New York Yankees"
             ]
         },
         {
             "id": "favorite_players",
             "question": "Name 5 favorite players",
             "answer": [
-                "Shohei Ohtani, Mike Trout, Aaron Judge, Mookie Betts, Ronald Acu\u00c3\u00b1a Jr."
+                "Henry Aaron",
+                "Luis Aparicio",
+                "Nolan Arenado",
+                "Jose Altuve",
+                "Roberto Alomar"
             ]
         },
         {
             "id": "selected_team",
             "question": "Which team do you want to select?",
-            "answer": "['Los Angeles Dodgers']"
+            "answer": [
+                "Baltimore Orioles"
+            ]
         },
         {
             "id": "favorite_match",
             "question": "Which match did you like the most?",
-            "answer": "yankess vs dodgers"
+            "answer": "yankees vs doggers"
         },
         {
             "id": "notifications",
             "question": "Select notification frequency",
-            "answer": "monthly"
+            "answer": "daily"
         }
     ]
 }

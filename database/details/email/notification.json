@@ -16,9 +16,13 @@
             {
                 "question_id": "favorite_players",
                 "timestamp": "2025-01-30T11:31:21.858905"
+            },
+            {
+                "question_id": "favorite_teams",
+                "timestamp": "2025-01-31T12:57:41.280033"
             }
         ],
-        "last_sent_date": "2025-01-30T11:31:21.858905"
+        "last_sent_date": "2025-01-31T12:57:41.280033"
     },
     "jj": {
         "notification_history": [
@@ -37,9 +41,13 @@
             {
                 "question_id": "fan_duration",
                 "timestamp": "2025-01-30T11:31:27.820287"
+            },
+            {
+                "question_id": "favorite_match",
+                "timestamp": "2025-01-31T12:57:46.383607"
             }
         ],
-        "last_sent_date": "2025-01-30T11:31:27.820287"
+        "last_sent_date": "2025-01-31T12:57:46.383607"
     },
     "hopper": {
         "notification_history": [
@@ -66,5 +74,14 @@
             }
         ],
         "last_sent_date": "2025-01-30T22:02:23.410638"
+    },
+    "gg": {
+        "notification_history": [
+            {
+                "question_id": "favorite_match",
+                "timestamp": "2025-01-31T12:57:51.491047"
+            }
+        ],
+        "last_sent_date": "2025-01-31T12:57:51.491047"
     }
 }

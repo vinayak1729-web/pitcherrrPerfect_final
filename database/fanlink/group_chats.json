@@ -36,6 +36,11 @@
             "type": "system",
             "message": "vinayak1729 joined the group",
             "timestamp": "11:15 PM"
+        },
+        {
+            "type": "system",
+            "message": "gg joined the group",
+            "timestamp": "12:59 PM"
         }
     ],
     "439e4467-28fd-4eb3-88d0-4250c6ac406b": [
@@ -53,6 +58,18 @@
             "type": "system",
             "message": "vinayak1729 joined the group",
             "timestamp": "11:14 PM"
+        },
+        {
+            "type": "system",
+            "message": "gg joined the group",
+            "timestamp": "12:59 PM"
+        }
+    ],
+    "e9f06b96-29b8-4a2a-96f3-60735b2481ff": [
+        {
+            "type": "system",
+            "message": "gg joined the group",
+            "timestamp": "12:59 PM"
         }
     ]
 }
