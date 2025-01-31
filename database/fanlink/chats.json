@@ -1,105 +1,25 @@
 {
-    "Vinayak9271_jj": [
+    "Vinayak1729_Vishal22": [
         {
-            "from": "Vinayak9271",
-            "message": "Shared a file: Perfect_2.png",
-            "timestamp": "01:37 PM",
-            "file": {
-                "name": "Perfect_2.png",
-                "url": "http://127.0.0.1:5000/uploads/20250129_133707_Vinayak9271_Perfect_2.png",
-                "type": "image/png"
-            }
+            "from": "Vishal22",
+            "message": "hi vinayak!!",
+            "timestamp": "04:49 PM"
         },
         {
-            "from": "jj",
-            "message": "Shared a file: Perfect_2.png",
-            "timestamp": "01:40 PM",
-            "file": {
-                "name": "Perfect_2.png",
-                "url": "http://127.0.0.1:5000/uploads/20250129_134012_jj_Perfect_2.png",
-                "type": "image/png"
-            }
+            "from": "Vishal22",
+            "message": "wsuuppp!!",
+            "timestamp": "04:50 PM"
         },
         {
-            "from": "Vinayak9271",
-            "message": "Shared a file: Perfect_2.png",
-            "timestamp": "01:43 PM",
-            "file": {
-                "name": "Perfect_2.png",
-                "url": "http://127.0.0.1:5000/uploads/20250129_134346_Vinayak9271_Perfect_2.png",
-                "type": "image/png"
-            }
-        },
-        {
-            "from": "Vinayak9271",
-            "message": "Shared a file: baseball-field.png",
-            "timestamp": "01:49 PM",
-            "file": {
-                "name": "baseball-field.png",
-                "url": "http://127.0.0.1:5000/uploads/20250129_134935_Vinayak9271_baseball-field.png",
-                "type": "image/png"
-            }
-        },
-        {
-            "from": "jj",
-            "message": "Shared a file: PADMINI.png",
-            "timestamp": "02:15 PM",
-            "file": {
-                "name": "PADMINI.png",
-                "url": "http://127.0.0.1:5000/uploads/20250129_141533_jj_PADMINI.png",
-                "type": "image/png"
-            }
-        },
-        {
-            "from": "jj",
-            "message": "Shared a file: PADMINI.png",
-            "timestamp": "02:19 PM",
-            "file": {
-                "name": "PADMINI.png",
-                "url": "http://127.0.0.1:5000/uploads/20250129_141924_jj_PADMINI.png",
-                "type": "image/png"
-            }
-        },
-        {
-            "from": "Vinayak9271",
-            "message": "Shared a file: Blue_Modern_Business_Card.pdf",
-            "timestamp": "02:20 PM",
-            "file": {
-                "name": "Blue_Modern_Business_Card.pdf",
-                "url": "http://127.0.0.1:5000/uploads/20250129_142030_Vinayak9271_Blue_Modern_Business_Card.pdf",
-                "type": "application/pdf"
-            }
-        },
-        {
-            "from": "jj",
+            "from": "Vishal22",
             "message": "",
-            "timestamp": "04:04 PM",
-            "file_url": "/static/uploads/20250129_160406_baseball-field.png"
+            "timestamp": "04:50 PM",
+            "file_url": "/static/uploads/20250131_165053_Screenshot_2025-01-31_142502.png"
         },
         {
-            "from": "Vinayak9271",
-            "message": "",
-            "timestamp": "08:47 PM",
-            "file_url": "/static/uploads/20250129_204747_Perfect_2.png"
-        },
-        {
-            "from": "Vinayak9271",
-            "message": "",
-            "timestamp": "10:17 AM",
-            "file_url": "/static/uploads/20250131_101715_20250129_160406_baseball-field.png"
-        }
-    ],
-    "jj_vinayak1729": [
-        {
-            "from": "vinayak1729",
-            "message": "hi",
-            "timestamp": "12:14 AM"
-        },
-        {
-            "from": "vinayak1729",
-            "message": "",
-            "timestamp": "12:14 AM",
-            "file_url": "/static/uploads/20250130_001437_Perfect_2.png"
+            "from": "Vishal22",
+            "message": "see my team\ud83d\ude0e\ud83d\ude0e",
+            "timestamp": "04:51 PM"
         }
     ]
 }

@@ -1,4 +1,4 @@
-# personalizedEmailContent.py
+
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
@@ -94,4 +94,3 @@ def personalizedEmail(username,question_id,answer,team):
    return subject, body
 
 
-print(personalizedEmail("vinu","fav_player","Shohei Ohtani","Dodgers"))

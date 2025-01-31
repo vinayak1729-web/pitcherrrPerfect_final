@@ -1,14 +1,14 @@
 [
     {
         "user_id": "7dd26d95-4202-4937-832c-2895ed07dd8b",
-        "username": "Vinayak9271",
+        "username": "Vinayak1729",
         "email": "shindevinayak233@gmail.com",
         "password": "123",
         "signup_date": "2025-01-28 10:44:18"
     },
     {
         "user_id": "5c8cbfef-79da-4b89-a748-2226325ffab3",
-        "username": "jj",
+        "username": "Vishal22",
         "email": "vishal213.mishra@gmail.com",
         "password": "123",
         "signup_date": "2025-01-28 11:13:11"
@@ -19,19 +19,5 @@
         "email": "paraggurav65@gmail.com",
         "password": "Parag@123",
         "signup_date": "2025-01-29 11:30:03"
-    },
-    {
-        "user_id": "0049943f-a116-45de-8771-17ddf743a400",
-        "username": "vinayak1729",
-        "email": "shindevinayak233@gmail.com",
-        "password": "123",
-        "signup_date": "2025-01-29 21:46:40"
-    },
-    {
-        "user_id": "462f6245-eda6-427b-b463-832115fd9b42",
-        "username": "gg",
-        "email": "vishal213.mishra@gmail.com",
-        "password": "123",
-        "signup_date": "2025-01-31 10:30:00"
     }
 ]

@@ -1,8 +1,8 @@
 {
-    "user_id": "-8142961412063195099",
-    "username": "vinayak1729",
+    "user_id": "-6502940114445056616",
+    "username": "Vinayak9271",
     "email": "",
-    "submission_date": "2025-01-29 21:47:28",
+    "submission_date": "2025-01-28 10:45:11",
     "questions": [
         {
             "id": "fan_duration",
@@ -20,23 +20,23 @@
             "id": "favorite_players",
             "question": "Name 5 favorite players",
             "answer": [
-                "Babe Ruth, Willie Mays, Hank Aaron, Barry Bonds, Shohei Ohtani"
+                "Shohei Ohtani, Mike Trout, Aaron Judge, Mookie Betts, Ronald Acu\u00c3\u00b1a Jr."
             ]
         },
         {
             "id": "selected_team",
             "question": "Which team do you want to select?",
-            "answer": "['New York Yankees']"
+            "answer": "['Los Angeles Dodgers']"
         },
         {
             "id": "favorite_match",
             "question": "Which match did you like the most?",
-            "answer": "dogers vs yankess"
+            "answer": "yankess vs dodgers"
         },
         {
             "id": "notifications",
             "question": "Select notification frequency",
-            "answer": "weekly"
+            "answer": "monthly"
         }
     ]
 }

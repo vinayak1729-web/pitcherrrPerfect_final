@@ -1,1 +1,0 @@
-## this data is of Players Expected Statistics from statcast Link : ([https://baseballsavant.mlb.com/leaderboard/expected_statistics?type=batter&year=2024&position=&team=119&filterType=bip&min=q])

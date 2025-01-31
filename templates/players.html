@@ -262,243 +262,244 @@
             }
         }
 
-/* Navigation Buttons */
-.nav-buttons-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-}
+        /* Navigation Buttons */
+        .nav-buttons-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
 
-.nav-button {
-    padding: 1rem 2rem;
-    font-family: 'Bungee', cursive;
-    font-size: 1rem;
-    border: 4px solid #000;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.8);
-    position: relative;
-    overflow: hidden;
-}
+        .nav-button {
+            padding: 1rem 2rem;
+            font-family: 'Bungee', cursive;
+            font-size: 1rem;
+            border: 4px solid #000;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
 
-.nav-button--back {
-    background: var(--card-accent);
-}
+        .nav-button--back {
+            background: var(--card-accent);
+        }
 
-.nav-button--team {
-    background: var(--card-primary);
-}
+        .nav-button--team {
+            background: var(--card-primary);
+        }
 
-.nav-button:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
-}
+        .nav-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
+        }
 
-.nav-button:active {
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
-}
+        .nav-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+        }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .nav-buttons-container {
-        flex-direction: column;
-    }
-    
-    .nav-button {
-        width: 100%;
-        text-align: center;
-    }
-}
-.nav-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem;
-}
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-buttons-container {
+                flex-direction: column;
+            }
 
-.button-wrapper {
-    display: flex;
-    justify-content: space-between;
-    gap: 2rem;
-    margin-bottom: 3rem;
-}
+            .nav-button {
+                width: 100%;
+                text-align: center;
+            }
+        }
 
-.neo-button {
-    padding: 1rem 2rem;
-    border: 4px solid #000;
-    font-family: 'Bungee', cursive;
-    font-size: 1.1rem;
-    color: white;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
-}
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
-.neo-button--red {
-    background: linear-gradient(135deg, #ff4d4d 0%, #ff2e2e 100%);
-}
+        .button-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
 
-.neo-button--blue {
-    background: linear-gradient(135deg, #4169e1 0%, #213a8f 100%);
-}
+        .neo-button {
+            padding: 1rem 2rem;
+            border: 4px solid #000;
+            font-family: 'Bungee', cursive;
+            font-size: 1.1rem;
+            color: white;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
+        }
 
-.neo-button:hover {
-    transform: translate(-4px, -4px);
-    box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.8);
-}
+        .neo-button--red {
+            background: linear-gradient(135deg, #ff4d4d 0%, #ff2e2e 100%);
+        }
 
-.neo-button:active {
-    transform: translate(2px, 2px);
-    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8);
-}
+        .neo-button--blue {
+            background: linear-gradient(135deg, #4169e1 0%, #213a8f 100%);
+        }
 
-.mega-title {
-    font-family: 'Bungee Spice', cursive;
-    font-size: 4rem;
-    text-align: center;
-    color: #213a8f;
-    letter-spacing: 0.05em;
-    line-height: 1.2;
-    margin: 2rem 0;
-    transform: scale(1.02);
-    transition: transform 0.3s ease;
-}
+        .neo-button:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.8);
+        }
 
-.mega-title:hover {
-    transform: scale(1.05);
-}
+        .neo-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8);
+        }
 
-@media (max-width: 768px) {
-    .button-wrapper {
-        flex-direction: column;
-    }
-    
-    .mega-title {
-        font-size: 3rem;
-    }
-}
-.player-list-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-    padding: 20px;
-}
+        .mega-title {
+            font-family: 'Bungee Spice', cursive;
+            font-size: 4rem;
+            text-align: center;
+            color: #213a8f;
+            letter-spacing: 0.05em;
+            line-height: 1.2;
+            margin: 2rem 0;
+            transform: scale(1.02);
+            transition: transform 0.3s ease;
+        }
 
-.player-card {
-    position: relative;
-    border-radius: 8px;
-    background: linear-gradient(45deg, #f0f0f0, #ffffff);
-    padding: 3px; /* Border width */
-    animation: borderRotate 4s linear infinite;
-    background-image: linear-gradient(
-        90deg,
-        #ff0000 0%,
-        #ffa500 25%,
-        #0000ff 50%,
-        #ff0000 75%,
-        #ffa500 100%
-    );
-}
+        .mega-title:hover {
+            transform: scale(1.05);
+        }
 
-.card-content {
-    background: white;
-    border-radius: 6px;
-    padding: 15px;
-    height: 100%;
-}
+        @media (max-width: 768px) {
+            .button-wrapper {
+                flex-direction: column;
+            }
 
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
+            .mega-title {
+                font-size: 3rem;
+            }
+        }
 
-.jersey-number {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-}
+        .player-list-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 20px;
+        }
 
-.player-image {
-    position: relative;
-    text-align: center;
-    margin-bottom: 15px;
-}
+        .player-card {
+            position: relative;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #f0f0f0, #ffffff);
+            padding: 3px;
+            /* Border width */
+            animation: borderRotate 4s linear infinite;
+            background-image: linear-gradient(90deg,
+                    #ff0000 0%,
+                    #ffa500 25%,
+                    #0000ff 50%,
+                    #ff0000 75%,
+                    #ffa500 100%);
+        }
 
-.player-image img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border: 3px solid #ddd;
-}
+        .card-content {
+            background: white;
+            border-radius: 6px;
+            padding: 15px;
+            height: 100%;
+        }
 
-.position {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: #fff;
-    padding: 5px 10px;
-    border: 2px solid #333;
-    font-weight: bold;
-}
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
 
-.player-image h2 {
-    margin: 10px 0;
-    font-size: 18px;
-    color: #333;
-}
+        .jersey-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
 
-.stats {
-    font-size: 14px;
-}
+        .player-image {
+            position: relative;
+            text-align: center;
+            margin-bottom: 15px;
+        }
 
-.stat-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    padding: 5px 0;
-    border-bottom: 1px solid #eee;
-}
+        .player-image img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border: 3px solid #ddd;
+        }
 
-.strike-zone {
-    text-align: center;
-    padding: 10px;
-    background: #f5f5f5;
-    border-radius: 4px;
-}
+        .position {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #fff;
+            padding: 5px 10px;
+            border: 2px solid #333;
+            font-weight: bold;
+        }
 
-@keyframes borderRotate {
-    0% {
-        background-position: 0% center;
-    }
-    100% {
-        background-position: 200% center;
-    }
-}
+        .player-image h2 {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #333;
+        }
 
-/* Checkbox styling */
-.select-wrapper input[type="checkbox"] {
-    display: none;
-}
+        .stats {
+            font-size: 14px;
+        }
 
-.select-wrapper label {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #333;
-    cursor: pointer;
-}
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
 
-.select-wrapper input[type="checkbox"]:checked + label {
-    background: #333;
-}
+        .strike-zone {
+            text-align: center;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
 
+        @keyframes borderRotate {
+            0% {
+                background-position: 0% center;
+            }
+
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        /* Checkbox styling */
+        .select-wrapper input[type="checkbox"] {
+            display: none;
+        }
+
+        .select-wrapper label {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #333;
+            cursor: pointer;
+        }
+
+        .select-wrapper input[type="checkbox"]:checked+label {
+            background: #333;
+        }
     </style>
 </head>
 
@@ -508,152 +509,194 @@
             <button onclick="location.href='/'" class="neo-button neo-button--red">
                 ⚾ BACK TO DUGOUT
             </button>
-            
+
             <button onclick="location.href='/my_team'" class="neo-button neo-button--blue">
                 👀 SEE YOUR TEAM
             </button>
         </div>
-    
+
         <h1 class="mega-title">⚾ Build Your Dream Team ⚾</h1>
     </div>
     <div class="filters-container">
-            <form method="GET" action="{{ url_for('team_players') }}" class="filters-grid">
-                <div class="filter-group team-select">
-                    <img src="{{ team_logo }}" alt="Team Logo" class="team-logo">
-                    <label for="team_id">Team Selection</label>
-                    <select name="team_id" id="team_id">
-                        {% for league, divisions in team_mapping.items() %}
-                        {% for division, teams in divisions.items() %}
-                        <optgroup label="{{ league }} - {{ division }}">
-                            {% for team in teams %}
-                            <option value="{{ team.id }}" {% if team.id==selected_team %}selected{% endif %}>
-                                {{ team.name }}
-                            </option>
-                            {% endfor %}
-                        </optgroup>
-                        {% endfor %}
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="filter-group status-select">
-                    <label for="status">Player Status</label>
-                    <select name="status" id="status">
-                        <option value="All" {% if selected_status=='All' %}selected{% endif %}>All Players</option>
-                        <option value="Active" {% if selected_status=='Active' %}selected{% endif %}>Active Roster
+        <form method="GET" action="{{ url_for('team_players') }}" class="filters-grid">
+            <div class="filter-group team-select">
+                <img src="{{ team_logo }}" alt="Team Logo" class="team-logo">
+                <label for="team_id">Team Selection</label>
+                <select name="team_id" id="team_id">
+                    {% for league, divisions in team_mapping.items() %}
+                    {% for division, teams in divisions.items() %}
+                    <optgroup label="{{ league }} - {{ division }}">
+                        {% for team in teams %}
+                        <option value="{{ team.id }}" {% if team.id==selected_team %}selected{% endif %}>
+                            {{ team.name }}
                         </option>
-                        <option value="Minor League" {% if selected_status=='Minor League' %}selected{% endif %}>Minor
-                            League</option>
-                    </select>
-                </div>
-
-                <div class="filter-group positions-grid">
-                    <label>Player Positions</label>
-                    <div class="checkbox-grid">
-                        {% for role in ['Pitcher', 'Catcher', 'First Base', 'Second Base', 'Third Base', 'Shortstop',
-                        'Outfielder','Two-Way Player'] %}
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="role_{{ loop.index }}" name="roles" value="{{ role }}" {% if role
-                                in selected_roles %}checked{% endif %} class="role-checkbox">
-                            <label for="role_{{ loop.index }}">{{ role }}</label>
-                        </div>
                         {% endfor %}
+                    </optgroup>
+                    {% endfor %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group status-select">
+                <label for="status">Player Status</label>
+                <select name="status" id="status">
+                    <option value="All" {% if selected_status=='All' %}selected{% endif %}>All Players</option>
+                    <option value="Active" {% if selected_status=='Active' %}selected{% endif %}>Active Roster
+                    </option>
+                    <option value="Minor League" {% if selected_status=='Minor League' %}selected{% endif %}>Minor
+                        League</option>
+                </select>
+            </div>
+
+            <div class="filter-group positions-grid">
+                <label>Player Positions</label>
+                <div class="checkbox-grid">
+                    {% for role in ['Pitcher', 'Catcher', 'First Base', 'Second Base', 'Third Base', 'Shortstop',
+                    'Outfielder','Two-Way Player'] %}
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="role_{{ loop.index }}" name="roles" value="{{ role }}" {% if role in
+                            selected_roles %}checked{% endif %} class="role-checkbox">
+                        <label for="role_{{ loop.index }}">{{ role }}</label>
                     </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="filter-group submit-button" style="text-align: center;">
+                <button type="submit" style="background-color: red; text-align: center;">Apply Filters</button>
+            </div>
+            <!-- Team Name and Save Section -->
+            <div class="container team-save-section" style="text-align: center;">
+                <label for="team_name">Team Name</label>
+                <input type="text" id="team_name" name="team_name" placeholder="Enter your team name">
+                <button id="savePlayersButton" style="background-color:#4169e1;color: white; text-align: center;">Save
+                    Selected Players</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="container player-list-container">
+        {% for player in players %}
+        <div class="player-card" data-player='{{ player|tojson }}'>
+            <div class="card-content">
+                <div class="card-header">
+                    <div class="select-wrapper">
+                        <input type="checkbox" class="player-select" id="player_{{ loop.index }}">
+                        <label for="player_{{ loop.index }}"></label>
+                    </div>
+                    <span class="jersey-number">#{{ player.jersey_number }}</span>
                 </div>
 
-                <div class="filter-group submit-button" style="text-align: center;">
-                    <button type="submit" style="background-color: red; text-align: center;">Apply Filters</button>
+                <div class="player-image">
+                    <span class="position">{{ player.position }}</span>
+                    <img src="{{ player.headshot_url }}" alt="{{ player.name }}">
+                    <h2>{{ player.name }}</h2>
                 </div>
-                <!-- Team Name and Save Section -->
-        <div class="container team-save-section" style="text-align: center;">
-            <label for="team_name">Team Name</label>
-            <input type="text" id="team_name" name="team_name" placeholder="Enter your team name">
-            <button id="savePlayersButton" style="background-color:#4169e1;color: white; text-align: center;">Save Selected Players</button>
-        </div>
 
-            </form>
-        </div>
+                <div class="stats">
+                    <div class="stat-row">
+                        <span>Bat: {{ player.bat_side }}</span>
+                        <span>Pitch: {{ player.pitch_side }}</span>
+                    </div>
 
-         <div class="container player-list-container">
-            {% for player in players %}
-            <div class="player-card">
-                <div class="card-content">
-                    <div class="card-header">
-                        <div class="select-wrapper">
-                            <input type="checkbox" class="player-select" id="player_{{ loop.index }}">
-                            <label for="player_{{ loop.index }}"></label>
-                        </div>
-                        <span class="jersey-number">#{{ player.jersey_number }}</span>
+                    <div class="stat-row">
+                        <span>Height: {{ player.height }}</span>
+                        <span>Weight: {{ player.weight }}lbs</span>
                     </div>
-        
-                    <div class="player-image">
-                        <span class="position">{{ player.position }}</span>
-                        <img src="{{ player.headshot_url }}" alt="{{ player.name }}">
-                        <h2>{{ player.name }}</h2>
-                    </div>
-        
-                    <div class="stats">
-                        <div class="stat-row">
-                            <span>Bat: {{ player.bat_side }}</span>
-                            <span>Pitch: {{ player.pitch_side }}</span>
-                        </div>
-        
-                        <div class="stat-row">
-                            <span>Height: {{ player.height }}</span>
-                            <span>Weight: {{ player.weight }}lbs</span>
-                        </div>
-        
-                        <div class="strike-zone">
-                            <p>Strike Zone</p>
-                            <span>Top: {{ player.strike_zone_top }}</span>
-                            <span>Bottom: {{ player.strike_zone_bottom }}</span>
-                        </div>
+
+                    <div class="strike-zone">
+                        <p>Strike Zone</p>
+                        <span>Top: {{ player.strike_zone_top }}</span>
+                        <span>Bottom: {{ player.strike_zone_bottom }}</span>
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    const saveButton = document.getElementById('savePlayersButton');
+
+    saveButton.addEventListener('click', function (e) {
+        e.preventDefault();
         
-        <script>
-            document.getElementById('savePlayersButton').addEventListener('click', function () {
-                const selectedPlayers = [];
-                document.querySelectorAll('.player-select:checked').forEach(checkbox => {
-                    selectedPlayers.push(JSON.parse(checkbox.closest('.player-card').dataset.player));
-                });
-                const teamName = document.getElementById('team_name').value.trim();
-                if (!teamName || selectedPlayers.length === 0) {
-                    alert('Enter a team name and select players');
-                    return;
+        const selectedPlayers = [];
+        const checkboxes = document.querySelectorAll('.player-select:checked');
+        const teamName = document.getElementById('team_name').value.trim();
+
+        if (!teamName) {
+            alert('Please enter a team name');
+            return;
+        }
+
+        if (checkboxes.length === 0) {
+            alert('Please select at least one player');
+            return;
+        }
+
+        checkboxes.forEach(checkbox => {
+            const playerCard = checkbox.closest('.player-card');
+            const playerData = JSON.parse(playerCard.dataset.player);
+            selectedPlayers.push(playerData);
+        });
+
+        const userData = {
+            user_team: {
+                [teamName]: {
+                    selected_players: selectedPlayers
                 }
-                fetch('/save_team_data', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_team: { [teamName]: { selected_players: selectedPlayers } } })
-                }).then(response => response.json()).then(data => {
-                    alert(data.success ? 'Team saved successfully!' : 'Error saving team');
-                }).catch(error => console.error('Error:', error));
+            }
+        };
+
+        fetch('/save_team_data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Team saved successfully!');
+                checkboxes.forEach(cb => cb.checked = false);
+                document.getElementById('team_name').value = '';
+            } else {
+                alert(data.message || 'Error saving team');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error saving team. Please try again.');
+        });
+    });
+});
+
+
+        // Enhanced card hover effects
+        document.querySelectorAll('.player-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
             });
-            // Enhanced card hover effects
-            document.querySelectorAll('.player-card').forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
 
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-
-                    const rotateX = (y - centerY) / 20;
-                    const rotateY = (centerX - x) / 20;
-
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                });
-
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'none';
-                });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'none';
             });
-        </script>
+        });
+    </script>
 </body>
 
 </html>

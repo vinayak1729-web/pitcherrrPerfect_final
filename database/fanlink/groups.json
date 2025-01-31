@@ -1,34 +1,57 @@
 {
-    "aab1ca29-cbd8-4367-b8fc-eb249f273b78": {
-        "name": "Surya prabha ",
-        "description": "lets glow like sun shine",
-        "creator": "jj",
+    "5eae1851-a7f2-4273-a63c-d2ed1a5a8065": {
+        "name": "The Yankee Empire \u2694\ufe0f",
+        "description": "The most dedicated supporters of the Bronx Bombers, standing tall with pride and history!\n\n",
+        "creator": "Vinayak1729",
         "members": [
-            "jj",
-            "vinayak1729",
-            "gg"
+            "Vinayak1729",
+            "Vishal22"
         ],
-        "created_at": "2025-01-28 12:48:55"
+        "created_at": "2025-01-31 16:39:17"
     },
-    "439e4467-28fd-4eb3-88d0-4250c6ac406b": {
-        "name": "journeytogoa",
-        "description": "chalo goa",
-        "creator": "Vinayak9271",
+    "f236241c-eda2-4e9a-85e6-189768cd133f": {
+        "name": "The South Side Sox",
+        "description": "A hard-hitting, never-quit group of White Sox fans who bleed black and white!\n\n",
+        "creator": "Vinayak1729",
         "members": [
-            "Vinayak9271",
-            "vinayak1729",
-            "gg"
+            "Vinayak1729"
         ],
-        "created_at": "2025-01-29 16:22:30"
+        "created_at": "2025-01-31 16:40:21"
     },
-    "e9f06b96-29b8-4a2a-96f3-60735b2481ff": {
-        "name": "nn",
-        "description": "qsqs",
-        "creator": "Vinayak9271",
+    "8c9497bd-1a01-4049-bda7-f5c18c594edc": {
+        "name": "The Mariner Fleet",
+        "description": "A sea of devoted Mariners fans navigating every game with passion and pride!\n\n",
+        "creator": "Vinayak1729",
         "members": [
-            "Vinayak9271",
-            "gg"
+            "Vinayak1729"
         ],
-        "created_at": "2025-01-31 10:17:36"
+        "created_at": "2025-01-31 16:40:52"
+    },
+    "7f14c873-c9a0-4488-8dea-c08d31b621a1": {
+        "name": "The Metropolis",
+        "description": "A sea of devoted Mariners fans navigating every game with passion and pride!\n\nThe heart of New York\u2019s Mets fanbase, built on passion and perseverance!\n\n",
+        "creator": "Vinayak1729",
+        "members": [
+            "Vinayak1729"
+        ],
+        "created_at": "2025-01-31 16:41:23"
+    },
+    "1f01799c-ef2b-4367-af2e-7ec994e9e3a4": {
+        "name": "The Buccaneer Brigade\u2620\ufe0f",
+        "description": "A fearless crew of Pirates fans, sailing the high seas of baseball with pride!\n\n",
+        "creator": "Vinayak1729",
+        "members": [
+            "Vinayak1729"
+        ],
+        "created_at": "2025-01-31 16:42:28"
+    },
+    "8a770676-6269-430c-b90d-776186b1931b": {
+        "name": "Dodger Blue Crew \ud83d\udd35",
+        "description": "A historic and powerful army of Dodgers fans draped in blue!\n\n",
+        "creator": "Vinayak1729",
+        "members": [
+            "Vinayak1729"
+        ],
+        "created_at": "2025-01-31 16:43:01"
     }
 }

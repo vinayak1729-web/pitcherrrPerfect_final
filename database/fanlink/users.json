@@ -1,28 +1,19 @@
 {
-    "Vinayak9271": {
+    "Vinayak1729": {
         "user_id": "7dd26d95-4202-4937-832c-2895ed07dd8b",
         "email": "vs8879785320@gmail.com",
         "password": "123",
         "friends": [
-            "jj",
-            "gg"
+            "Vishal22"
         ],
         "profile_pic": "/static/default.png"
     },
-    "NANO": {
-        "user_id": "e1452522-4b3e-4851-916e-5ecc0704bb1c",
-        "email": "vishal213.mishra@gmail.com",
-        "password": "123",
-        "friends": [],
-        "profile_pic": "/static/default.png"
-    },
-    "jj": {
+    "Vishal22": {
         "user_id": "5c8cbfef-79da-4b89-a748-2226325ffab3",
         "email": "vishal213.mishra@gmail.com",
         "password": "123",
         "friends": [
-            "Vinayak9271",
-            "vinayak1729"
+            "Vinayak1729"
         ],
         "profile_pic": "/static/default.png"
     },
@@ -31,24 +22,6 @@
         "email": "paraggurav65@gmail.com",
         "password": "Parag@123",
         "friends": [],
-        "profile_pic": "/static/default.png"
-    },
-    "vinayak1729": {
-        "user_id": "0049943f-a116-45de-8771-17ddf743a400",
-        "email": "shindevinayak233@gmail.com",
-        "password": "123",
-        "friends": [
-            "jj"
-        ],
-        "profile_pic": "/static/default.png"
-    },
-    "gg": {
-        "user_id": "462f6245-eda6-427b-b463-832115fd9b42",
-        "email": "vishal213.mishra@gmail.com",
-        "password": "123",
-        "friends": [
-            "Vinayak9271"
-        ],
         "profile_pic": "/static/default.png"
     }
 }
