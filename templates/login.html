@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,7 @@
     <style>
         .baseball-stitches {
             background-image: linear-gradient(to right, transparent 50%, #ff1414 50%),
-                            linear-gradient(to right, transparent 50%, #ff1414 50%);
+                linear-gradient(to right, transparent 50%, #ff1414 50%);
             background-size: 20px 4px;
             background-position: 0 0, 0 100%;
             background-repeat: repeat-x;
@@ -20,22 +21,23 @@
         }
 
         @keyframes slideIn {
-            from { 
+            from {
                 transform: translateX(-100%);
-                opacity: 0; 
+                opacity: 0;
             }
-            to { 
+
+            to {
                 transform: translateX(0);
-                opacity: 1; 
+                opacity: 1;
             }
         }
 
         .shadow-custom {
-            box-shadow: 8px 8px 0px rgba(0,0,0,1);
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 1);
         }
 
         .hover-shadow-custom:hover {
-            box-shadow: 4px 4px 0px rgba(0,0,0,1);
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 1);
         }
     </style>
 </head>
@@ -54,20 +56,20 @@
 
                 <div>
                     <label class="block text-xl font-medium text-[#1B3B6F] mb-2">USERNAME</label>
-                    <input type="text" name="username" required 
-                           class="w-full border-black border-2 p-3 rounded-lg focus:outline-none focus:shadow-[4px_4px_0px_rgba(0,0,0,1)] focus:bg-[#FFE5E5]">
+                    <input type="text" name="username" required
+                        class="w-full border-black border-2 p-3 rounded-lg focus:outline-none focus:shadow-[4px_4px_0px_rgba(0,0,0,1)] focus:bg-[#FFE5E5]">
                 </div>
 
                 <div>
                     <label class="block text-xl font-medium text-[#1B3B6F] mb-2">PASSWORD</label>
-                    <input type="password" name="password" required 
-                           class="w-full border-black border-2 p-3 rounded-lg focus:outline-none focus:shadow-[4px_4px_0px_rgba(0,0,0,1)] focus:bg-[#FFE5E5]">
+                    <input type="password" name="password" required
+                        class="w-full border-black border-2 p-3 rounded-lg focus:outline-none focus:shadow-[4px_4px_0px_rgba(0,0,0,1)] focus:bg-[#FFE5E5]">
                 </div>
 
                 <div class="flex items-center justify-between text-[#1B3B6F]">
                     <div class="flex items-center">
                         <input type="checkbox" id="remember" name="remember"
-                               class="h-4 w-4 border-2 border-black rounded">
+                            class="h-4 w-4 border-2 border-black rounded">
                         <label for="remember" class="ml-2 text-sm">
                             Remember me
                         </label>
@@ -77,8 +79,8 @@
                     </a>
                 </div>
 
-                <button type="submit" 
-                        class="w-full py-4 px-6 bg-[#ff1414] border-black border-2 text-white hover:bg-[#d10000] hover-shadow-custom active:bg-[#b00000] transition-all rounded-lg transform hover:-translate-y-1">
+                <button type="submit"
+                    class="w-full py-4 px-6 bg-[#ff1414] border-black border-2 text-white hover:bg-[#d10000] hover-shadow-custom active:bg-[#b00000] transition-all rounded-lg transform hover:-translate-y-1">
                     PLAY BALL! ⚾
                 </button>
             </form>
@@ -94,4 +96,5 @@
         </div>
     </div>
 </body>
+
 </html>

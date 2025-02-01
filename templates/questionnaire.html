@@ -1,15 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Baseball Questionnaire</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+    <script type="text/javascript"src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,ja,es,hi,de,fr,ko',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
     <style>
+
+
+        .question-counter {
+            font-family: 'Bungee', cursive;
+            letter-spacing: 1px;
+            padding: 4px 12px;
+            background: rgba(27, 59, 111, 0.1);
+            border-radius: 20px;
+            display: inline-block;
+            margin: 0 auto;
+        }        
+
+
         .baseball-stitches {
             background-image: linear-gradient(to right, transparent 50%, #ff1414 50%),
-                            linear-gradient(to right, transparent 50%, #ff1414 50%);
+                linear-gradient(to right, transparent 50%, #ff1414 50%);
             background-size: 20px 4px;
             background-position: 0 0, 0 100%;
             background-repeat: repeat-x;
@@ -25,7 +49,7 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         .baseball-stitches {
             position: absolute;
             top: 50%;
@@ -36,52 +60,121 @@
         .slide-in {
             animation: slideIn 0.5s forwards;
         }
+
         .slide-out {
             animation: slideOut 0.5s forwards;
         }
+
         @keyframes slideIn {
-            from { 
+            from {
                 transform: translate(-150%, -50%);
-                opacity: 0; 
+                opacity: 0;
             }
-            to { 
+
+            to {
                 transform: translate(-50%, -50%);
-                opacity: 1; 
+                opacity: 1;
             }
         }
-        
+
         @keyframes slideOut {
-            from { 
+            from {
                 transform: translate(-50%, -50%);
-                opacity: 1; 
+                opacity: 1;
             }
-            to { 
+
+            to {
                 transform: translate(50%, -50%);
-                opacity: 0; 
+                opacity: 0;
             }
         }
-        
+
 
         .modal-overlay {
             backdrop-filter: blur(3px);
+        }
+
+        /* Translation button styles */
+        #google_translate_element {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+            transform: scale(0.85);
+            transform-origin: top right;
+        }
+
+        .goog-te-gadget {
+            font-family: 'Bungee Spice', 'Bungee', sans-serif !important;
+            font-size: 14px !important;
+        }
+
+        .goog-te-gadget-simple {
+            background-color: #ffffff !important;
+            border: 2px solid #000000 !important;
+            padding: 4px 8px !important;
+            border-radius: 4px !important;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8) !important;
+            transition: all 0.2s ease !important;
+            height: 30px !important;
+            display: flex !important;
+            align-items: center !important;
+            width: auto !important;
+            max-width: 150px !important;
+        }
+
+        .goog-te-gadget-simple:hover {
+            transform: translate(-2px, -2px) !important;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8) !important;
+        }
+
+        /* Dark mode styles for translation button */
+        .dark .goog-te-gadget-simple {
+            background-color: #1a1a1a !important;
+            border-color: #ffd700 !important;
+            color: #ffffff !important;
+            box-shadow: 3px 3px 0 rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .dark .goog-te-gadget-simple:hover {
+            box-shadow: 4px 4px 0 rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .dark .goog-te-gadget-simple img {
+            filter: invert(1) !important;
+        }
+
+        /* Hide unnecessary elements */
+        .goog-te-gadget-icon {
+            display: none !important;
+        }
+
+        .goog-te-menu-value span:nth-child(3),
+        .goog-te-menu-value span:nth-child(5) {
+            display: none !important;
         }
     </style>
 </head>
 
 <!-- Previous head section remains the same -->
 
+
 <body class="bg-[#E5F6FF] min-h-screen flex items-center justify-center" style="font-family: 'Bungee', cursive;">
     <div id="container-wrapper">
         <!-- Containers will be dynamically inserted here -->
     </div>
-
+    <div id="google_translate_element"></div>
     <template id="question-template">
-        <div class="w-full max-w-md p-8 bg-white border-black border-4 shadow-[8px_8px_0px_rgba(0,0,0,1)] baseball-stitches mb-8 slide-in">
+        <div
+            class="w-full max-w-md p-8 bg-white border-black border-4 shadow-[8px_8px_0px_rgba(0,0,0,1)] baseball-stitches mb-8 slide-in">
             <h2 class="text-3xl text-center mb-8 text-[#1B3B6F]">BASEBALL STATS</h2>
+            <div class="question-counter text-sm text-center mb-4 text-[#1B3B6F]">
+                Question <span class="current-question">1</span> of <span class="total-questions">6</span>
+            </div>
             <div class="question-content text-xl font-medium text-[#1B3B6F] mb-6"></div>
             <form class="question-form space-y-6">
                 <!-- Input elements will be dynamically inserted here -->
-                <button type="submit" 
+                <button type="submit"
                     class="w-full py-4 px-6 bg-[#ff1414] border-black border-2 text-white hover:bg-[#d10000] hover:shadow-[4px_4px_0px_rgba(0,0,0,1)] active:bg-[#b00000] transition-all rounded-lg transform hover:-translate-y-1">
                     NEXT PITCH 🎯
                 </button>
@@ -91,52 +184,52 @@
 
     <script>
         const mlbTeams = {
-                "American League": {
-                    "East": [
-                        {"name": "New York Yankees", "id": 147},
-                        {"name": "Tampa Bay Rays", "id": 139},
-                        {"name": "Boston Red Sox", "id": 111},
-                        {"name": "Toronto Blue Jays", "id": 141},
-                        {"name": "Baltimore Orioles", "id": 110}
-                    ],
-                    "Central": [
-                        {"name": "Cleveland Guardians", "id": 114},
-                        {"name": "Minnesota Twins", "id": 142},
-                        {"name": "Chicago White Sox", "id": 145},
-                        {"name": "Kansas City Royals", "id": 118},
-                        {"name": "Detroit Tigers", "id": 116}
-                    ],
-                    "West": [
-                        {"name": "Houston Astros", "id": 117},
-                        {"name": "Texas Rangers", "id": 140},
-                        {"name": "Oakland Athletics", "id": 133},
-                        {"name": "Seattle Mariners", "id": 136},
-                        {"name": "Los Angeles Angels", "id": 108}
-                    ]
-                },
-                "National League": {
-                    "East": [
-                        {"name": "New York Mets", "id": 121},
-                        {"name": "Washington Nationals", "id": 120},
-                        {"name": "Atlanta Braves", "id": 144},
-                        {"name": "Miami Marlins", "id": 146},
-                        {"name": "Philadelphia Phillies", "id": 143}
-                    ],
-                    "Central": [
-                        {"name": "St. Louis Cardinals", "id": 138},
-                        {"name": "Cincinnati Reds", "id": 113},
-                        {"name": "Pittsburgh Pirates", "id": 134},
-                        {"name": "Chicago Cubs", "id": 112},
-                        {"name": "Milwaukee Brewers", "id": 158}
-                    ],
-                    "West": [
-                        {"name": "San Francisco Giants", "id": 137},
-                        {"name": "San Diego Padres", "id": 135},
-                        {"name": "Colorado Rockies", "id": 115},
-                        {"name": "Arizona Diamondbacks", "id": 109},
-                        {"name": "Los Angeles Dodgers", "id": 119}
-                    ]
-                }
+            "American League": {
+                "East": [
+                    { "name": "New York Yankees", "id": 147 },
+                    { "name": "Tampa Bay Rays", "id": 139 },
+                    { "name": "Boston Red Sox", "id": 111 },
+                    { "name": "Toronto Blue Jays", "id": 141 },
+                    { "name": "Baltimore Orioles", "id": 110 }
+                ],
+                "Central": [
+                    { "name": "Cleveland Guardians", "id": 114 },
+                    { "name": "Minnesota Twins", "id": 142 },
+                    { "name": "Chicago White Sox", "id": 145 },
+                    { "name": "Kansas City Royals", "id": 118 },
+                    { "name": "Detroit Tigers", "id": 116 }
+                ],
+                "West": [
+                    { "name": "Houston Astros", "id": 117 },
+                    { "name": "Texas Rangers", "id": 140 },
+                    { "name": "Oakland Athletics", "id": 133 },
+                    { "name": "Seattle Mariners", "id": 136 },
+                    { "name": "Los Angeles Angels", "id": 108 }
+                ]
+            },
+            "National League": {
+                "East": [
+                    { "name": "New York Mets", "id": 121 },
+                    { "name": "Washington Nationals", "id": 120 },
+                    { "name": "Atlanta Braves", "id": 144 },
+                    { "name": "Miami Marlins", "id": 146 },
+                    { "name": "Philadelphia Phillies", "id": 143 }
+                ],
+                "Central": [
+                    { "name": "St. Louis Cardinals", "id": 138 },
+                    { "name": "Cincinnati Reds", "id": 113 },
+                    { "name": "Pittsburgh Pirates", "id": 134 },
+                    { "name": "Chicago Cubs", "id": 112 },
+                    { "name": "Milwaukee Brewers", "id": 158 }
+                ],
+                "West": [
+                    { "name": "San Francisco Giants", "id": 137 },
+                    { "name": "San Diego Padres", "id": 135 },
+                    { "name": "Colorado Rockies", "id": 115 },
+                    { "name": "Arizona Diamondbacks", "id": 109 },
+                    { "name": "Los Angeles Dodgers", "id": 119 }
+                ]
+            }
         };
 
         const questions = [
@@ -153,10 +246,23 @@
         const containerWrapper = document.getElementById('container-wrapper');
         const template = document.getElementById('question-template');
 
+
+
+        function updateQuestionCounter() {
+            const currentQuestionElement = document.querySelector('.current-question');
+            const totalQuestionsElement = document.querySelector('.total-questions');
+            if (currentQuestionElement && totalQuestionsElement) {
+                currentQuestionElement.textContent = currentQuestionIndex + 1;
+                totalQuestionsElement.textContent = questions.length;
+            }
+        }
+        
+
+
         function createTeamSelectButton(multiple = false) {
             const buttonContainer = document.createElement('div');
             buttonContainer.className = 'relative';
-        
+
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'w-full border-black border-2 p-3 bg-white focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-lg flex justify-between items-center';
@@ -166,7 +272,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             `;
-        
+
             const modal = document.createElement('div');
             modal.className = 'fixed inset-0 bg-black bg-opacity-50 modal-overlay hidden flex items-center justify-center z-50';
             modal.innerHTML = `
@@ -179,17 +285,17 @@
                     </div>
                 </div>
             `;
-        
+
             const selectedTeams = new Set();
             const teamOptionsDiv = modal.querySelector('.team-options');
-        
+
             Object.entries(mlbTeams).forEach(([league, divisions]) => {
                 Object.entries(divisions).forEach(([division, teams]) => {
                     const divisionTitle = document.createElement('div');
                     divisionTitle.className = 'font-bold mt-3 mb-2';
                     divisionTitle.textContent = `${league} - ${division}`;
                     teamOptionsDiv.appendChild(divisionTitle);
-        
+
                     teams.forEach(team => {
                         const label = document.createElement('label');
                         label.className = 'flex items-center space-x-2 p-2 hover:bg-gray-100 rounded cursor-pointer';
@@ -198,7 +304,7 @@
                                    class="border-black border-2 rounded ${multiple ? '' : 'form-radio'}">
                             <span>${team.name}</span>
                         `;
-                        
+
                         const input = label.querySelector('input');
                         input.addEventListener('change', () => {
                             if (multiple) {
@@ -220,12 +326,12 @@
                             }
                             updateButtonText();
                         });
-                        
+
                         teamOptionsDiv.appendChild(label);
                     });
                 });
             });
-        
+
             function updateButtonText() {
                 const text = button.querySelector('.selected-teams-text');
                 if (selectedTeams.size > 0) {
@@ -234,15 +340,15 @@
                     text.textContent = multiple ? 'Select 5 Teams' : 'Select Your Team';
                 }
             }
-        
+
             button.addEventListener('click', () => {
                 modal.classList.remove('hidden');
             });
-        
+
             modal.querySelector('.cancel-btn').addEventListener('click', () => {
                 modal.classList.add('hidden');
             });
-        
+
             modal.querySelector('.confirm-btn').addEventListener('click', () => {
                 if (multiple && selectedTeams.size !== 5) {
                     alert('Please select exactly 5 teams!');
@@ -250,10 +356,10 @@
                 }
                 modal.classList.add('hidden');
             });
-        
+
             buttonContainer.appendChild(button);
             document.body.appendChild(modal);
-        
+
             return {
                 container: buttonContainer,
                 getSelected: () => Array.from(selectedTeams)
@@ -265,11 +371,11 @@
             const form = e.target;
             const currentQuestion = questions[currentQuestionIndex];
             let answer;
-        
+
             if (currentQuestion.type === 'team-multi' || currentQuestion.type === 'team-single') {
                 const teamContainer = form.querySelector('div');
                 answer = teamContainer.getSelected();
-                
+
                 if (currentQuestion.type === 'team-multi' && answer.length !== 5) {
                     alert('Please select exactly 5 teams!');
                     return;
@@ -281,10 +387,10 @@
             } else {
                 answer = form.querySelector('input').value;
             }
-        
+
             responses[currentQuestion.key] = answer;
             form.closest('.baseball-stitches').classList.add('slide-out');
-        
+
             setTimeout(() => {
                 currentQuestionIndex++;
                 if (currentQuestionIndex < questions.length) {
@@ -293,8 +399,8 @@
                     submitResponses();
                 }
             }, 500);
-        }        
-    
+        }
+
         function displayQuestion() {
             const currentQuestion = questions[currentQuestionIndex];
             const container = template.content.cloneNode(true);
@@ -335,6 +441,7 @@
             form.insertBefore(input, form.querySelector('button'));
             form.addEventListener('submit', handleSubmit);
             containerWrapper.appendChild(container);
+            updateQuestionCounter(); 
         }
 
 

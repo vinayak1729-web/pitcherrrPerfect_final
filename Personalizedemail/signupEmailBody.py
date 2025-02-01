@@ -19,10 +19,10 @@ def Sign_up_email_body_template(username):
    👉 <a href="https://youryoutubelink.com">Watch the Tutorial</a></p>
 
   <p><b>Explore our demo doc to see all the features in action:</b><br>
-  👉 <a href="https://yourdemolink.com">View the Demo</a></p>
+  👉 <a href="https://github.com/vinayak1729-web/pitcherrrPerfect_final">View the Demo</a></p>
 
   <p>Then, visit our website and start exploring all that <b><i>Pitcher Perfect</i></b> has to offer:<br>
-  👉 <a href="https://yourwebsite.com">Visit Pitcher Perfect Now</a></p>
+  👉 <a href="https://pitcherperfect.pythonanywhere.com/">Visit Pitcher Perfect Now</a></p>
 
 
   <p>We're part of <b>Suryaprabha</b> and we're passionate about bringing the best baseball experiences right to you!</p>

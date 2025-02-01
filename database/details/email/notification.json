@@ -62,9 +62,13 @@
             {
                 "question_id": "selected_team",
                 "timestamp": "2025-01-31T14:52:46.647001"
+            },
+            {
+                "question_id": "favorite_teams",
+                "timestamp": "2025-02-01T15:29:20.670123"
             }
         ],
-        "last_sent_date": "2025-01-31T14:52:46.647001"
+        "last_sent_date": "2025-02-01T15:29:20.670123"
     },
     "vinayak1729": {
         "notification_history": [

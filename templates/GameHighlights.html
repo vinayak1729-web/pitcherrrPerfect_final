@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ game_data.home_team }} vs {{ game_data.away_team }} Highlights</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
-
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,ja,es,hi,de,fr,ko',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
     <script>
         tailwind.config = {
             theme: {
@@ -31,9 +41,9 @@
     <style>
         body {
             font-family: 'Bungee', cursive;
-            background: 
-                radial-gradient(circle at top right, rgba(255,107,107,0.2), transparent 70%),
-                radial-gradient(circle at bottom left, rgba(30,61,89,0.2), transparent 70%),
+            background:
+                radial-gradient(circle at top right, rgba(255, 107, 107, 0.2), transparent 70%),
+                radial-gradient(circle at bottom left, rgba(30, 61, 89, 0.2), transparent 70%),
                 repeating-linear-gradient(45deg, #f4f1de 0px, #f4f1de 10px, #ffffff 10px, #ffffff 20px);
         }
 
@@ -55,7 +65,7 @@
             border: 4px solid black;
             padding: 1rem 2rem;
             background: white;
-            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+            box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 0.9);
             transform: rotate(-1deg);
         }
 
@@ -69,19 +79,19 @@
             border: 4px solid black;
             background: white;
             font-family: 'Bungee', cursive;
-           
+
             transition: all 0.2s ease;
         }
 
         .tab:hover {
-          
-            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+
+            box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
         }
 
         .tab.active {
             background: #1e3d59;
             color: white;
-            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+            box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
         }
 
         .play-item {
@@ -89,27 +99,27 @@
             margin-bottom: 1.5rem;
             padding: 1rem;
             background: white;
-            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+            box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
             transform: rotate(-0.5deg);
             transition: all 0.2s ease;
         }
 
         .play-item:hover {
             transform: translate(-2px, -2px) rotate(0deg);
-            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+            box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 0.9);
         }
 
         .video-highlight-card {
             border: 4px solid black;
             background: white;
-            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+            box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 0.9);
             transform: rotate(-0.5deg);
             transition: all 0.2s ease;
         }
 
         .video-highlight-card:hover {
             transform: translate(-2px, -2px) rotate(0deg);
-            box-shadow: 10px 10px 0px 0px rgba(0,0,0,0.9);
+            box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.9);
         }
 
         button {
@@ -125,7 +135,7 @@
 
         .share-button:hover {
             transform: translate(-2px, -2px);
-            box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.9);
+            box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.9);
         }
 
         .score {
@@ -137,96 +147,160 @@
             color: #1e3d59;
             font-size: 0.8rem;
         }
+
         .shadow-brutal {
-    box-shadow: 8px 8px 0px rgba(0, 0, 0, 1);
-}
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 1);
+        }
 
-.bg-baseball-red {
-    background-color: #E31937;
-}
+        .bg-baseball-red {
+            background-color: #E31937;
+        }
 
-.bg-baseball-blue {
-    background-color: #002D72;
-}
+        .bg-baseball-blue {
+            background-color: #002D72;
+        }
 
-/* Button hover animations */
-.transform {
-    transition: all 0.2s ease-in-out;
-}
+        /* Button hover animations */
+        .transform {
+            transition: all 0.2s ease-in-out;
+        }
 
-.hover\:rotate-1:hover {
-    transform: rotate(2deg);
-}
+        .hover\:rotate-1:hover {
+            transform: rotate(2deg);
+        }
 
-.hover\:-rotate-1:hover {
-    transform: rotate(-2deg);
-}
+        .hover\:-rotate-1:hover {
+            transform: rotate(-2deg);
+        }
 
-/* Button base styles */
-button {
-    font-family: 'Bungee', cursive;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-}
+        /* Button base styles */
+        button {
+            font-family: 'Bungee', cursive;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
 
-button:active {
-    transform: translate(2px, 2px);
-    box-shadow: 6px 6px 0px rgba(0, 0, 0, 1);
-}
-.tab {
-    background-color: #f0f0f0;
-    padding: 10px 20px;
-    border: 2px solid black;
-    margin-right: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+        button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 6px 6px 0px rgba(0, 0, 0, 1);
+        }
 
-.tab.active {
-    background-color: #2563eb;
-    color: white;
-}
+        .tab {
+            background-color: #f0f0f0;
+            padding: 10px 20px;
+            border: 2px solid black;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-.commentary-controls {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    margin-bottom: 2rem;
-}
+        .tab.active {
+            background-color: #2563eb;
+            color: white;
+        }
 
-#audio-highlights {
-    padding: 2rem;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border: 2px solid black;
-}
+        .commentary-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
 
-.commentary p {
-    padding: 0.5rem;
-    border-bottom: 1px solid #e5e7eb;
-}
+        #audio-highlights {
+            padding: 2rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 2px solid black;
+        }
 
+        .commentary p {
+            padding: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* Translation button styles */
+        #google_translate_element {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+            transform: scale(0.85);
+            transform-origin: top right;
+        }
+
+        .goog-te-gadget {
+            font-family: 'Bungee Spice', 'Bungee', sans-serif !important;
+            font-size: 14px !important;
+        }
+
+        .goog-te-gadget-simple {
+            background-color: #ffffff !important;
+            border: 2px solid #000000 !important;
+            padding: 4px 8px !important;
+            border-radius: 4px !important;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8) !important;
+            transition: all 0.2s ease !important;
+            height: 30px !important;
+            display: flex !important;
+            align-items: center !important;
+            width: auto !important;
+            max-width: 150px !important;
+        }
+
+        .goog-te-gadget-simple:hover {
+            transform: translate(-2px, -2px) !important;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8) !important;
+        }
+
+        /* Dark mode styles for translation button */
+        .dark .goog-te-gadget-simple {
+            background-color: #1a1a1a !important;
+            border-color: #ffd700 !important;
+            color: #ffffff !important;
+            box-shadow: 3px 3px 0 rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .dark .goog-te-gadget-simple:hover {
+            box-shadow: 4px 4px 0 rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .dark .goog-te-gadget-simple img {
+            filter: invert(1) !important;
+        }
+
+        /* Hide unnecessary elements */
+        .goog-te-gadget-icon {
+            display: none !important;
+        }
+
+        .goog-te-menu-value span:nth-child(3),
+        .goog-te-menu-value span:nth-child(5) {
+            display: none !important;
+        }
     </style>
-    
+
 <body>
+    
     <div class="container mx-auto px-8 pt-8 flex justify-between">
+        <div id="google_translate_element"></div>
         <!-- Left Button - See Your Team -->
         <button onclick="history.back()"
             class="bg-baseball-red border-4 border-black p-4 shadow-brutal transform hover:-rotate-1 transition-transform font-bungee text-white">
             Watch Some Other Highlights 👀
         </button>
         <!-- Right Button - Back to Home -->
-        <button onclick="location.href='/Chat_dashboard'" 
-        class="bg-baseball-blue border-4 border-black p-4 shadow-brutal transform hover:rotate-1 transition-transform font-bungee text-white flex flex-col items-center gap-2">
-        <i class="fas fa-users text-2xl"></i>
-        <span>⚾Fan Link🤝</span>
-      </button>
-        
+        <button onclick="location.href='/Chat_dashboard'"
+            class="bg-baseball-blue border-4 border-black p-4 shadow-brutal transform hover:rotate-1 transition-transform font-bungee text-white flex flex-col items-center gap-2">
+            <i class="fas fa-users text-2xl"></i>
+            <span>⚾Fan Link🤝</span>
+        </button>
+
     </div>
     <div class="neo-brutal-container">
-        <h1 class="game-details text-4xl font-extrabold text-blue-800">{{ game_data.home_team }} vs {{ game_data.away_team }} Highlights</h1>
+        <h1 class="game-details text-4xl font-extrabold text-blue-800">{{ game_data.home_team }} vs {{
+            game_data.away_team }} Highlights</h1>
         <div class="score-display">
             <div class="team-score">
                 <h2>{{ game_data.home_team }}</h2>
@@ -250,61 +324,57 @@ button:active {
             <button class="tab active" data-tab="text">Text Highlights</button>
             <button class="tab active" data-tab="text">Audio Highlights</button>
 
-            
+
         </div>
-<br>
+        <br>
         <div id="text-highlights" class="highlight-content">
             <ul class="play-list">
                 {% set prev_away = 0 %}
                 {% set prev_home = 0 %}
                 {% for play in highlights_data %}
-                    <li class="play-item">
-                        <strong>{{ play.inning }}</strong>
-                        <p>{{ play.description }}</p>
-                        
-                        {% if play.away_score != prev_away or play.home_score != prev_home %}
-                            <p class="score">Score: Away {{ play.away_score }} - Home {{ play.home_score }}</p>
-                            {% set prev_away = play.away_score %}
-                            {% set prev_home = play.home_score %}
-                        {% endif %}
-                        
-                        <span class="time">{{ play.time }}</span>
-                    </li>
+                <li class="play-item">
+                    <strong>{{ play.inning }}</strong>
+                    <p>{{ play.description }}</p>
+
+                    {% if play.away_score != prev_away or play.home_score != prev_home %}
+                    <p class="score">Score: Away {{ play.away_score }} - Home {{ play.home_score }}</p>
+                    {% set prev_away = play.away_score %}
+                    {% set prev_home = play.home_score %}
+                    {% endif %}
+
+                    <span class="time">{{ play.time }}</span>
+                </li>
                 {% endfor %}
             </ul>
         </div>
-        
-        
+
+
         <div id="video-highlights" class="highlight-content" style="display: none;">
             {% for video in video_highlights %}
             <div class="video-highlight-card bg-white rounded-lg shadow-md p-4 mb-6">
                 <div class="flex justify-between items-start mb-3">
                     <h3 class="text-xl font-bold text-blue-800">{{ video.title }}</h3>
-                    <button 
+                    <button
                         onclick="shareVideo('{{ video.title }}', '{{ video.description }}', '{{ video.video_url }}')"
-                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
-                    >
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
                         Share
                     </button>
                 </div>
-                
+
                 <p class="text-gray-600 mb-4">{{ video.description }}</p>
-                
+
                 <video controls crossorigin="anonymous" width="100%" class="rounded-lg">
                     <source src="{{ video.video_url }}" type="video/mp4">
                 </video>
-                
+
                 <div class="mt-4 flex gap-2">
-                    <button 
-                        onclick="copyToClipboard('{{ video.video_url }}')"
-                        class="text-sm bg-gray-100 px-3 py-1 rounded hover:bg-gray-200"
-                    >
+                    <button onclick="copyToClipboard('{{ video.video_url }}')"
+                        class="text-sm bg-gray-100 px-3 py-1 rounded hover:bg-gray-200">
                         Copy Video URL
                     </button>
-                    <button 
+                    <button
                         onclick="copyToClipboard('{{ video.title }}\n{{ video.description }}\n{{ video.video_url }}')"
-                        class="text-sm bg-gray-100 px-3 py-1 rounded hover:bg-gray-200"
-                    >
+                        class="text-sm bg-gray-100 px-3 py-1 rounded hover:bg-gray-200">
                         Copy All Info
                     </button>
                 </div>
@@ -313,7 +383,7 @@ button:active {
         </div>
         <div id="boxscore-highlights" class="highlight-content" style="display: none;">
             <h2 class="text-2xl font-bold text-center text-blue-800">Game Box Score</h2>
-        
+
             <div class="team-boxscore">
                 <h3 class="text-xl font-semibold text-red-500">{{ game_data.home_team }} Stats</h3>
                 <table class="w-full border-collapse border border-black">
@@ -341,9 +411,9 @@ button:active {
                     </tbody>
                 </table>
             </div>
-        
+
             <br>
-        
+
             <div class="team-boxscore">
                 <h3 class="text-xl font-semibold text-blue-500">{{ game_data.away_team }} Stats</h3>
                 <table class="w-full border-collapse border border-black">
@@ -372,71 +442,72 @@ button:active {
                 </table>
             </div>
         </div>
-        
+
     </div>
 </body>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const tabs = document.querySelectorAll('.tab');
-    const contents = document.querySelectorAll('.highlight-content');
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.highlight-content');
 
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Remove active class from all tabs
-            tabs.forEach(t => t.classList.remove('active'));
-            // Add active class to clicked tab
-            tab.classList.add('active');
-            
-            // Hide all content sections
-            contents.forEach(content => content.style.display = 'none');
-            // Show selected content
-            document.getElementById(`${tab.dataset.tab}-highlights`).style.display = 'block';
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                tab.classList.add('active');
+
+                // Hide all content sections
+                contents.forEach(content => content.style.display = 'none');
+                // Show selected content
+                document.getElementById(`${tab.dataset.tab}-highlights`).style.display = 'block';
+            });
         });
     });
-});
 
     function shareVideo(title, description, videoUrl) {
-    if (navigator.share) {
-        navigator.share({
-            title: title,
-            text: description,
-            url: videoUrl
-        })
-        .catch(error => console.log('Error sharing:', error));
-    } else {
-        copyToClipboard(`${title}\n${description}\n${videoUrl}`);
-        alert('Video information copied to clipboard!');
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                text: description,
+                url: videoUrl
+            })
+                .catch(error => console.log('Error sharing:', error));
+        } else {
+            copyToClipboard(`${title}\n${description}\n${videoUrl}`);
+            alert('Video information copied to clipboard!');
+        }
     }
-}
 
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text)
-        .then(() => {
-            // Optional: Show a brief success message
-            const msg = document.createElement('div');
-            msg.textContent = 'Copied!';
-            msg.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded';
-            document.body.appendChild(msg);
-            setTimeout(() => msg.remove(), 2000);
-        });
-}
-    document.addEventListener('DOMContentLoaded', function() {
-    const tabs = document.querySelectorAll('.tab');
-    const contents = document.querySelectorAll('.highlight-content');
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                // Optional: Show a brief success message
+                const msg = document.createElement('div');
+                msg.textContent = 'Copied!';
+                msg.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded';
+                document.body.appendChild(msg);
+                setTimeout(() => msg.remove(), 2000);
+            });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.highlight-content');
 
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Remove active class from all tabs
-            tabs.forEach(t => t.classList.remove('active'));
-            // Add active class to clicked tab
-            tab.classList.add('active');
-            
-            // Hide all content sections
-            contents.forEach(content => content.style.display = 'none');
-            // Show selected content
-            document.getElementById(`${tab.dataset.tab}-highlights`).style.display = 'block';
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                tab.classList.add('active');
+
+                // Hide all content sections
+                contents.forEach(content => content.style.display = 'none');
+                // Show selected content
+                document.getElementById(`${tab.dataset.tab}-highlights`).style.display = 'block';
+            });
         });
     });
-});
 </script>
+
 </html>

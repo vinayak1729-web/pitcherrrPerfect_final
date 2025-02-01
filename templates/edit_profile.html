@@ -1,11 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+    <script type="text/javascript"src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,ja,es,hi,de,fr,ko',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
     <style>
+        /* Translation button styles */
+        #google_translate_element {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+            transform: scale(0.85);
+            transform-origin: top right;
+        }
+
+        .goog-te-gadget {
+            font-family: 'Bungee Spice', 'Bungee', sans-serif !important;
+            font-size: 14px !important;
+        }
+
+        .goog-te-gadget-simple {
+            background-color: #ffffff !important;
+            border: 2px solid #000000 !important;
+            padding: 4px 8px !important;
+            border-radius: 4px !important;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8) !important;
+            transition: all 0.2s ease !important;
+            height: 30px !important;
+            display: flex !important;
+            align-items: center !important;
+            width: auto !important;
+            max-width: 150px !important;
+        }
+
+        .goog-te-gadget-simple:hover {
+            transform: translate(-2px, -2px) !important;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8) !important;
+        }
+
+        /* Dark mode styles for translation button */
+        .dark .goog-te-gadget-simple {
+            background-color: #1a1a1a !important;
+            border-color: #ffd700 !important;
+            color: #ffffff !important;
+            box-shadow: 3px 3px 0 rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .dark .goog-te-gadget-simple:hover {
+            box-shadow: 4px 4px 0 rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .dark .goog-te-gadget-simple img {
+            filter: invert(1) !important;
+        }
+
+        /* Hide unnecessary elements */
+        .goog-te-gadget-icon {
+            display: none !important;
+        }
+
+        .goog-te-menu-value span:nth-child(3),
+        .goog-te-menu-value span:nth-child(5) {
+            display: none !important;
+        }
+
         :root {
             --baseball-red: #E31837;
             --baseball-blue: #002D72;
@@ -29,7 +100,7 @@
             border: 4px solid black;
             box-shadow: 8px 8px 0 black;
             border-radius: 12px;
-            
+
         }
 
         .profile-header {
@@ -39,7 +110,7 @@
             text-align: center;
             text-shadow: 3px 3px 0 black;
             margin-bottom: 40px;
-            
+
         }
 
         .form-section {
@@ -48,7 +119,7 @@
             margin: 20px 0;
             border: 3px solid black;
             box-shadow: 6px 6px 0 var(--shadow-color);
-            
+
         }
 
         .form-section h3 {
@@ -67,7 +138,8 @@
             font-size: 1em;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
@@ -79,7 +151,8 @@
             transition: transform 0.2s;
         }
 
-        input:focus, select:focus {
+        input:focus,
+        select:focus {
             outline: none;
             transform: scale(1.01);
             box-shadow: 4px 4px 0 var(--shadow-color);
@@ -92,7 +165,8 @@
             margin-top: 30px;
         }
 
-        .save-button, .cancel-button {
+        .save-button,
+        .cancel-button {
             padding: 15px 30px;
             font-family: 'Bungee', cursive;
             font-size: 1em;
@@ -116,12 +190,14 @@
             text-decoration: none;
         }
 
-        .save-button:hover, .cancel-button:hover {
+        .save-button:hover,
+        .cancel-button:hover {
             transform: translate(-2px, -2px);
             box-shadow: 6px 6px 0 black;
         }
 
-        .save-button:active, .cancel-button:active {
+        .save-button:active,
+        .cancel-button:active {
             transform: translate(2px, 2px);
             box-shadow: 2px 2px 0 black;
         }
@@ -131,53 +207,59 @@
                 margin: 10px;
                 padding: 20px;
             }
-            
+
             .form-actions {
                 flex-direction: column;
             }
         }
     </style>
 </head>
+
 <body>
+   
     <!-- Rest of your HTML remains the same -->
     <div class="profile-container">
+        <div id="google_translate_element"></div>
         <h1 class="profile-header">Edit Profile</h1>
-        
+
         <form method="POST" action="{{ url_for('edit_profile') }}" class="profile-form">
             <div class="form-section">
                 <h3>Basic Information</h3>
                 <label for="email">Email:</label>
                 <input type="email" name="email" value="{{ user.email }}" required>
             </div>
-    
+
             <div class="form-section">
                 <h3>MLB Fan Information</h3>
                 <label for="fan_duration">How long have you been a fan of MLB?</label>
                 <input type="text" name="fan_duration" value="{{ user.fan_duration }}">
-                
+
                 <label for="favorite_teams">Favorite Teams (comma-separated):</label>
                 <input type="text" name="favorite_teams" value="{{ user.favorite_teams|join(', ') }}">
-                
+
                 <label for="favorite_players">Favorite Players (comma-separated):</label>
                 <input type="text" name="favorite_players" value="{{ user.favorite_players|join(', ') }}">
-                
+
                 <label for="selected_team">Selected Team:</label>
                 <input type="text" name="selected_team" value="{{ user.selected_team }}">
-                
+
                 <label for="favorite_match">Favorite Match:</label>
                 <input type="text" name="favorite_match" value="{{ user.favorite_match }}">
             </div>
-            
+
             <div class="form-section">
                 <h3>Preferences</h3>
                 <label for="notification_frequency">Notification Frequency:</label>
                 <select name="notification_frequency">
-                    <option value="daily" {% if user.notification_frequency == 'daily' %}selected{% endif %}>Daily</option>
-                    <option value="weekly" {% if user.notification_frequency == 'weekly' %}selected{% endif %}>Weekly</option>
-                    <option value="monthly" {% if user.notification_frequency == 'monthly' %}selected{% endif %}>Monthly</option>
+                    <option value="daily" {% if user.notification_frequency=='daily' %}selected{% endif %}>Daily
+                    </option>
+                    <option value="weekly" {% if user.notification_frequency=='weekly' %}selected{% endif %}>Weekly
+                    </option>
+                    <option value="monthly" {% if user.notification_frequency=='monthly' %}selected{% endif %}>Monthly
+                    </option>
                 </select>
             </div>
-            
+
             <div class="form-actions">
                 <button type="submit" class="save-button">Save Changes</button>
                 <a href="{{ url_for('view_profile') }}" class="cancel-button">Cancel</a>
@@ -185,4 +267,5 @@
         </form>
     </div>
 </body>
+
 </html>

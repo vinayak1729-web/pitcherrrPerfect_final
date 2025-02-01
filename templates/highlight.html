@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MLB Match Highlights</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
-
+    <script type="text/javascript"src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,ja,es,hi,de,fr,ko',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
     <script>
         tailwind.config = {
             theme: {
@@ -31,7 +41,7 @@
     <style>
         body {
             font-family: 'Bungee', cursive;
-            background: 
+            background:
                 radial-gradient(circle at top right, rgba(77, 193, 252, 0.2), transparent 60%),
                 radial-gradient(circle at bottom left, rgba(74, 171, 255, 0.2), transparent 60%),
                 url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0C13.4 0 0 13.4 0 30s13.4 30 30 30 30-13.4 30-30S46.6 0 30 0zm0 55.2C16.1 55.2 4.8 43.9 4.8 30S16.1 4.8 30 4.8 55.2 16.1 55.2 30 43.9 55.2 30 55.2z' fill='%23000000' fill-opacity='0.03'/%3E%3C/svg%3E");
@@ -39,7 +49,7 @@
 
         .neo-brutal {
             border: 4px solid black;
-            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+            box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 0.9);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -50,31 +60,31 @@
 
         .match-card {
             border: 4px solid black;
-            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+            box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
             transition: all 0.2s ease;
-       
+
         }
 
         .match-card:hover {
             transform: translate(-2px, -2px) rotate(0deg);
-            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.9);
+            box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 0.9);
         }
 
         .brutal-select {
             border: 4px solid black;
-            box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.9);
+            box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.9);
             transition: all 0.2s ease;
         }
 
         .brutal-select:focus {
             transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+            box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
             outline: none;
         }
 
         .brutal-select:hover {
             transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+            box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
             outline: none;
         }
 
@@ -86,17 +96,80 @@
 
         .brutal-button:hover {
             transform: translate(-2px, -2px) rotate(0deg);
-            box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.9);
+            box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.9);
+        }
+
+        /* Translation button styles */
+        #google_translate_element {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+            transform: scale(0.85);
+            transform-origin: top right;
+        }
+
+        .goog-te-gadget {
+            font-family: 'Bungee Spice', 'Bungee', sans-serif !important;
+            font-size: 14px !important;
+        }
+
+        .goog-te-gadget-simple {
+            background-color: #ffffff !important;
+            border: 2px solid #000000 !important;
+            padding: 4px 8px !important;
+            border-radius: 4px !important;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8) !important;
+            transition: all 0.2s ease !important;
+            height: 30px !important;
+            display: flex !important;
+            align-items: center !important;
+            width: auto !important;
+            max-width: 150px !important;
+        }
+
+        .goog-te-gadget-simple:hover {
+            transform: translate(-2px, -2px) !important;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8) !important;
+        }
+
+        /* Dark mode styles for translation button */
+        .dark .goog-te-gadget-simple {
+            background-color: #1a1a1a !important;
+            border-color: #ffd700 !important;
+            color: #ffffff !important;
+            box-shadow: 3px 3px 0 rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .dark .goog-te-gadget-simple:hover {
+            box-shadow: 4px 4px 0 rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .dark .goog-te-gadget-simple img {
+            filter: invert(1) !important;
+        }
+
+        /* Hide unnecessary elements */
+        .goog-te-gadget-icon {
+            display: none !important;
+        }
+
+        .goog-te-menu-value span:nth-child(3),
+        .goog-te-menu-value span:nth-child(5) {
+            display: none !important;
         }
     </style>
 </head>
+
 <body class="bg-red-50 font-sans text-gray-900">
+   
     <a href="/" class="fixed top-4 left-4 neo-brutal bg-mlb-red text-white font-bungee px-4 py-2 rounded-lg">
         🏠 HOME
     </a>
     <h1 class="text-center text-6xl font-bungee mt-6 text-mlb-navy transform -rotate-2">
         ⚾ THE SHOW ⚾
     </h1>
+    <div id="google_translate_element"></div>
     <div class="container mx-auto mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Sidebar -->
         <div class="neo-brutal  text-white p-6 rounded-lg col-span-1 bg-mlb-blue">
@@ -104,56 +177,62 @@
             <form method="POST" class="space-y-6">
                 <div>
                     <label for="season" class="block font-bungee text-xl">SEASON:</label>
-                    <select name="season" id="season" class="brutal-select w-full text-black p-2 rounded-lg font-bungee">
+                    <select name="season" id="season"
+                        class="brutal-select w-full text-black p-2 rounded-lg font-bungee">
                         <option value="2024" class="font-bungee">2024</option>
                         <option value="2023" class="font-bungee">2023</option>
                         <option value="2022" class="font-bungee">2022</option>
                     </select>
                 </div>
-            
+
                 <div>
                     <label for="home_team" class="block font-bungee text-xl">HOME TEAM:</label>
-                    <select name="home_team" id="home_team" class="brutal-select w-full text-black p-2 rounded-lg font-bungee">
+                    <select name="home_team" id="home_team"
+                        class="brutal-select w-full text-black p-2 rounded-lg font-bungee">
                         <option value="" class="font-bungee">ALL</option>
                         {% for league, divisions in teams_data.items() %}
-                            {% for division, teams in divisions.items() %}
-                                {% for team in teams %}
-                                    <option value="{{ team.name }}" class="font-bungee">{{ team.name }}</option>
-                                {% endfor %}
-                            {% endfor %}
+                        {% for division, teams in divisions.items() %}
+                        {% for team in teams %}
+                        <option value="{{ team.name }}" class="font-bungee">{{ team.name }}</option>
+                        {% endfor %}
+                        {% endfor %}
                         {% endfor %}
                     </select>
                 </div>
-            
+
                 <div>
                     <label for="away_team" class="block font-bungee text-xl">AWAY TEAM:</label>
-                    <select name="away_team" id="away_team" class="brutal-select w-full text-black p-2 rounded-lg font-bungee">
+                    <select name="away_team" id="away_team"
+                        class="brutal-select w-full text-black p-2 rounded-lg font-bungee">
                         <option value="" class="font-bungee">ALL</option>
                         {% for league, divisions in teams_data.items() %}
-                            {% for division, teams in divisions.items() %}
-                                {% for team in teams %}
-                                    <option value="{{ team.name }}" class="font-bungee">{{ team.name }}</option>
-                                {% endfor %}
-                            {% endfor %}
+                        {% for division, teams in divisions.items() %}
+                        {% for team in teams %}
+                        <option value="{{ team.name }}" class="font-bungee">{{ team.name }}</option>
+                        {% endfor %}
+                        {% endfor %}
                         {% endfor %}
                     </select>
                 </div>
-            
-                <button type="submit" class="neo-brutal w-full bg-mlb-red text-white font-bungee text-xl py-3 rounded-lg">
+
+                <button type="submit"
+                    class="neo-brutal w-full bg-mlb-red text-white font-bungee text-xl py-3 rounded-lg">
                     PLAY BALL!
                 </button>
-            </form>            
+            </form>
         </div>
 
         <!-- Matches Section -->
         <div class="matches col-span-3 space-y-4">
             {% for match in matches %}
-            <div class="match bg-white shadow-sm border-4 border-gray-200 rounded-xl p-4 hover:scale-105 match-card bg-white p-6 rounded-lg">
+            <div
+                class="match bg-white shadow-sm border-4 border-gray-200 rounded-xl p-4 hover:scale-105 match-card bg-white p-6 rounded-lg">
                 <a href="{{ url_for('game_details', game_pk=match['game_pk']) }}" class="block">
                     <div class="teams flex items-center space-x-8">
                         <!-- Home Team -->
                         <div class="team flex items-center gap-4">
-                            <img src="{{ match['home_team_logo'] }}" alt="{{ match['home_team'] }} Logo" class="w-14 h-14 neo-brutal bg-white p-1 rounded-full">
+                            <img src="{{ match['home_team_logo'] }}" alt="{{ match['home_team'] }} Logo"
+                                class="w-14 h-14 neo-brutal bg-white p-1 rounded-full">
                             <div class="text-center">
                                 <p class="text-xl">{{ match['home_team'] }}</p>
                                 <p class="text-3xl text-mlb-navy">{{ match['home_score'] }}</p>
@@ -164,7 +243,8 @@
 
                         <!-- Away Team -->
                         <div class="team flex items-center space-x-2">
-                            <img src="{{ match['away_team_logo'] }}" alt="{{ match['away_team'] }} Logo" class="w-14 h-14 neo-brutal bg-white p-1 rounded-full">
+                            <img src="{{ match['away_team_logo'] }}" alt="{{ match['away_team'] }} Logo"
+                                class="w-14 h-14 neo-brutal bg-white p-1 rounded-full">
                             <div>
                                 <p class="text-lg font-bold">{{ match['away_team'] }}</p>
                                 <p class="text-xl font-extrabold text-red-800">{{ match['away_score'] }}</p>
@@ -181,4 +261,5 @@
         </div>
     </div>
 </body>
+
 </html>

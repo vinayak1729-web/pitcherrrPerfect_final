@@ -1,211 +1,390 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Team Comparison</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
+    <script type="text/javascript"src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,ja,es,hi,de,fr,ko',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
     <style>
-            /* Font Import */
-            @import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+        /* Dark theme for Google Translate */
+        .goog-te-banner-frame {
+            display: none !important;
+        }
 
-            :root {
-                --mlb-blue: #002D72;
-                --mlb-red: #E31837;
-                --neo-black: #000000;
-                --neo-white: #ffffff;
-                --neo-shadow: 8px 8px 0px rgba(0, 0, 0, 0.9);
-            }
+        .goog-te-gadget {
+            font-family: system-ui, -apple-system, sans-serif !important;
+            color: #ffffff !important;
+        }
 
-            body {
-                font-family: 'Bungee', cursive;
-                background: repeating-linear-gradient(
-                    45deg,
+        .goog-te-gadget span {
+            display: none !important;
+        }
+
+        .goog-te-gadget select {
+            background-color: #2d2d2d !important;
+            border: 1px solid #444444 !important;
+            border-radius: 4px !important;
+            color: #ffffff !important;
+            padding: 6px 8px !important;
+            height: 36px !important;
+            font-size: 14px !important;
+            outline: none !important;
+            cursor: pointer !important;
+        }
+
+        .goog-te-gadget select:hover {
+            background-color: #3d3d3d !important;
+            border-color: #666666 !important;
+        }
+
+        .goog-te-gadget select option {
+            background-color: #2d2d2d !important;
+            color: #ffffff !important;
+            padding: 8px !important;
+        }
+
+        /* Remove Google branding */
+        .VIpgJd-ZVi9od-l4eHX-hSRGPd,
+        .VIpgJd-ZVi9od-ORHb-OEVmcd {
+            display: none !important;
+        }
+
+        /* Hide top frame when translating */
+        .skiptranslate {
+            display: none !important;
+        }
+
+        body {
+            top: 0 !important;
+        }
+
+        /* Custom container styling */
+        #google_translate_element {
+            padding: 10px;
+            background-color: #1a1a1a;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        /* Font Import */
+        @import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+
+        :root {
+            --mlb-blue: #002D72;
+            --mlb-red: #E31837;
+            --neo-black: #000000;
+            --neo-white: #ffffff;
+            --neo-shadow: 8px 8px 0px rgba(0, 0, 0, 0.9);
+        }
+
+        body {
+            font-family: 'Bungee', cursive;
+            background: repeating-linear-gradient(45deg,
                     #1a1a1a,
                     #1a1a1a 10px,
                     #222 10px,
-                    #222 20px
-                );
-                color: var(--neo-white);
-                margin: 0;
-                padding: 40px;
-            }
+                    #222 20px);
+            color: var(--neo-white);
+            margin: 0;
+            padding: 40px;
+        }
 
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                background: #2a2a2a;
-                padding: 40px;
-                border: 4px solid var(--neo-black);
-                box-shadow: var(--neo-shadow);
-            }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #2a2a2a;
+            padding: 40px;
+            border: 4px solid var(--neo-black);
+            box-shadow: var(--neo-shadow);
+        }
 
-            .header {
-                background: linear-gradient(90deg, var(--mlb-blue), var(--mlb-red));
-                padding: 20px;
-                margin: -40px -40px 40px -40px;
-                border-bottom: 4px solid var(--neo-black);
-            }
+        .header {
+            background: linear-gradient(90deg, var(--mlb-blue), var(--mlb-red));
+            padding: 20px;
+            margin: -40px -40px 40px -40px;
+            border-bottom: 4px solid var(--neo-black);
+        }
 
-            .header h1 {
-                font-size: 3rem;
-                text-transform: uppercase;
-                text-shadow: 4px 4px 0px var(--neo-black);
-                letter-spacing: 2px;
-                margin: 0;
-                text-align: center;
-            }
+        .header h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            text-shadow: 4px 4px 0px var(--neo-black);
+            letter-spacing: 2px;
+            margin: 0;
+            text-align: center;
+        }
 
-            .team-select-container {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 40px;
-                margin-bottom: 40px;
-            }
+        .team-select-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
 
-            .team-select {
-                background: var(--neo-white);
-                color: var(--neo-black);
-                padding: 30px;
-                border: 4px solid var(--neo-black);
-                box-shadow: var(--neo-shadow);
-                transform: rotate(-1deg);
-            }
+        .team-select {
+            background: var(--neo-white);
+            color: var(--neo-black);
+            padding: 30px;
+            border: 4px solid var(--neo-black);
+            box-shadow: var(--neo-shadow);
+            transform: rotate(-1deg);
+        }
 
-            .team-select:nth-child(2) {
-                transform: rotate(1deg);
-            }
+        .team-select:nth-child(2) {
+            transform: rotate(1deg);
+        }
 
-            .team-select h2 {
-                color: var(--neo-black);
-                text-transform: uppercase;
-                margin-top: 0;
-                text-align: center;
-                font-size: 1.8rem;
-            }
+        .team-select h2 {
+            color: var(--neo-black);
+            text-transform: uppercase;
+            margin-top: 0;
+            text-align: center;
+            font-size: 1.8rem;
+        }
 
-            select {
-                width: 100%;
-                padding: 15px;
-                border: 4px solid var(--neo-black);
-                background: var(--neo-white);
-                font-family: 'Bungee', cursive;
-                font-size: 1rem;
-                appearance: none;
-                cursor: pointer;
-            }
+        select {
+            width: 100%;
+            padding: 15px;
+            border: 4px solid var(--neo-black);
+            background: var(--neo-white);
+            font-family: 'Bungee', cursive;
+            font-size: 1rem;
+            appearance: none;
+            cursor: pointer;
+        }
 
-            .team-logo {
-                width: 150px;
-                height: 150px;
-                margin: 20px auto;
-                display: block;
-                filter: drop-shadow(4px 4px 0px var(--neo-black));
-            }
+        .team-logo {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            display: block;
+            filter: drop-shadow(4px 4px 0px var(--neo-black));
+        }
 
-            .compare-btn {
-                display: block;
-                margin: 40px auto;
-                padding: 20px 40px;
-                background: var(--mlb-red);
-                color: var(--neo-white);
-                border: 4px solid var(--neo-black);
-                box-shadow: var(--neo-shadow);
-                font-family: 'Bungee', cursive;
-                font-size: 1.5rem;
-                cursor: pointer;
-                transform: rotate(-2deg);
-                transition: transform 0.2s, box-shadow 0.2s;
-            }
+        .compare-btn {
+            display: block;
+            margin: 40px auto;
+            padding: 20px 40px;
+            background: var(--mlb-red);
+            color: var(--neo-white);
+            border: 4px solid var(--neo-black);
+            box-shadow: var(--neo-shadow);
+            font-family: 'Bungee', cursive;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transform: rotate(-2deg);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
 
-            .compare-btn:hover {
-                transform: rotate(-2deg) translate(4px, 4px);
-                box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.9);
-            }
+        .compare-btn:hover {
+            transform: rotate(-2deg) translate(4px, 4px);
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.9);
+        }
 
-            .comparison-container {
-                background: var(--neo-white);
-                padding: 40px;
-                border: 4px solid var(--neo-black);
-                box-shadow: var(--neo-shadow);
-                margin-top: 60px;
-                position: relative;
-                height: 500px;
-                width: 85%;
-                max-width: 1100px;
-                margin-left: auto;
-                margin-right: auto;
-            }
+        .comparison-container {
+            background: var(--neo-white);
+            padding: 40px;
+            border: 4px solid var(--neo-black);
+            box-shadow: var(--neo-shadow);
+            margin-top: 60px;
+            position: relative;
+            height: 500px;
+            width: 85%;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-            .comparison-container::before {
-                content: '';
-                position: absolute;
-                top: -4px;
-                left: -4px;
-                right: -4px;
-                bottom: -4px;
-                border: 4px solid var(--neo-black);
-                z-index: -1;
-            }
+        .comparison-container::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border: 4px solid var(--neo-black);
+            z-index: -1;
+        }
 
-            #comparisonChart {
-                width: 90% ;
-                height: 90%;
-                margin: 0 auto;
-                background: var(--neo-white);
-            }
-
-
-            .overall-score {
-                font-family: 'Bungee', cursive;
-                font-size: 2.5rem;
-                text-align: center;
-                margin-bottom: 20px;
-                padding: 15px;
-                background: var(--neo-white);
-                border: 4px solid var(--neo-black);
-                box-shadow: var(--neo-shadow);
-            }            
+        #comparisonChart {
+            width: 90%;
+            height: 90%;
+            margin: 0 auto;
+            background: var(--neo-white);
+        }
 
 
+        .overall-score {
+            font-family: 'Bungee', cursive;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--neo-white);
+            border: 4px solid var(--neo-black);
+            box-shadow: var(--neo-shadow);
+        }
 
-            .visualization-buttons {
-                display: flex;
-                justify-content: center;
-                gap: 20px;
-                margin: 20px 0;
-                flex-wrap: wrap;
+
+
+        .visualization-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .viz-btn {
+            padding: 15px 25px;
+            background: var(--mlb-blue);
+            color: var(--neo-white);
+            border: 4px solid var(--neo-black);
+            box-shadow: var(--neo-shadow);
+            font-family: 'Bungee', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transform: rotate(-1deg);
+            transition: all 0.2s;
+        }
+
+        .viz-btn:hover {
+            transform: rotate(1deg) translate(2px, 2px);
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.9);
+        }
+
+        .viz-btn.active {
+            background: var(--mlb-red);
+            transform: translate(4px, 4px);
+            box-shadow: none;
+        }
+
+        /* Translation button styles */
+        #google_translate_element {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+            transform: scale(0.85);
+            transform-origin: top right;
+        }
+
+        .goog-te-gadget {
+            font-family: 'Bungee Spice', 'Bungee', sans-serif !important;
+            font-size: 14px !important;
+        }
+
+        .goog-te-gadget-simple {
+            background-color: #ffffff !important;
+            border: 2px solid #000000 !important;
+            padding: 4px 8px !important;
+            border-radius: 4px !important;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8) !important;
+            transition: all 0.2s ease !important;
+            height: 30px !important;
+            display: flex !important;
+            align-items: center !important;
+            width: auto !important;
+            max-width: 150px !important;
+        }
+
+        .goog-te-gadget-simple:hover {
+            transform: translate(-2px, -2px) !important;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8) !important;
+        }
+
+        /* Dark mode styles for translation button */
+        .dark .goog-te-gadget-simple {
+            background-color: #1a1a1a !important;
+            border-color: #ffd700 !important;
+            color: #ffffff !important;
+            box-shadow: 3px 3px 0 rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .dark .goog-te-gadget-simple:hover {
+            box-shadow: 4px 4px 0 rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .dark .goog-te-gadget-simple img {
+            filter: invert(1) !important;
+        }
+
+        /* Hide unnecessary elements */
+        .goog-te-gadget-icon {
+            display: none !important;
+        }
+
+        .goog-te-menu-value span:nth-child(3),
+        .goog-te-menu-value span:nth-child(5) {
+            display: none !important;
+        }
+
+        .loading-message {
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: var(--mlb-blue);
+            color: var(--neo-white);
+            border: 4px solid var(--neo-black);
+            box-shadow: var(--neo-shadow);
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
             }
-            
-            .viz-btn {
-                padding: 15px 25px;
-                background: var(--mlb-blue);
-                color: var(--neo-white);
-                border: 4px solid var(--neo-black);
-                box-shadow: var(--neo-shadow);
-                font-family: 'Bungee', cursive;
-                font-size: 1rem;
-                cursor: pointer;
-                transform: rotate(-1deg);
-                transition: all 0.2s;
+
+            50% {
+                transform: translateY(-10px);
             }
-            
-            .viz-btn:hover {
-                transform: rotate(1deg) translate(2px, 2px);
-                box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.9);
+        }
+
+        .error-message {
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: var(--mlb-red);
+            color: var(--neo-white);
+            border: 4px solid var(--neo-black);
+            box-shadow: var(--neo-shadow);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
             }
-            
-            .viz-btn.active {
-                background: var(--mlb-red);
-                transform: translate(4px, 4px);
-                box-shadow: none;
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
             }
+        }
     </style>
 </head>
+
 <body>
+
     <div class="container">
+        <div id="google_translate_element"></div>
         <div class="header">
             <h1>Team Comparison</h1>
         </div>
@@ -225,6 +404,11 @@
         </div>
 
         <button class="compare-btn" onclick="compareTeams()">Compare Teams</button>
+        <div id="loadingMessage" class="loading-message" style="display: none;">
+            Comparing teams... Please wait while we crunch the numbers! ⚾
+        </div>
+        <div id="errorMessage" class="error-message" style="display: none;"> Please select different home and away teams
+            to compare! 🏟️</div>
 
         <div class="comparison-container">
             <div class="overall-score">
@@ -240,48 +424,48 @@
         const teams = {
             "American League": {
                 "East": [
-                    {"name": "New York Yankees", "id": 147},
-                    {"name": "Tampa Bay Rays", "id": 139},
-                    {"name": "Boston Red Sox", "id": 111},
-                    {"name": "Toronto Blue Jays", "id": 141},
-                    {"name": "Baltimore Orioles", "id": 110}
+                    { "name": "New York Yankees", "id": 147 },
+                    { "name": "Tampa Bay Rays", "id": 139 },
+                    { "name": "Boston Red Sox", "id": 111 },
+                    { "name": "Toronto Blue Jays", "id": 141 },
+                    { "name": "Baltimore Orioles", "id": 110 }
                 ],
                 "Central": [
-                    {"name": "Cleveland Guardians", "id": 114},
-                    {"name": "Minnesota Twins", "id": 142},
-                    {"name": "Chicago White Sox", "id": 145},
-                    {"name": "Kansas City Royals", "id": 118},
-                    {"name": "Detroit Tigers", "id": 116}
+                    { "name": "Cleveland Guardians", "id": 114 },
+                    { "name": "Minnesota Twins", "id": 142 },
+                    { "name": "Chicago White Sox", "id": 145 },
+                    { "name": "Kansas City Royals", "id": 118 },
+                    { "name": "Detroit Tigers", "id": 116 }
                 ],
                 "West": [
-                    {"name": "Houston Astros", "id": 117},
-                    {"name": "Texas Rangers", "id": 140},
-                    {"name": "Oakland Athletics", "id": 133},
-                    {"name": "Seattle Mariners", "id": 136},
-                    {"name": "Los Angeles Angels", "id": 108}
+                    { "name": "Houston Astros", "id": 117 },
+                    { "name": "Texas Rangers", "id": 140 },
+                    { "name": "Oakland Athletics", "id": 133 },
+                    { "name": "Seattle Mariners", "id": 136 },
+                    { "name": "Los Angeles Angels", "id": 108 }
                 ]
             },
             "National League": {
                 "East": [
-                    {"name": "New York Mets", "id": 121},
-                    {"name": "Washington Nationals", "id": 120},
-                    {"name": "Atlanta Braves", "id": 144},
-                    {"name": "Miami Marlins", "id": 146},
-                    {"name": "Philadelphia Phillies", "id": 143}
+                    { "name": "New York Mets", "id": 121 },
+                    { "name": "Washington Nationals", "id": 120 },
+                    { "name": "Atlanta Braves", "id": 144 },
+                    { "name": "Miami Marlins", "id": 146 },
+                    { "name": "Philadelphia Phillies", "id": 143 }
                 ],
                 "Central": [
-                    {"name": "St. Louis Cardinals", "id": 138},
-                    {"name": "Cincinnati Reds", "id": 113},
-                    {"name": "Pittsburgh Pirates", "id": 134},
-                    {"name": "Chicago Cubs", "id": 112},
-                    {"name": "Milwaukee Brewers", "id": 158}
+                    { "name": "St. Louis Cardinals", "id": 138 },
+                    { "name": "Cincinnati Reds", "id": 113 },
+                    { "name": "Pittsburgh Pirates", "id": 134 },
+                    { "name": "Chicago Cubs", "id": 112 },
+                    { "name": "Milwaukee Brewers", "id": 158 }
                 ],
                 "West": [
-                    {"name": "San Francisco Giants", "id": 137},
-                    {"name": "San Diego Padres", "id": 135},
-                    {"name": "Colorado Rockies", "id": 115},
-                    {"name": "Arizona Diamondbacks", "id": 109},
-                    {"name": "Los Angeles Dodgers", "id": 119}
+                    { "name": "San Francisco Giants", "id": 137 },
+                    { "name": "San Diego Padres", "id": 135 },
+                    { "name": "Colorado Rockies", "id": 115 },
+                    { "name": "Arizona Diamondbacks", "id": 109 },
+                    { "name": "Los Angeles Dodgers", "id": 119 }
                 ]
             }
         };
@@ -292,31 +476,58 @@
             // Calculate batting and pitching out of 50 points each
             const battingScore = Math.abs(stats.batting / 100) * 50;
             const pitchingScore = Math.abs(stats.pitching / 100) * 50;
-            
+
             return {
                 batting: battingScore,
                 pitching: pitchingScore,
                 overall: battingScore + pitchingScore // This gives us a score out of 100
             };
         }
-
         async function compareTeams() {
+            const loadingMessage = document.getElementById('loadingMessage');
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Get selected teams
             const homeTeam = document.getElementById('homeTeam').value;
             const awayTeam = document.getElementById('awayTeam').value;
-            
+
+            // Validate team selection
+            if (!homeTeam || !awayTeam) {
+                errorMessage.textContent = "Please select both home and away teams! 🏟️";
+                errorMessage.style.display = 'block';
+                loadingMessage.style.display = 'none';
+                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            if (homeTeam === awayTeam) {
+                errorMessage.textContent = "Please select different teams to compare! ⚾";
+                errorMessage.style.display = 'block';
+                loadingMessage.style.display = 'none';
+                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            // Hide error message and show loading
+            errorMessage.style.display = 'none';
+            loadingMessage.style.display = 'block';
+
             const formData = new FormData();
             formData.append('home_team', homeTeam);
             formData.append('away_team', awayTeam);
-        
+
             try {
                 const response = await fetch('/compare', {
                     method: 'POST',
                     body: formData
                 });
-                
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
                 const data = await response.json();
-                
-                
+
                 // Transform the API data for visualization
                 const transformedData = {
                     home: {
@@ -330,25 +541,30 @@
                         overall: (data.away.batting.value + data.away.pitching.value)
                     }
                 };
-        
+
                 // Update scores and chart
                 document.getElementById('homeScore').textContent = Math.round(transformedData.home.overall);
                 document.getElementById('awayScore').textContent = Math.round(transformedData.away.overall);
-                
-                // Update chart
                 updateBarChart(transformedData);
-                
+
+                // Hide messages
+                loadingMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+
                 // Scroll to comparison
-                document.querySelector('.comparison-container').scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'center' 
+                document.querySelector('.comparison-container').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
                 });
-                
+
             } catch (error) {
                 console.error('Error comparing teams:', error);
-                alert('Error comparing teams. Please try again.');
+                errorMessage.textContent = "Unable to compare teams. Please try again later! 🔄";
+                errorMessage.style.display = 'block';
+                loadingMessage.style.display = 'none';
+                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
-        }     
+        }
 
         //visualizationfunctions
         // 1. Enhanced Bar Chart
@@ -357,7 +573,7 @@
             document.getElementById('awayScore').textContent = data.away.overall.toFixed(1);
 
             if (chart) chart.destroy();
-            
+
             const ctx = document.getElementById('comparisonChart').getContext('2d');
             chart = new Chart(ctx, {
                 type: 'bar',
@@ -389,7 +605,7 @@
                         },
                         tooltip: {
                             callbacks: {
-                                label: function(context) {
+                                label: function (context) {
                                     return `${context.dataset.label}: ${context.raw.toFixed(1)}`;
                                 }
                             }
@@ -401,7 +617,7 @@
                             max: 50,
                             grid: { color: '#000000', lineWidth: 2 },
                             ticks: {
-                                callback: function(value) {
+                                callback: function (value) {
                                     return value.toFixed(0);
                                 }
                             }
@@ -414,35 +630,35 @@
                 }
             });
         }
-        
+
 
         function populateTeamSelects() {
             const homeSelect = document.getElementById('homeTeam');
             const awaySelect = document.getElementById('awayTeam');
-            
+
             // Clear existing options
             homeSelect.innerHTML = '';
             awaySelect.innerHTML = '';
-        
+
             // Add a default option
             const defaultOption = document.createElement('option');
             defaultOption.value = '';
             defaultOption.textContent = 'Select a team';
             homeSelect.appendChild(defaultOption.cloneNode(true));
             awaySelect.appendChild(defaultOption.cloneNode(true));
-        
+
             for (const league in teams) {
                 for (const division in teams[league]) {
                     const optgroup = document.createElement('optgroup');
                     optgroup.label = `${league} ${division}`;
-        
+
                     teams[league][division].forEach(team => {
                         const option = document.createElement('option');
                         option.value = team.id;
                         option.textContent = team.name;
                         optgroup.appendChild(option.cloneNode(true));
                     });
-        
+
                     homeSelect.appendChild(optgroup.cloneNode(true));
                     awaySelect.appendChild(optgroup);
                 }
@@ -465,7 +681,7 @@
             const logoUrl = `https://www.mlbstatic.com/team-logos/${teamId}.svg`;
             const logoImg = document.getElementById(logoId);
             logoImg.src = logoUrl;
-            logoImg.onerror = function() {
+            logoImg.onerror = function () {
                 // Fallback if the logo fails to load
                 this.src = 'https://www.mlbstatic.com/team-logos/league-on-dark/1.svg';
             };
@@ -479,4 +695,5 @@
         setDefaultTeam();
     </script>
 </body>
+
 </html>

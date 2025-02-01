@@ -8,906 +8,985 @@
     <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Permanent+Marker&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<!-- Add this in your HTML head section -->
-<script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-            pageLanguage: 'en',
-            includedLanguages: 'en,ja,es,hi,de,fr,ko',
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-        }, 'google_translate_element');
-    }
-</script>
+    <script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <!-- Add this in your HTML head section -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,ja,es,hi,de,fr,ko',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
 
-<style>
-    /* Neo-brutalism base styles */
-    :root {
-        --neon-blue: #213a8f;
-        --neon-red: #ff2e2e;
-        --neon-yellow: #ffd100;
-        --baseball-green: #2ecc71;
-    }
-
-    body {
-        background: repeating-linear-gradient(45deg,
-                #ffffff 0px,
-                #d7f1ff 10px,
-                #ffffff 10px,
-                #e9f2ff 20px);
-        font-family: 'Bungee', cursive;
-    }
-
-    /* Neo-brutal navbar */
-    .navbar.neo-brutal {
-        background: white;
-        border-bottom: 4px solid black;
-        transform-style: preserve-3d;
-        transition: transform 0.3s;
-        position: relative;
-        z-index: 50;
-    }
-
-    .nav-item {
-        padding: 0.5rem 1rem;
-        border: 3px solid black;
-        background: white;
-        transform-style: preserve-3d;
-        transition: all 0.2s;
-        position: relative;
-    }
-
-    .nav-item:hover {
-        transform: translate(-4px, -4px);
-        box-shadow: 4px 4px 0 black;
-    }
-
-    /* Upcoming games section */
-    .upcoming-games {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
-        padding: 2rem;
-    }
-
-    .game-card {
-        background: white;
-        border: 4px solid black;
-        transform-style: preserve-3d;
-        transition: transform 0.3s;
-        position: relative;
-    }
-
-    .game-card:hover {
-        transform: translate(-8px, -8px);
-        box-shadow: 8px 8px 0 var(--neon-red);
-    }
-
-    /* Latest highlight section */
-    .highlight-container {
-        background: linear-gradient(135deg, var(--neon-blue), var(--neon-red));
-        border: 4px solid black;
-        padding: 2rem;
-        color: white;
-    }
-
-    /* Team section with FIFA-style shine */
-    .my_team {
-        background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
-        border: 4px solid var(--neon-yellow);
-        padding: 2rem;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .my_team::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(45deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.1) 50%,
-                transparent 100%);
-        animation: shine 3s infinite;
-    }
-
-    /* Chat sections */
-    .chat-container {
-        background: white;
-        border: 4px solid black;
-        border-radius: 12px;
-        transform-style: preserve-3d;
-        transition: transform 0.3s;
-    }
-
-    .chat-container:hover {
-        transform: translate(-4px, -4px);
-        box-shadow: 4px 4px 0 var(--baseball-green);
-    }
-
-    /* Animations */
-    @keyframes shine {
-        0% {
-            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    <style>
+        /* Translation button styles */
+        #google_translate_element {
+            position: fixed;
+            top: 60px;
+            right: 10px;
+            z-index: 9999;
+            transform: scale(0.85);
+            transform-origin: top right;
         }
 
-        100% {
-            transform: translateX(100%) translateY(100%) rotate(45deg);
-        }
-    }
-
-    /* Dark mode adjustments */
-    .dark .navbar.neo-brutal {
-        background: #1a1a1a;
-        border-color: var(--neon-blue);
-    }
-
-    .dark .nav-item {
-        background: #2a2a2a;
-        color: white;
-        border-color: var(--neon-blue);
-    }
-
-    .neo-brutal-panel {
-        box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
-        transition: all 0.3s ease;
-    }
-
-    .neo-brutal-panel:hover {
-        box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.8);
-    }
-
-    .neo-brutal-button {
-        border: 3px solid black;
-        box-shadow: 4px 4px 0 black;
-        transition: all 0.2s ease;
-    }
-
-    .neo-brutal-button:hover {
-        transform: translate(-2px, -2px);
-        box-shadow: 6px 6px 0 black;
-    }
-
-    .shadow-brutal {
-        box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8);
-    }
-
-    .neo-brutal-highlight {
-        box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.8);
-        transform-style: preserve-3d;
-        transition: all 0.3s ease;
-    }
-
-    .neo-brutal-highlight:hover {
-        transform: translate(-4px, -4px);
-        box-shadow: 16px 16px 0 rgba(0, 0, 0, 0.8);
-    }
-
-    .shine-effect {
-        position: absolute;
-        top: -100%;
-        left: -100%;
-        width: 300%;
-        height: 300%;
-        background: linear-gradient(45deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.1) 30%,
-                rgba(255, 255, 255, 0.4) 50%,
-                rgba(255, 255, 255, 0.1) 70%,
-                transparent 100%);
-        animation: shine 5s infinite;
-    }
-
-    .team-logo-wrapper {
-        background: white;
-        border: 4px solid black;
-        border-radius: 50%;
-        padding: 1rem;
-        box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.8);
-        transition: all 0.3s ease;
-    }
-
-    .team-logo-wrapper:hover {
-        transform: scale(1.05) rotate(-5deg);
-    }
-
-    .neo-brutal-highlight {
-        box-shadow: 16px 16px 0 rgba(0, 0, 0, 0.8);
-        transform-style: preserve-3d;
-    }
-
-    .glowing-border {
-        position: absolute;
-        inset: -2px;
-        border: 4px solid transparent;
-        background: linear-gradient(45deg, #ff2e2e, #213a8f, #ffd100);
-        -webkit-mask:
-            linear-gradient(#fff 0 0) content-box,
-            linear-gradient(#fff 0 0);
-        mask:
-            linear-gradient(#fff 0 0) content-box,
-            linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
-        animation: borderRotate 4s linear infinite;
-    }
-
-    .shine-effect {
-        position: absolute;
-        top: -150%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(45deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.1) 30%,
-                rgba(255, 255, 255, 0.4) 50%,
-                rgba(255, 255, 255, 0.1) 70%,
-                transparent 100%);
-        animation: shine 3s infinite;
-        transform: rotate(45deg);
-    }
-
-    @keyframes borderRotate {
-        from {
-            transform: rotate(0deg);
+        .goog-te-gadget {
+            font-family: 'Bungee Spice', 'Bungee', sans-serif !important;
+            font-size: 14px !important;
+            display: flex !important;
+            align-items: center !important;
         }
 
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    /* Make side panels more compact */
-    .col-span-3 .neo-brutal-panel {
-        padding: 1.5rem;
-        font-size: 0.95rem;
-    }
-
-    /* Enhanced center section */
-    .col-span-6 {
-        z-index: 10;
-    }
-
-    .col-span-6 .team-logo-wrapper {
-        padding: 1.5rem;
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 50%;
-        box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
-    }
-
-    .versus-badge {
-        transform: scale(1.2);
-        z-index: 20;
-    }
-
-    .shine-text {
-        background: linear-gradient(45deg, #213a8f, #ff2e2e);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
-    }
-
-    .neo-brutal-video {
-        box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
-        transition: all 0.3s ease;
-    }
-
-    .neo-brutal-video:hover {
-        transform: scale(1.02);
-    }
-
-    .neo-brutal-highlight {
-        box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
-    }
-
-    .team-logo-wrapper {
-        background: rgba(255, 255, 255, 0.1);
-        padding: 1rem;
-        border-radius: 12px;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        transition: all 0.3s ease;
-    }
-
-    .team-logo-wrapper:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-4px);
-    }
-
-    .video-wrapper {
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    .neo-brutal-button {
-        border: 3px solid black;
-        box-shadow: 4px 4px 0 black;
-        transition: all 0.2s ease;
-    }
-
-    .neo-brutal-button:hover {
-        transform: translate(-2px, -2px);
-        box-shadow: 6px 6px 0 black;
-    }
-
-    .shine-effect {
-        position: absolute;
-        top: -100%;
-        left: -100%;
-        width: 250%;
-        height: 250%;
-        background: linear-gradient(45deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.05) 30%,
-                rgba(255, 255, 255, 0.1) 50%,
-                rgba(255, 255, 255, 0.05) 70%,
-                transparent 100%);
-        animation: shine 5s infinite;
-    }
-
-    /* Dark mode styles */
-    .dark body {
-        background: #121212;
-        color: white;
-    }
-
-    .dark .neo-brutal-panel {
-        background: #1a1a1a;
-        border-color: #213a8f;
-    }
-
-    .dark .game-card {
-        background: #1a1a1a;
-        color: white;
-        border-color: #213a8f;
-    }
-
-    .dark .team-logo-wrapper {
-        background: rgba(255, 255, 255, 0.05);
-        border-color: #213a8f;
-    }
-
-    .dark .highlight-container {
-        background: rgba(10, 17, 40, 0.8);
-    }
-
-    .dark .neo-brutal-button {
-        background: #2d4b8e;
-        color: white;
-        border-color: #ffd100;
-    }
-
-    .dark .neo-brutal-highlight {
-        background: linear-gradient(to bottom right, #1a2151, #2d4b8e);
-    }
-
-    .dark .chatbot-container {
-        background: #1a1a1a;
-        border-color: #213a8f;
-    }
-
-    .dark .upcoming-games {
-        background: #121212;
-    }
-
-    .dark .news-section {
-        background: #1a1a1a;
-        color: white;
-    }
-
-    /* News Section Dark Mode */
-    .dark #news-section {
-        background: #1a1a1a;
-        border-color: #ffd700;
-        box-shadow: 8px 8px 0 rgba(255, 215, 0, 0.2);
-    }
-
-    .dark #news-section h2 {
-        color: #ffd700;
-    }
-
-    .dark #news-section a {
-        background: #2a2a2a;
-        border: 1px solid #333;
-    }
-
-    .dark #news-section a:hover {
-        background: #333;
-        border-color: #ffd700;
-    }
-
-    .dark #news-section h3 {
-        color: #fff;
-    }
-
-    .dark #news-section .text-blue-500 {
-        color: #ffd700;
-    }
-
-    .dark #close-news {
-        color: #ff2e2e;
-    }
-
-    .dark input,
-    .dark textarea {
-        background: #2a2a2a;
-        color: white;
-        border-color: #213a8f;
-    }
-
-    /* Left Sidebar Dark Mode Enhancements */
-    .dark .neo-brutal-panel.bg {
-        background: linear-gradient(145deg, #213a8f, #1a2151);
-        border-color: #ffd100;
-        box-shadow: 8px 8px 0 rgba(255, 209, 0, 0.3);
-    }
-
-    .dark .neo-brutal-panel.bg-white {
-        background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
-        border-color: #213a8f;
-        box-shadow: 8px 8px 0 rgba(33, 58, 143, 0.3);
-    }
-
-    .dark #friendsList .bg-white {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(5px);
-    }
-
-    .dark .font-permanent-marker {
-        color: #ffffff;
-    }
-
-    .dark .text-gray-500 {
-        color: #a0aec0;
-    }
-
-    .dark .bg-gray-50 {
-        background: rgba(255, 255, 255, 0.05);
-    }
-
-    .dark .shadow-brutal {
-        box-shadow: 4px 4px 0 rgba(255, 209, 0, 0.3);
-    }
-
-    .dark .neo-brutal-button {
-        border-color: #ffd100;
-        box-shadow: 3px 3px 0 rgba(255, 209, 0, 0.5);
-    }
-
-    .dark .neo-brutal-button:hover {
-        transform: translate(-2px, -2px);
-        box-shadow: 5px 5px 0 rgba(255, 209, 0, 0.5);
-    }
-
-    @keyframes shine {
-        0% {
-            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+        .goog-te-gadget-simple {
+            background-color: #ffffff !important;
+            border: 2px solid #000000 !important;
+            padding: 4px 8px !important;
+            border-radius: 4px !important;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8) !important;
+            transition: all 0.2s ease !important;
+            height: 30px !important;
+            display: flex !important;
+            align-items: center !important;
+            width: auto !important;
+            max-width: 150px !important;
+            line-height: 1 !important;
         }
 
-        100% {
-            transform: translateX(100%) translateY(100%) rotate(45deg);
-        }
-    }
-
-
-    @keyframes pulse {
-
-        0%,
-        100% {
-            transform: scale(1) rotate(12deg);
+        .goog-te-gadget-simple img,
+        .goog-te-gadget-simple>span {
+            vertical-align: middle !important;
+            display: inline-flex !important;
+            align-items: center !important;
         }
 
-        50% {
-            transform: scale(1.1) rotate(12deg);
-        }
-    }
-
-    .neon-brutal-header {
-        text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
-        animation: headerPulse 3s infinite;
-    }
-
-    @keyframes headerPulse {
-
-        0%,
-        100% {
-            transform: scale(1);
+        .goog-te-gadget-simple:hover {
+            transform: translate(-2px, -2px) !important;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8) !important;
         }
 
-        50% {
+
+        /* Dark mode styles for translation button */
+        .dark .goog-te-gadget-simple {
+            background-color: #1a1a1a !important;
+            border-color: #ffd700 !important;
+            color: #ffffff !important;
+            box-shadow: 3px 3px 0 rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .dark .goog-te-gadget-simple:hover {
+            box-shadow: 4px 4px 0 rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .dark .goog-te-gadget-simple img {
+            filter: invert(1) !important;
+        }
+
+        /* Hide unnecessary elements */
+        .goog-te-gadget-icon {
+            display: none !important;
+        }
+
+        .goog-te-menu-value span:nth-child(3),
+        .goog-te-menu-value span:nth-child(5) {
+            display: none !important;
+        }
+
+        /* Neo-brutalism base styles */
+        :root {
+            --neon-blue: #213a8f;
+            --neon-red: #ff2e2e;
+            --neon-yellow: #ffd100;
+            --baseball-green: #2ecc71;
+        }
+
+        body {
+            background: repeating-linear-gradient(45deg,
+                    #ffffff 0px,
+                    #d7f1ff 10px,
+                    #ffffff 10px,
+                    #e9f2ff 20px);
+            font-family: 'Bungee', cursive;
+        }
+
+        /* Neo-brutal navbar */
+        .navbar.neo-brutal {
+            background: white;
+            border-bottom: 4px solid black;
+            transform-style: preserve-3d;
+            transition: transform 0.3s;
+            position: relative;
+            z-index: 50;
+        }
+
+        .nav-item {
+            padding: 0.5rem 1rem;
+            border: 3px solid black;
+            background: white;
+            transform-style: preserve-3d;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 black;
+        }
+
+        /* Upcoming games section */
+        .upcoming-games {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .game-card {
+            background: white;
+            border: 4px solid black;
+            transform-style: preserve-3d;
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .game-card:hover {
+            transform: translate(-8px, -8px);
+            box-shadow: 8px 8px 0 var(--neon-red);
+        }
+
+        /* Latest highlight section */
+        .highlight-container {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-red));
+            border: 4px solid black;
+            padding: 2rem;
+            color: white;
+        }
+
+        /* Team section with FIFA-style shine */
+        .my_team {
+            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+            border: 4px solid var(--neon-yellow);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .my_team::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.1) 50%,
+                    transparent 100%);
+            animation: shine 3s infinite;
+        }
+
+        /* Chat sections */
+        .chat-container {
+            background: white;
+            border: 4px solid black;
+            border-radius: 12px;
+            transform-style: preserve-3d;
+            transition: transform 0.3s;
+        }
+
+        .chat-container:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 var(--baseball-green);
+        }
+
+        /* Animations */
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        /* Dark mode adjustments */
+        .dark .navbar.neo-brutal {
+            background: #1a1a1a;
+            border-color: var(--neon-blue);
+        }
+
+        .dark .nav-item {
+            background: #2a2a2a;
+            color: white;
+            border-color: var(--neon-blue);
+        }
+
+        .neo-brutal-panel {
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .neo-brutal-panel:hover {
+            box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        .neo-brutal-button {
+            border: 3px solid black;
+            box-shadow: 4px 4px 0 black;
+            transition: all 0.2s ease;
+        }
+
+        .neo-brutal-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 black;
+        }
+
+        .shadow-brutal {
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        .neo-brutal-highlight {
+            box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.8);
+            transform-style: preserve-3d;
+            transition: all 0.3s ease;
+        }
+
+        .neo-brutal-highlight:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 16px 16px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        .shine-effect {
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(45deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.1) 30%,
+                    rgba(255, 255, 255, 0.4) 50%,
+                    rgba(255, 255, 255, 0.1) 70%,
+                    transparent 100%);
+            animation: shine 5s infinite;
+        }
+
+        .team-logo-wrapper {
+            background: white;
+            border: 4px solid black;
+            border-radius: 50%;
+            padding: 1rem;
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .team-logo-wrapper:hover {
+            transform: scale(1.05) rotate(-5deg);
+        }
+
+        .neo-brutal-highlight {
+            box-shadow: 16px 16px 0 rgba(0, 0, 0, 0.8);
+            transform-style: preserve-3d;
+        }
+
+        .glowing-border {
+            position: absolute;
+            inset: -2px;
+            border: 4px solid transparent;
+            background: linear-gradient(45deg, #ff2e2e, #213a8f, #ffd100);
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: borderRotate 4s linear infinite;
+        }
+
+        .shine-effect {
+            position: absolute;
+            top: -150%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.1) 30%,
+                    rgba(255, 255, 255, 0.4) 50%,
+                    rgba(255, 255, 255, 0.1) 70%,
+                    transparent 100%);
+            animation: shine 3s infinite;
+            transform: rotate(45deg);
+        }
+
+        @keyframes borderRotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Make side panels more compact */
+        .col-span-3 .neo-brutal-panel {
+            padding: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Enhanced center section */
+        .col-span-6 {
+            z-index: 10;
+        }
+
+        .col-span-6 .team-logo-wrapper {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        .versus-badge {
+            transform: scale(1.2);
+            z-index: 20;
+        }
+
+        .shine-text {
+            background: linear-gradient(45deg, #213a8f, #ff2e2e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .neo-brutal-video {
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .neo-brutal-video:hover {
             transform: scale(1.02);
         }
-    }
 
-
-    /* Add this to your existing style section */
-    .dark-mode-logo {
-        position: absolute;
-        left: 0;
-        opacity: 0;
-        transform: translateY(-50%) rotate(-3deg);
-        transition: all 0.3s ease;
-        font-family: 'Bungee', cursive;
-        font-size: 1.875rem;
-        background: linear-gradient(
-            45deg, 
-            #ffd700, 
-            #ff9900, 
-            #ffd700, 
-            #ffb347, 
-            #ffd700
-        );
-        background-size: 200% auto;
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        animation: shimmer 3s linear infinite;
-    }
-    .dark-mode-logo:hover {
-        animation: shimmerAndFloat 3s linear infinite;
-        transform: translateY(-5px) rotate(-3deg);
-    }
-
-
-    @keyframes shimmer {
-        to {
-            background-position: 200% center;
-        }
-    }
-
-    @keyframes shimmerAndFloat {
-        0%, 100% {
-            transform: translateY(-5px) rotate(-3deg);
-            background-position: 0% center;
-        }
-        50% {
-            transform: translateY(-10px) rotate(-3deg);
-            background-position: 100% center;
-        }
-    }
-
-
-
-    @keyframes floatText {
-        0%, 100% {
-            transform: rotate(-3deg) translateY(0px);
-        }
-        50% {
-            transform: rotate(-3deg) translateY(-5px);
-        }
-    }
-
-    /* Import Bungee font if not already imported */
-    @import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&display=swap');
-
-
-
-    .neo-brutal-highlight {
-        box-shadow: 8px 8px 0 rgba(255, 215, 0, 0.3);
-    }
-
-    .dark .neo-brutal-highlight {
-        box-shadow:
-            8px 8px 0 rgba(255, 215, 0, 0.3),
-            inset 0 0 20px rgba(255, 215, 0, 0.1);
-    }
-
-    .team-logo-wrapper img {
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-    }
-
-    .dark .team-logo-wrapper:hover {
-        border-color: #ffd700;
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-    }
-
-    .dark .video-wrapper {
-        box-shadow:
-            0 4px 20px rgba(0, 0, 0, 0.5),
-            0 0 0 2px rgba(255, 215, 0, 0.3);
-    }
-
-    .neon-header {
-        position: relative;
-        z-index: 10;
-        color: #213a8f;
-        text-shadow:
-            2px 2px 0px #ff2e2e,
-            -2px -2px 0px #ffd700;
-        transition: all 0.3s ease;
-    }
-
-    /* Add specific z-index for dropdown */
-    .nav-item .group-hover\:block {
-        z-index: 50;
-    }
-
-    .absolute.group-hover\:block {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        z-index: 50;
-    }
-
-    .dark .neon-header {
-        color: #ffd700;
-        text-shadow:
-            2px 2px 0px #ff2e2e,
-            -2px -2px 0px #213a8f;
-    }
-
-    /* Ensure dropdown is positioned correctly */
-    .relative.group {
-        position: relative;
-    }
-
-    .neon-header:hover {
-        letter-spacing: 2px;
-        transform: translateY(-2px);
-    }
-
-    /* Dark mode styles for Latest Game section */
-    .dark .neo-brutal-highlight {
-        background: linear-gradient(135deg, #000000, #1a1a1a);
-        border-color: #ffd700;
-        box-shadow:
-            0 0 20px rgba(255, 215, 0, 0.2),
-            inset 0 0 50px rgba(255, 215, 0, 0.1);
-    }
-
-    .dark .team-logo-wrapper {
-        background: rgba(255, 215, 0, 0.05);
-        border: 2px solid rgba(255, 215, 0, 0.3);
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
-    }
-
-    .dark .team-logo-wrapper:hover {
-        background: rgba(255, 215, 0, 0.1);
-        transform: translateY(-5px);
-        box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
-    }
-
-    .dark .versus-badge .text {
-        color: #ffd700;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-    }
-
-    .dark .highlight-container {
-        background: rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(255, 215, 0, 0.2);
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    }
-
-    .dark .video-wrapper {
-        border: 2px solid rgba(255, 215, 0, 0.3);
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
-    }
-
-    .dark .neo-brutal-button {
-        background: linear-gradient(45deg, #ffd700, #ff9900);
-        border: 2px solid #000;
-        color: #000;
-        font-weight: bold;
-        box-shadow: 4px 4px 0 #000;
-    }
-
-    .dark .neo-brutal-button:hover {
-        background: linear-gradient(45deg, #ff9900, #ffd700);
-        transform: translate(-2px, -2px);
-        box-shadow: 6px 6px 0 #000;
-    }
-
-    .dark .shine-effect {
-        background: linear-gradient(45deg,
-                transparent 0%,
-                rgba(255, 215, 0, 0.05) 30%,
-                rgba(255, 215, 0, 0.1) 50%,
-                rgba(255, 215, 0, 0.05) 70%,
-                transparent 100%);
-    }
-
-    /* Chatbot Styling */
-    .chatbot-trigger {
-        animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-
-        0%,
-        100% {
-            transform: translateY(0);
+        .neo-brutal-highlight {
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
         }
 
-        50% {
-            transform: translateY(-10px);
+        .team-logo-wrapper {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
         }
-    }
 
-    #chatbot-container {
-        transform-origin: bottom right;
-        animation: slideIn 0.3s ease-out;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        border: 3px solid #000;
-        background: white;
-        border-radius: 8px;
-        overflow: hidden;
-    }
+        .team-logo-wrapper:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+        }
 
-    @keyframes slideIn {
-        from {
-            transform: scale(0.8);
+        .video-wrapper {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .neo-brutal-button {
+            border: 3px solid black;
+            box-shadow: 4px 4px 0 black;
+            transition: all 0.2s ease;
+        }
+
+        .neo-brutal-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 black;
+        }
+
+        .shine-effect {
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 250%;
+            height: 250%;
+            background: linear-gradient(45deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.05) 30%,
+                    rgba(255, 255, 255, 0.1) 50%,
+                    rgba(255, 255, 255, 0.05) 70%,
+                    transparent 100%);
+            animation: shine 5s infinite;
+        }
+
+        /* Dark mode styles */
+        .dark body {
+            background: #121212;
+            color: white;
+        }
+
+        .dark .neo-brutal-panel {
+            background: #1a1a1a;
+            border-color: #213a8f;
+        }
+
+        .dark .game-card {
+            background: #1a1a1a;
+            color: white;
+            border-color: #213a8f;
+        }
+
+        .dark .team-logo-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #213a8f;
+        }
+
+        .dark .highlight-container {
+            background: rgba(10, 17, 40, 0.8);
+        }
+
+        .dark .neo-brutal-button {
+            background: #2d4b8e;
+            color: white;
+            border-color: #ffd100;
+        }
+
+        .dark .neo-brutal-highlight {
+            background: linear-gradient(to bottom right, #1a2151, #2d4b8e);
+        }
+
+        .dark .chatbot-container {
+            background: #1a1a1a;
+            border-color: #213a8f;
+        }
+
+        .dark .upcoming-games {
+            background: #121212;
+        }
+
+        .dark .news-section {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        /* News Section Dark Mode */
+        .dark #news-section {
+            background: #1a1a1a;
+            border-color: #ffd700;
+            box-shadow: 8px 8px 0 rgba(255, 215, 0, 0.2);
+        }
+
+        .dark #news-section h2 {
+            color: #ffd700;
+        }
+
+        .dark #news-section a {
+            background: #2a2a2a;
+            border: 1px solid #333;
+        }
+
+        .dark #news-section a:hover {
+            background: #333;
+            border-color: #ffd700;
+        }
+
+        .dark #news-section h3 {
+            color: #fff;
+        }
+
+        .dark #news-section .text-blue-500 {
+            color: #ffd700;
+        }
+
+        .dark #close-news {
+            color: #ff2e2e;
+        }
+
+        .dark input,
+        .dark textarea {
+            background: #2a2a2a;
+            color: white;
+            border-color: #213a8f;
+        }
+
+        /* Left Sidebar Dark Mode Enhancements */
+        .dark .neo-brutal-panel.bg {
+            background: linear-gradient(145deg, #213a8f, #1a2151);
+            border-color: #ffd100;
+            box-shadow: 8px 8px 0 rgba(255, 209, 0, 0.3);
+        }
+
+        .dark .neo-brutal-panel.bg-white {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border-color: #213a8f;
+            box-shadow: 8px 8px 0 rgba(33, 58, 143, 0.3);
+        }
+
+        .dark #friendsList .bg-white {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .dark .font-permanent-marker {
+            color: #ffffff;
+        }
+
+        .dark .text-gray-500 {
+            color: #a0aec0;
+        }
+
+        .dark .bg-gray-50 {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .dark .shadow-brutal {
+            box-shadow: 4px 4px 0 rgba(255, 209, 0, 0.3);
+        }
+
+        .dark .neo-brutal-button {
+            border-color: #ffd100;
+            box-shadow: 3px 3px 0 rgba(255, 209, 0, 0.5);
+        }
+
+        .dark .neo-brutal-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 rgba(255, 209, 0, 0.5);
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(12deg);
+            }
+
+            50% {
+                transform: scale(1.1) rotate(12deg);
+            }
+        }
+
+        .neon-brutal-header {
+            text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+            animation: headerPulse 3s infinite;
+        }
+
+        @keyframes headerPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+
+        /* Add this to your existing style section */
+        .dark-mode-logo {
+            position: absolute;
+            left: 0;
             opacity: 0;
+            transform: translateY(-50%) rotate(-3deg);
+            transition: all 0.3s ease;
+            font-family: 'Bungee', cursive;
+            font-size: 1.875rem;
+            background: linear-gradient(45deg,
+                    #ffd700,
+                    #ff9900,
+                    #ffd700,
+                    #ffb347,
+                    #ffd700);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: shimmer 3s linear infinite;
         }
 
-        to {
-            transform: scale(1);
+        .dark-mode-logo:hover {
+            animation: shimmerAndFloat 3s linear infinite;
+            transform: translateY(-5px) rotate(-3deg);
+        }
+
+
+        @keyframes shimmer {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        @keyframes shimmerAndFloat {
+
+            0%,
+            100% {
+                transform: translateY(-5px) rotate(-3deg);
+                background-position: 0% center;
+            }
+
+            50% {
+                transform: translateY(-10px) rotate(-3deg);
+                background-position: 100% center;
+            }
+        }
+
+
+
+        @keyframes floatText {
+
+            0%,
+            100% {
+                transform: rotate(-3deg) translateY(0px);
+            }
+
+            50% {
+                transform: rotate(-3deg) translateY(-5px);
+            }
+        }
+
+        /* Import Bungee font if not already imported */
+        @import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&display=swap');
+
+
+
+        .neo-brutal-highlight {
+            box-shadow: 8px 8px 0 rgba(255, 215, 0, 0.3);
+        }
+
+        .dark .neo-brutal-highlight {
+            box-shadow:
+                8px 8px 0 rgba(255, 215, 0, 0.3),
+                inset 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .team-logo-wrapper img {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+        }
+
+        .dark .team-logo-wrapper:hover {
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .dark .video-wrapper {
+            box-shadow:
+                0 4px 20px rgba(0, 0, 0, 0.5),
+                0 0 0 2px rgba(255, 215, 0, 0.3);
+        }
+
+        .neon-header {
+            position: relative;
+            z-index: 10;
+            color: #213a8f;
+            text-shadow:
+                2px 2px 0px #ff2e2e,
+                -2px -2px 0px #ffd700;
+            transition: all 0.3s ease;
+        }
+
+        /* Add specific z-index for dropdown */
+        .nav-item .group-hover\:block {
+            z-index: 50;
+        }
+
+        .absolute.group-hover\:block {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 50;
+        }
+
+        .dark .neon-header {
+            color: #ffd700;
+            text-shadow:
+                2px 2px 0px #ff2e2e,
+                -2px -2px 0px #213a8f;
+        }
+
+        /* Ensure dropdown is positioned correctly */
+        .relative.group {
+            position: relative;
+        }
+
+        .neon-header:hover {
+            letter-spacing: 2px;
+            transform: translateY(-2px);
+        }
+
+        /* Dark mode styles for Latest Game section */
+        .dark .neo-brutal-highlight {
+            background: linear-gradient(135deg, #000000, #1a1a1a);
+            border-color: #ffd700;
+            box-shadow:
+                0 0 20px rgba(255, 215, 0, 0.2),
+                inset 0 0 50px rgba(255, 215, 0, 0.1);
+        }
+
+        .dark .team-logo-wrapper {
+            background: rgba(255, 215, 0, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .dark .team-logo-wrapper:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
+        }
+
+        .dark .versus-badge .text {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .dark .highlight-container {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .dark .video-wrapper {
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .dark .neo-brutal-button {
+            background: linear-gradient(45deg, #ffd700, #ff9900);
+            border: 2px solid #000;
+            color: #000;
+            font-weight: bold;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        .dark .neo-brutal-button:hover {
+            background: linear-gradient(45deg, #ff9900, #ffd700);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #000;
+        }
+
+        .dark .shine-effect {
+            background: linear-gradient(45deg,
+                    transparent 0%,
+                    rgba(255, 215, 0, 0.05) 30%,
+                    rgba(255, 215, 0, 0.1) 50%,
+                    rgba(255, 215, 0, 0.05) 70%,
+                    transparent 100%);
+        }
+
+        /* Chatbot Styling */
+        .chatbot-trigger {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        #chatbot-container {
+            transform-origin: bottom right;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: 3px solid #000;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .dark #chatbot-container {
+            border-color: #ffd700;
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
+            background: #1a1a1a;
+        }
+
+        #chatbot-messages {
+            scrollbar-width: thin;
+            scrollbar-color: #ff2e2e #ffffff;
+        }
+
+        .dark #chatbot-messages {
+            scrollbar-color: #ffd700 #1a1a1a;
+        }
+
+        #chatbot-input {
+            border: 2px solid #000;
+            transition: all 0.3s ease;
+        }
+
+        .dark #chatbot-input {
+            background: #2a2a2a;
+            border-color: #ffd700;
+            color: white;
+        }
+
+        #send-message {
+            position: relative;
+            overflow: hidden;
+        }
+
+        #send-message::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.1),
+                    transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        /* Navbar Logo Dark Mode */
+        .logo-neo {
+            width: auto;
+            height: 80px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Logo and text container styles */
+        .logo-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .dark .logo-neo {
+            filter: brightness(0) invert(1);
+            opacity: 0;
+            mix-blend-mode: overlay;
+            transition: all 0.3s ease;
+            transform: scale(0.8);
+        }
+
+        .dark .dark-mode-logo {
             opacity: 1;
+            transform: translateY(0) rotate(-3deg);
         }
-    }
 
-    .dark #chatbot-container {
-        border-color: #ffd700;
-        box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
-        background: #1a1a1a;
-    }
+        .dark .logo-neo:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+            filter: brightness(0) invert(1) drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+        }
 
-    #chatbot-messages {
-        scrollbar-width: thin;
-        scrollbar-color: #ff2e2e #ffffff;
-    }
+        .navbar {
+            background-color: white;
+            border-bottom: 4px solid #000;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+        }
 
-    .dark #chatbot-messages {
-        scrollbar-color: #ffd700 #1a1a1a;
-    }
+        .nav-item {
+            position: relative;
+            color: #E53E3E;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
 
-    #chatbot-input {
-        border: 2px solid #000;
-        transition: all 0.3s ease;
-    }
+        .nav-item:hover {
+            color: #C53030;
+            transform: translateY(-2px);
+        }
 
-    .dark #chatbot-input {
-        background: #2a2a2a;
-        border-color: #ffd700;
-        color: white;
-    }
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #E53E3E;
+            transition: width 0.3s ease;
+        }
 
-    #send-message {
-        position: relative;
-        overflow: hidden;
-    }
+        .nav-item:hover::after {
+            width: 100%;
+        }
 
-    #send-message::after {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(45deg,
-                transparent,
-                rgba(255, 255, 255, 0.1),
-                transparent);
-        transform: rotate(45deg);
-        animation: shine 3s infinite;
-    }
+        .dropdown-item {
+            color: #ff0000;
+            padding: 0.75rem 1rem;
+            transition: all 0.2s ease;
+            display: block;
+            text-decoration: none;
+        }
 
-    /* Navbar Logo Dark Mode */
-    .logo-neo {
-        width: auto;
-        height: 80px;
-        transition: opacity 0.3s ease, transform 0.3s ease;
-    }
+        .dropdown-item:hover {
+            background-color: #ff0000;
+            transform: translateX(4px);
+        }
 
-    /* Logo and text container styles */
-    .logo-container {
-        position: relative;
-        display: flex;
-        align-items: center;
-    }
+        .shadow-brutal {
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+        }
 
-    .dark .logo-neo {
-        filter: brightness(0) invert(1);
-        opacity: 0;
-        mix-blend-mode: overlay;
-        transition: all 0.3s ease;
-        transform: scale(0.8);
-    }
+        /* Dark mode styles */
+        .dark .navbar {
+            background-color: #1A202C;
+            border-bottom: 4px solid #E53E3E;
+        }
 
-    .dark .dark-mode-logo {
-        opacity: 1;
-        transform: translateY(0) rotate(-3deg);
-    }
+        .dark .nav-item {
+            color: #FC8181;
+        }
 
-    .dark .logo-neo:hover {
-        opacity: 0.9;
-        transform: scale(1.05);
-        filter: brightness(0) invert(1) drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
-    }
-    .navbar {
-    background-color: white;
-    border-bottom: 4px solid #000;
-    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
-}
+        .dark .nav-item:hover {
+            color: #ff0000;
+        }
 
-.nav-item {
-    position: relative;
-    color: #E53E3E;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-}
+        .dark .dropdown-item {
+            background-color: #367efa;
+            color: #ff0000;
+        }
 
-.nav-item:hover {
-    color: #C53030;
-    transform: translateY(-2px);
-}
-
-.nav-item::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: #E53E3E;
-    transition: width 0.3s ease;
-}
-
-.nav-item:hover::after {
-    width: 100%;
-}
-
-.dropdown-item {
-    color: #ff0000;
-    padding: 0.75rem 1rem;
-    transition: all 0.2s ease;
-    display: block;
-    text-decoration: none;
-}
-
-.dropdown-item:hover {
-    background-color: #ff0000;
-    transform: translateX(4px);
-}
-
-.shadow-brutal {
-    box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
-}
-
-/* Dark mode styles */
-.dark .navbar {
-    background-color: #1A202C;
-    border-bottom: 4px solid #E53E3E;
-}
-
-.dark .nav-item {
-    color: #FC8181;
-}
-
-.dark .nav-item:hover {
-    color: #ff0000;
-}
-
-.dark .dropdown-item {
-    background-color: #367efa;
-    color: #ff0000;
-}
-
-.dark .dropdown-item:hover {
-    background-color: #327cfb;
-}
-
-
-</style>
+        .dark .dropdown-item:hover {
+            background-color: #327cfb;
+        }
+    </style>
 </head>
+
 <body>
+    <div id="google_translate_element"></div>
+
     <div class="decorative-corner top-left"></div>
     <div class="decorative-corner bottom-right"></div>
     <nav class="navbar neo-brutal">
@@ -939,19 +1018,28 @@
                             <i class="fas fa-crown mr-2"></i>Your Team
                             <i class="fas fa-chevron-down ml-2"></i>
                         </button>
-                        <div class="absolute hidden group-hover:block w-48 bg-white dark:bg-gray-800 border-4 border-black dark:border-[#213a8f] shadow-brutal">
-                            <a href="/team_players" class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-red-100 dark:hover:bg-red-900 transition-colors">Players</a>
-                            <a href="/my_team" class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-red-100 dark:hover:bg-red-900 transition-colors">My Team</a>
-                            <a href="/team_compare" class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-red-100 dark:hover:bg-red-900 transition-colors">Team Compare</a>
+                        <div
+                            class="absolute hidden group-hover:block w-48 bg-white dark:bg-gray-800 border-4 border-black dark:border-[#213a8f] shadow-brutal">
+                            <a href="/team_players"
+                                class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-red-100 dark:hover:bg-red-900 transition-colors">Built
+                                Your Team</a>
+                            <a href="/my_team"
+                                class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-red-100 dark:hover:bg-red-900 transition-colors">My
+                                Team</a>
+                            <a href="/team_compare"
+                                class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-red-100 dark:hover:bg-red-900 transition-colors">Team
+                                Compare</a>
                         </div>
                     </div>
                     <a href="/profile" class="nav-item">
                         <i class="fas fa-user mr-2"></i>Profile
                     </a>
+                    <div id="google_translate_element"></div>
                     <button id="darkModeToggle" class="nav-item">
                         <i class="fas fa-moon"></i>
                     </button>
                 </div>
+
             </div>
         </div>
     </nav>
@@ -992,13 +1080,15 @@
     </div>
 
     <div id="news-toggle" class="fixed bottom-5 left-5 z-50">
-        <button class="neo-brutal-button bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition">
+        <button
+            class="neo-brutal-button bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition">
             <i class="fas fa-newspaper text-2xl"></i>
         </button>
     </div>
 
     <!-- News Section -->
-    <div id="news-section" class="fixed bottom-5 left-5 z-40 hidden bg-white border-4 border-black rounded-lg shadow-brutal w-80 max-h-[70vh] overflow-y-auto">
+    <div id="news-section"
+        class="fixed bottom-5 left-5 z-40 hidden bg-white border-4 border-black rounded-lg shadow-brutal w-80 max-h-[70vh] overflow-y-auto">
         <div class="p-4">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bungee text-[#213a8f]">Latest News</h2>
@@ -1186,37 +1276,37 @@
     <script src="{{ url_for('static', filename='js/toggles.js') }}"></script>
 </body>
 
-    <script>
-  document.addEventListener('DOMContentLoaded', function () {
-            const searchInput = document.getElementById('searchInput');
-            const searchResults = document.getElementById('searchResults');
-            let searchTimeout;
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        let searchTimeout;
 
-            searchInput.addEventListener('input', () => {
-                clearTimeout(searchTimeout);
-                if (searchInput.value.length < 2) {
-                    searchResults.innerHTML = '';
-                    searchResults.classList.add('hidden');
-                    return;
-                }
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            if (searchInput.value.length < 2) {
+                searchResults.innerHTML = '';
+                searchResults.classList.add('hidden');
+                return;
+            }
 
-                // Add debounce to prevent too many requests
-                searchTimeout = setTimeout(async () => {
-                    try {
-                        const response = await fetch(`/search_users?query=${encodeURIComponent(searchInput.value)}`);
-                        const data = await response.json();
+            // Add debounce to prevent too many requests
+            searchTimeout = setTimeout(async () => {
+                try {
+                    const response = await fetch(`/search_users?query=${encodeURIComponent(searchInput.value)}`);
+                    const data = await response.json();
 
-                        if (!data.success && data.error) {
-                            throw new Error(data.error);
-                        }
+                    if (!data.success && data.error) {
+                        throw new Error(data.error);
+                    }
 
-                        let resultsHTML = '';
+                    let resultsHTML = '';
 
-                        // Add users results
-                        if (data.users && data.users.length > 0) {
-                            resultsHTML += '<div class="p-2 bg-gray-100 font-semibold">Users</div>';
-                            data.users.forEach(user => {
-                                resultsHTML += `
+                    // Add users results
+                    if (data.users && data.users.length > 0) {
+                        resultsHTML += '<div class="p-2 bg-gray-100 font-semibold">Users</div>';
+                        data.users.forEach(user => {
+                            resultsHTML += `
                             <div class="flex items-center justify-between p-4 hover:bg-gray-50">
                                 <span>${user}</span>
                                 <button 
@@ -1227,14 +1317,14 @@
                                 </button>
                             </div>
                         `;
-                            });
-                        }
+                        });
+                    }
 
-                        // Add groups results
-                        if (data.groups && data.groups.length > 0) {
-                            resultsHTML += '<div class="p-2 bg-gray-100 font-semibold">Groups</div>';
-                            data.groups.forEach(group => {
-                                resultsHTML += `
+                    // Add groups results
+                    if (data.groups && data.groups.length > 0) {
+                        resultsHTML += '<div class="p-2 bg-gray-100 font-semibold">Groups</div>';
+                        data.groups.forEach(group => {
+                            resultsHTML += `
                             <div class="flex items-center justify-between p-4 hover:bg-gray-50">
                                 <div>
                                     <div class="font-medium">${group.group_name}</div>
@@ -1248,382 +1338,382 @@
                                 </button>
                             </div>
                         `;
-                            });
-                        }
-
-                        if (!resultsHTML) {
-                            resultsHTML = '<div class="p-4 text-gray-500">No results found</div>';
-                        }
-
-                        searchResults.innerHTML = resultsHTML;
-                        searchResults.classList.remove('hidden');
-                    } catch (error) {
-                        console.error('Search error:', error);
-                        searchResults.innerHTML = '<div class="p-4 text-red-500">Error performing search</div>';
+                        });
                     }
-                }, 300);
-            });
 
-            // Close search results when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-                    searchResults.classList.add('hidden');
-                }
-            });
-
-            // Friend request functions
-            window.sendRequest = async function (toUser) {
-                try {
-                    const formData = new FormData();
-                    formData.append('to_user', toUser);
-
-                    const response = await fetch('/send_request', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    const data = await response.json();
-
-                    if (data.success) {
-                        // Show success message
-                        const toast = document.createElement('div');
-                        toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg';
-                        toast.textContent = `Friend request sent to ${toUser}`;
-                        document.body.appendChild(toast);
-
-                        // Remove toast after 3 seconds
-                        setTimeout(() => toast.remove(), 3000);
-                    } else {
-                        throw new Error('Failed to send request');
+                    if (!resultsHTML) {
+                        resultsHTML = '<div class="p-4 text-gray-500">No results found</div>';
                     }
+
+                    searchResults.innerHTML = resultsHTML;
+                    searchResults.classList.remove('hidden');
                 } catch (error) {
-                    console.error('Error sending friend request:', error);
-                    alert('Failed to send friend request. Please try again.');
+                    console.error('Search error:', error);
+                    searchResults.innerHTML = '<div class="p-4 text-red-500">Error performing search</div>';
                 }
-            };
+            }, 300);
+        });
 
-            window.acceptRequest = async function (fromUser) {
-                try {
-                    const formData = new FormData();
-                    formData.append('from_user', fromUser);
+        // Close search results when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.classList.add('hidden');
+            }
+        });
 
-                    const response = await fetch('/accept_request', {
-                        method: 'POST',
-                        body: formData
-                    });
+        // Friend request functions
+        window.sendRequest = async function (toUser) {
+            try {
+                const formData = new FormData();
+                formData.append('to_user', toUser);
 
-                    const data = await response.json();
+                const response = await fetch('/send_request', {
+                    method: 'POST',
+                    body: formData
+                });
 
+                const data = await response.json();
+
+                if (data.success) {
+                    // Show success message
+                    const toast = document.createElement('div');
+                    toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg';
+                    toast.textContent = `Friend request sent to ${toUser}`;
+                    document.body.appendChild(toast);
+
+                    // Remove toast after 3 seconds
+                    setTimeout(() => toast.remove(), 3000);
+                } else {
+                    throw new Error('Failed to send request');
+                }
+            } catch (error) {
+                console.error('Error sending friend request:', error);
+                alert('Failed to send friend request. Please try again.');
+            }
+        };
+
+        window.acceptRequest = async function (fromUser) {
+            try {
+                const formData = new FormData();
+                formData.append('from_user', fromUser);
+
+                const response = await fetch('/accept_request', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    location.reload();
+                } else {
+                    throw new Error('Failed to accept request');
+                }
+            } catch (error) {
+                console.error('Error accepting friend request:', error);
+                alert('Failed to accept friend request. Please try again.');
+            }
+        };
+
+        window.startChat = function (friendName) {
+            // Implement chat functionality or redirect to chat page
+            alert('Chat functionality coming soon!');
+        };
+
+        window.joinGroup = function (groupId) {
+            // Implement group join functionality
+            fetch(`/join_group/${groupId}`, {
+                method: 'POST'
+            })
+                .then(response => response.json())
+                .then(data => {
                     if (data.success) {
                         location.reload();
                     } else {
-                        throw new Error('Failed to accept request');
+                        throw new Error(data.error || 'Failed to join group');
                     }
-                } catch (error) {
-                    console.error('Error accepting friend request:', error);
-                    alert('Failed to accept friend request. Please try again.');
-                }
-            };
-
-            window.startChat = function (friendName) {
-                // Implement chat functionality or redirect to chat page
-                alert('Chat functionality coming soon!');
-            };
-
-            window.joinGroup = function (groupId) {
-                // Implement group join functionality
-                fetch(`/join_group/${groupId}`, {
-                    method: 'POST'
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            location.reload();
-                        } else {
-                            throw new Error(data.error || 'Failed to join group');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error joining group:', error);
-                        alert('Failed to join group. Please try again.');
-                    });
-            };
+                .catch(error => {
+                    console.error('Error joining group:', error);
+                    alert('Failed to join group. Please try again.');
+                });
+        };
+    });
+
+    async function createGroup() {
+        const groupName = document.getElementById('groupName').value;
+        const groupDescription = document.getElementById('groupDescription').value;
+
+        if (!groupName) {
+            alert("Group name is required!");
+            return;
+        }
+
+        const response = await axios.post('/create_group', {
+            group_name: groupName,
+            description: groupDescription
         });
 
-        async function createGroup() {
-            const groupName = document.getElementById('groupName').value;
-            const groupDescription = document.getElementById('groupDescription').value;
+        if (response.data.success) {
+            alert('Group created successfully');
+            window.location.href = `/group_chat/${response.data.group_id}`;
+        } else {
+            alert('Failed to create group: ' + response.data.error);
+        }
+    }
 
-            if (!groupName) {
-                alert("Group name is required!");
-                return;
-            }
-
-            const response = await axios.post('/create_group', {
-                group_name: groupName,
-                description: groupDescription
-            });
-
+    async function joinGroup(groupId) {
+        try {
+            const response = await axios.post(`/join_group/${groupId}`);
             if (response.data.success) {
-                alert('Group created successfully');
-                window.location.href = `/group_chat/${response.data.group_id}`;
+                alert('Joined group successfully!');
+                location.reload();
             } else {
-                alert('Failed to create group: ' + response.data.error);
+                alert('Failed to join group: ' + response.data.error);
+            }
+        } catch (error) {
+            console.error('Error joining group:', error);
+            alert('Failed to join group');
+        }
+    }
+
+    async function leaveGroup(groupId) {
+        if (!confirm('Are you sure you want to leave this group?')) {
+            return;
+        }
+
+        try {
+            const response = await axios.post(`/leave_group/${groupId}`);
+            if (response.data.success) {
+                alert('Left group successfully!');
+                location.reload();
+            } else {
+                alert('Failed to leave group: ' + response.data.error);
+            }
+        } catch (error) {
+            console.error('Error leaving group:', error);
+            alert('Failed to leave group');
+        }
+    }
+
+    // News Toggle
+    document.getElementById('news-toggle').addEventListener('click', function () {
+        const newsSection = document.getElementById('news-section');
+        newsSection.classList.toggle('hidden');
+    });
+
+    document.getElementById('close-news').addEventListener('click', function () {
+        document.getElementById('news-section').classList.add('hidden');
+    });
+
+    // Chatbot Toggle
+    document.getElementById('chatbot-trigger').addEventListener('click', function () {
+        const chatbotContainer = document.getElementById('chatbot-container');
+        chatbotContainer.classList.toggle('hidden');
+    });
+
+    document.getElementById('close-chatbot').addEventListener('click', function () {
+        document.getElementById('chatbot-container').classList.add('hidden');
+    });
+
+    // Dark mode toggle functionality
+    document.addEventListener('DOMContentLoaded', function () {
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const icon = darkModeToggle.querySelector('i');
+
+        // Function to update toggle button appearance
+        function updateToggleButton(isDark) {
+            if (isDark) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
             }
         }
 
-        async function joinGroup(groupId) {
-            try {
-                const response = await axios.post(`/join_group/${groupId}`);
-                if (response.data.success) {
-                    alert('Joined group successfully!');
-                    location.reload();
-                } else {
-                    alert('Failed to join group: ' + response.data.error);
-                }
-            } catch (error) {
-                console.error('Error joining group:', error);
-                alert('Failed to join group');
+        // Function to set dark mode
+        function setDarkMode(isDark) {
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
             }
+            updateToggleButton(isDark);
+            localStorage.setItem('darkMode', isDark);
         }
 
-        async function leaveGroup(groupId) {
-            if (!confirm('Are you sure you want to leave this group?')) {
-                return;
-            }
+        // Initialize dark mode from saved preference
+        const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+        setDarkMode(savedDarkMode);
 
-            try {
-                const response = await axios.post(`/leave_group/${groupId}`);
-                if (response.data.success) {
-                    alert('Left group successfully!');
-                    location.reload();
-                } else {
-                    alert('Failed to leave group: ' + response.data.error);
-                }
-            } catch (error) {
-                console.error('Error leaving group:', error);
-                alert('Failed to leave group');
-            }
-        }
+        // Toggle dark mode on button click
+        darkModeToggle.addEventListener('click', function () {
+            const isDark = document.documentElement.classList.contains('dark');
+            setDarkMode(!isDark);
 
-        // News Toggle
-        document.getElementById('news-toggle').addEventListener('click', function () {
-            const newsSection = document.getElementById('news-section');
-            newsSection.classList.toggle('hidden');
+            // Apply smooth transition to all elements
+            document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+            setTimeout(() => {
+                document.body.style.transition = '';
+            }, 300);
         });
 
-        document.getElementById('close-news').addEventListener('click', function () {
-            document.getElementById('news-section').classList.add('hidden');
-        });
+        // Add system preference detection
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-        // Chatbot Toggle
-        document.getElementById('chatbot-trigger').addEventListener('click', function () {
-            const chatbotContainer = document.getElementById('chatbot-container');
+        // Set initial dark mode if no saved preference
+        if (localStorage.getItem('darkMode') === null) {
+            setDarkMode(prefersDark.matches);
+        }
+
+        // Listen for system dark mode changes
+        prefersDark.addEventListener('change', (e) => {
+            if (localStorage.getItem('darkMode') === null) {
+                setDarkMode(e.matches);
+            }
+        });
+    });
+    // Team dropdown hover
+    const teamDropdown = document.querySelector('.group');
+    teamDropdown.addEventListener('mouseenter', function () {
+        this.querySelector('div').classList.remove('hidden');
+    });
+    teamDropdown.addEventListener('mouseleave', function () {
+        this.querySelector('div').classList.add('hidden');
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const chatbotTrigger = document.getElementById('chatbot-trigger');
+        const chatbotContainer = document.getElementById('chatbot-container');
+        const closeChatbot = document.getElementById('close-chatbot');
+        const chatMessages = document.getElementById('chatbot-messages');
+        const chatInput = document.getElementById('chatbot-input');
+        const sendButton = document.getElementById('send-message');
+
+        chatbotTrigger.addEventListener('click', () => {
             chatbotContainer.classList.toggle('hidden');
         });
 
-        document.getElementById('close-chatbot').addEventListener('click', function () {
-            document.getElementById('chatbot-container').classList.add('hidden');
+        closeChatbot.addEventListener('click', () => {
+            chatbotContainer.classList.add('hidden');
         });
 
-        // Dark mode toggle functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const icon = darkModeToggle.querySelector('i');
-    
-    // Function to update toggle button appearance
-    function updateToggleButton(isDark) {
-        if (isDark) {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-        } else {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-        }
-    }
-
-    // Function to set dark mode
-    function setDarkMode(isDark) {
-        if (isDark) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-        updateToggleButton(isDark);
-        localStorage.setItem('darkMode', isDark);
-    }
-
-    // Initialize dark mode from saved preference
-    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-    setDarkMode(savedDarkMode);
-
-    // Toggle dark mode on button click
-    darkModeToggle.addEventListener('click', function() {
-        const isDark = document.documentElement.classList.contains('dark');
-        setDarkMode(!isDark);
-        
-        // Apply smooth transition to all elements
-        document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
-        setTimeout(() => {
-            document.body.style.transition = '';
-        }, 300);
-    });
-
-    // Add system preference detection
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-    
-    // Set initial dark mode if no saved preference
-    if (localStorage.getItem('darkMode') === null) {
-        setDarkMode(prefersDark.matches);
-    }
-
-    // Listen for system dark mode changes
-    prefersDark.addEventListener('change', (e) => {
-        if (localStorage.getItem('darkMode') === null) {
-            setDarkMode(e.matches);
-        }
-    });
-});
-        // Team dropdown hover
-        const teamDropdown = document.querySelector('.group');
-        teamDropdown.addEventListener('mouseenter', function () {
-            this.querySelector('div').classList.remove('hidden');
-        });
-        teamDropdown.addEventListener('mouseleave', function () {
-            this.querySelector('div').classList.add('hidden');
-        });
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            const chatbotTrigger = document.getElementById('chatbot-trigger');
-            const chatbotContainer = document.getElementById('chatbot-container');
-            const closeChatbot = document.getElementById('close-chatbot');
-            const chatMessages = document.getElementById('chatbot-messages');
-            const chatInput = document.getElementById('chatbot-input');
-            const sendButton = document.getElementById('send-message');
-        
-            chatbotTrigger.addEventListener('click', () => {
-                chatbotContainer.classList.toggle('hidden');
-            });
-        
-            closeChatbot.addEventListener('click', () => {
-                chatbotContainer.classList.add('hidden');
-            });
-        
-            function addMessage(message, isUser = false) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `mb-4 ${isUser ? 'text-right' : 'text-left'}`;
-                messageDiv.innerHTML = `
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `mb-4 ${isUser ? 'text-right' : 'text-left'}`;
+            messageDiv.innerHTML = `
                     <div class="inline-block p-3 rounded-lg ${isUser ? 'bg-[#ff2e2e] text-white' : 'bg-gray-100 dark:bg-gray-700'}">
                         ${message}
                     </div>
                 `;
-                chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            chatInput.value = '';
+
+            try {
+                const response = await fetch('/geminichat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                const data = await response.json();
+                addMessage(data.response);
+            } catch (error) {
+                addMessage('Sorry, there was an error processing your message.');
             }
-        
-            async function sendMessage() {
-                const message = chatInput.value.trim();
-                if (!message) return;
-        
-                addMessage(message, true);
-                chatInput.value = '';
-        
-                try {
-                    const response = await fetch('/geminichat', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ message: message })
-                    });
-        
-                    const data = await response.json();
-                    addMessage(data.response);
-                } catch (error) {
-                    addMessage('Sorry, there was an error processing your message.');
-                }
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
             }
-        
-            sendButton.addEventListener('click', sendMessage);
-            chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    sendMessage();
+        });
+    });
+    const chatbotToggle = {
+        elements: {
+            trigger: document.getElementById('chatbot-trigger'),
+            container: document.getElementById('chatbot-container'),
+            closeBtn: document.getElementById('close-chatbot')
+        },
+
+        init() {
+            this.setupEventListeners();
+            this.setupAnimations();
+        },
+
+        setupEventListeners() {
+            this.elements.trigger.addEventListener('click', () => {
+                this.toggleChatbot();
+                this.animateTriggerButton();
+            });
+
+            this.elements.closeBtn.addEventListener('click', () => {
+                this.closeChatbot();
+            });
+
+            // Close chatbot when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!this.elements.container.contains(e.target) &&
+                    !this.elements.trigger.contains(e.target)) {
+                    this.closeChatbot();
                 }
             });
-        });
-        const chatbotToggle = {
-            elements: {
-                trigger: document.getElementById('chatbot-trigger'),
-                container: document.getElementById('chatbot-container'),
-                closeBtn: document.getElementById('close-chatbot')
-            },
-        
-            init() {
-                this.setupEventListeners();
-                this.setupAnimations();
-            },
-        
-            setupEventListeners() {
-                this.elements.trigger.addEventListener('click', () => {
-                    this.toggleChatbot();
-                    this.animateTriggerButton();
-                });
-        
-                this.elements.closeBtn.addEventListener('click', () => {
-                    this.closeChatbot();
-                });
-        
-                // Close chatbot when clicking outside
-                document.addEventListener('click', (e) => {
-                    if (!this.elements.container.contains(e.target) && 
-                        !this.elements.trigger.contains(e.target)) {
-                        this.closeChatbot();
-                    }
-                });
-            },
-        
-            setupAnimations() {
-                this.elements.trigger.style.transition = 'transform 0.3s ease';
-                this.elements.container.style.transition = 'all 0.3s ease';
-            },
-        
-            toggleChatbot() {
-                const isHidden = this.elements.container.classList.contains('hidden');
-                
-                if (isHidden) {
-                    this.elements.container.classList.remove('hidden');
-                    this.elements.container.style.opacity = '1';
-                    this.elements.container.style.transform = 'translateY(0)';
-                } else {
-                    this.closeChatbot();
-                }
-            },
-        
-            closeChatbot() {
-                this.elements.container.style.opacity = '0';
-                this.elements.container.style.transform = 'translateY(20px)';
-                
-                setTimeout(() => {
-                    this.elements.container.classList.add('hidden');
-                }, 300);
-            },
-        
-            animateTriggerButton() {
-                this.elements.trigger.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    this.elements.trigger.style.transform = 'scale(1)';
-                }, 200);
+        },
+
+        setupAnimations() {
+            this.elements.trigger.style.transition = 'transform 0.3s ease';
+            this.elements.container.style.transition = 'all 0.3s ease';
+        },
+
+        toggleChatbot() {
+            const isHidden = this.elements.container.classList.contains('hidden');
+
+            if (isHidden) {
+                this.elements.container.classList.remove('hidden');
+                this.elements.container.style.opacity = '1';
+                this.elements.container.style.transform = 'translateY(0)';
+            } else {
+                this.closeChatbot();
             }
-        };
-        
-        // Initialize the chatbot toggle functionality
-        document.addEventListener('DOMContentLoaded', () => {
-            chatbotToggle.init();
-        });
-        
-        
-           
-        
-    </script>
+        },
+
+        closeChatbot() {
+            this.elements.container.style.opacity = '0';
+            this.elements.container.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                this.elements.container.classList.add('hidden');
+            }, 300);
+        },
+
+        animateTriggerButton() {
+            this.elements.trigger.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.elements.trigger.style.transform = 'scale(1)';
+            }, 200);
+        }
+    };
+
+    // Initialize the chatbot toggle functionality
+    document.addEventListener('DOMContentLoaded', () => {
+        chatbotToggle.init();
+    });
+
+
+
+
+</script>
 
 </html>

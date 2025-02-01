@@ -1,84 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Baseball Signup</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+    <script type="text/javascript"src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,ja,es,hi,de,fr,ko',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
     <style>
         .baseball-stitches {
             background-image: linear-gradient(to right, transparent 50%, #ff1414 50%),
-                            linear-gradient(to right, transparent 50%, #ff1414 50%);
+                linear-gradient(to right, transparent 50%, #ff1414 50%);
             background-size: 20px 4px;
             background-position: 0 0, 0 100%;
             background-repeat: repeat-x;
+        }
+
+        /* Translation button styles */
+        #google_translate_element {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+            transform: scale(0.85);
+            transform-origin: top right;
+        }
+
+        .goog-te-gadget {
+            font-family: 'Bungee Spice', 'Bungee', sans-serif !important;
+            font-size: 14px !important;
+        }
+
+        .goog-te-gadget-simple {
+            background-color: #ffffff !important;
+            border: 2px solid #000000 !important;
+            padding: 4px 8px !important;
+            border-radius: 4px !important;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8) !important;
+            transition: all 0.2s ease !important;
+            height: 30px !important;
+            display: flex !important;
+            align-items: center !important;
+            width: auto !important;
+            max-width: 150px !important;
+        }
+
+        .goog-te-gadget-simple:hover {
+            transform: translate(-2px, -2px) !important;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8) !important;
+        }
+
+        /* Dark mode styles for translation button */
+        .dark .goog-te-gadget-simple {
+            background-color: #1a1a1a !important;
+            border-color: #ffd700 !important;
+            color: #ffffff !important;
+            box-shadow: 3px 3px 0 rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .dark .goog-te-gadget-simple:hover {
+            box-shadow: 4px 4px 0 rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .dark .goog-te-gadget-simple img {
+            filter: invert(1) !important;
+        }
+
+        /* Hide unnecessary elements */
+        .goog-te-gadget-icon {
+            display: none !important;
+        }
+
+        .goog-te-menu-value span:nth-child(3),
+        .goog-te-menu-value span:nth-child(5) {
+            display: none !important;
         }
     </style>
 </head>
 
 <body class="bg-[#E5F6FF] min-h-screen flex items-center justify-center" style="font-family: 'Bungee', cursive;">
-    <div class="w-full max-w-md p-3 bg-white border-black border-4 shadow-[8px_8px_0px_rgba(0,0,0,1)] baseball-stitches">
+    <div id="google_translate_element"></div>
+    <div
+        class="w-full max-w-md p-3 bg-white border-black border-4 shadow-[8px_8px_0px_rgba(0,0,0,1)] baseball-stitches">
         <!-- Logo Container -->
         <div class="flex justify-center mb-6">
             <div class="w-full h-24 border-2 border-black rounded-lg flex items-center justify-center bg-white px-4">
-                <img 
-                    src="{{ url_for('static', filename='images/logo.png') }}" 
-                    alt="Logo"
-                    class="max-w-full max-h-full object-contain"
-                >
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"
+                    class="max-w-full max-h-full object-contain">
             </div>
         </div>
-        
+
         <h2 class="text-3xl text-center mb-8 text-[#1B3B6F]">JOIN THE TEAM!</h2>
 
         <form id="signupForm" class="space-y-6">
             <!-- Username -->
             <div>
                 <label for="username" class="block text-sm text-[#1B3B6F] mb-2">PLAYER NAME</label>
-                <input type="text" 
-                    id="username" 
-                    name="username" 
+                <input type="text" id="username" name="username"
                     class="w-full border-black border-2 p-3 focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#FFE5E5] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-lg"
-                    required 
-                    placeholder="Your Player Name">
+                    required placeholder="Your Player Name">
             </div>
 
             <!-- Email -->
             <div>
                 <label for="email" class="block text-sm text-[#1B3B6F] mb-2">DUGOUT EMAIL</label>
-                <input type="email" 
-                    id="email" 
-                    name="email" 
+                <input type="email" id="email" name="email"
                     class="w-full border-black border-2 p-3 focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#E5F3FF] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-lg"
-                    required 
-                    placeholder="your@email.com">
+                    required placeholder="your@email.com">
             </div>
 
             <!-- Password -->
             <div>
                 <label for="password" class="block text-sm text-[#1B3B6F] mb-2">SECRET SIGNAL</label>
-                <input type="password" 
-                    id="password" 
-                    name="password" 
+                <input type="password" id="password" name="password"
                     class="w-full border-black border-2 p-3 focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#E5FFE5] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-lg"
-                    required 
-                    placeholder="Your Secret Signal">
+                    required placeholder="Your Secret Signal">
             </div>
 
             <!-- Confirm Password -->
             <div>
                 <label for="confirm_password" class="block text-sm text-[#1B3B6F] mb-2">CONFIRM SIGNAL</label>
-                <input type="password" 
-                    id="confirm_password" 
-                    name="confirm_password" 
+                <input type="password" id="confirm_password" name="confirm_password"
                     class="w-full border-black border-2 p-3 focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#E5FFE5] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-lg"
-                    required 
-                    placeholder="Confirm Your Signal">
+                    required placeholder="Confirm Your Signal">
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" 
+            <button type="submit"
                 class="w-full py-4 px-6 bg-[#ff1414] border-black border-2 text-white hover:bg-[#d10000] hover:shadow-[4px_4px_0px_rgba(0,0,0,1)] active:bg-[#b00000] transition-all rounded-lg transform hover:-translate-y-1">
                 PLAY BALL! 🎯
             </button>
