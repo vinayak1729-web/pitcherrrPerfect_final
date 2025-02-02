@@ -246,16 +246,6 @@
         const containerWrapper = document.getElementById('container-wrapper');
         const template = document.getElementById('question-template');
 
-
-
-        function updateQuestionCounter() {
-            const currentQuestionElement = document.querySelector('.current-question');
-            const totalQuestionsElement = document.querySelector('.total-questions');
-            if (currentQuestionElement && totalQuestionsElement) {
-                currentQuestionElement.textContent = currentQuestionIndex + 1;
-                totalQuestionsElement.textContent = questions.length;
-            }
-        }
         
 
 
@@ -407,6 +397,13 @@
             const form = container.querySelector('.question-form');
             const questionContent = container.querySelector('.question-content');
 
+
+            const currentQuestionElement = container.querySelector('.current-question');
+            const totalQuestionsElement = container.querySelector('.total-questions');
+            currentQuestionElement.textContent = currentQuestionIndex + 1;
+            totalQuestionsElement.textContent = questions.length;
+
+
             questionContent.textContent = currentQuestion.text;
 
             let input;
@@ -441,27 +438,26 @@
             form.insertBefore(input, form.querySelector('button'));
             form.addEventListener('submit', handleSubmit);
             containerWrapper.appendChild(container);
-            updateQuestionCounter(); 
+            
         }
 
 
 
         async function submitResponses() {
+            // Immediately redirect to login page
+            window.location.href = '/login';  // Replace with your login page URL
+
+            // Send the responses in the background
             try {
-                const response = await fetch('/questionnaire', {
+                await fetch('/questionnaire', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(responses)
+                    body: JSON.stringify(responses),
+                    // Using keepalive to ensure the request completes even after page navigation
+                    keepalive: true
                 });
-                const data = await response.json();
-                if (data.success) {
-                    window.location.href = data.redirect;
-                } else {
-                    alert('Error saving responses!');
-                }
             } catch (error) {
                 console.error('Error:', error);
-                alert('An error occurred during submission');
             }
         }
 

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neo Brutal Video Player</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+
+        :root {
+            --primary: #FF3366;
+            --secondary: #1a1a1a;
+            --accent: #FFD700;
+            --neo-shadow: 8px 8px 0px rgba(0, 0, 0, 0.9);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Bungee', cursive;
+            background: repeating-linear-gradient(
+                45deg,
+                #1a1a1a,
+                #1a1a1a 10px,
+                #222 10px,
+                #222 20px
+            );
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .video-container {
+            background: white;
+            padding: 20px;
+            border: 4px solid black;
+            box-shadow: var(--neo-shadow);
+            transform: rotate(-1deg);
+            max-width: 90%;
+            width: 800px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 4px solid black;
+        }
+
+        .back-btn {
+            padding: 15px 30px;
+            font-family: 'Bungee', cursive;
+            font-size: 1.2rem;
+            background: var(--primary);
+            color: white;
+            border: 4px solid black;
+            box-shadow: var(--neo-shadow);
+            cursor: pointer;
+            transform: rotate(2deg);
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            transform: translate(4px, 4px) rotate(2deg);
+            box-shadow: none;
+        }
+
+        .back-btn:active {
+            transform: translate(8px, 8px) rotate(2deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <div class="video-wrapper">
+            <iframe 
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+    
+    <a href="/login" class="back-btn">← BACK TO LOGIN</a>
+</body>
+</html>

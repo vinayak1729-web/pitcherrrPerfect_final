@@ -7,7 +7,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script type="text/javascript"src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
@@ -378,11 +379,111 @@
                 opacity: 1;
             }
         }
+
+        /* Add this to your existing style section */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .right-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .neo-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            font-family: 'Bungee', cursive;
+            font-size: 1.2rem;
+            text-decoration: none;
+            border: 4px solid var(--neo-black);
+            box-shadow: var(--neo-shadow);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .home-btn {
+            background-color: var(--mlb-blue);
+            color: var(--neo-white);
+            transform: rotate(-2deg);
+        }
+
+        .team-btn {
+            background-color: var(--mlb-red);
+            color: var(--neo-white);
+            transform: rotate(1deg);
+        }
+
+        .fan-btn {
+            background-color: #FFD700;
+            color: var(--neo-black);
+            transform: rotate(-1deg);
+        }
+
+        .neo-btn:hover {
+            transform: translate(4px, 4px);
+            box-shadow: none;
+        }
+
+        .btn-icon {
+            font-size: 1.4rem;
+            filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.5));
+        }
+
+        /* Add animation for buttons */
+        .neo-btn {
+            animation: buttonPop 0.3s ease-out;
+        }
+
+        @keyframes buttonPop {
+            0% {
+                transform: scale(0.9) rotate(0deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) rotate(-2deg);
+                opacity: 1;
+            }
+        }
+
+        /* Stagger animation for right buttons */
+        .right-buttons .neo-btn:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .right-buttons .neo-btn:nth-child(2) {
+            animation-delay: 0.2s;
+        }
     </style>
 </head>
 
 <body>
-
+    <!-- Add this right after the body tag, before the container div -->
+    <div class="top-nav">
+        <a href="/" class="neo-btn home-btn">
+            <span class="btn-icon">🏠</span>
+            Home
+        </a>
+        <div class="right-buttons">
+            <a href="/my-team" class="neo-btn team-btn">
+                <span class="btn-icon">⚾</span>
+                Your Team
+            </a>
+            <a href="/Chat_dashboard" class="neo-btn fan-btn">
+                <span class="btn-icon">🎯</span>
+                Fan Link
+            </a>
+        </div>
+    </div>
     <div class="container">
         <div id="google_translate_element"></div>
         <div class="header">

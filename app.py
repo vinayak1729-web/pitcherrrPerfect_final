@@ -612,6 +612,14 @@ def login():
     
     return render_template('login.html')
 
+
+@app.route('/baseball-rules')
+def baseball_rules():
+    return render_template('baseball_rules.html')
+
+@app.route('/how-to-use')
+def how_to_use():
+    return render_template('how_to_use.html')
 @app.route('/logout')
 def logout():
     # Clear the session
