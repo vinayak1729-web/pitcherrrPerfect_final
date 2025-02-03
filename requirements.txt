@@ -1,11 +1,8 @@
 beautifulsoup4==4.12.2
 Flask==2.3.3
-google-cloud-translate==3.11.1
 aiohttp==3.8.1 --no-build-isolation
-deep-translator==1.11.1
 python-dotenv==1.0.0
 google-generativeai==0.8.4
-googletrans==3.0.0
 requests==2.31.0
 pytz==2023.3
 Werkzeug==2.3.7
