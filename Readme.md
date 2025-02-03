@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="static/images/pitcher_perfect_logo.png" alt="Pitcher Perfect Logo" width="200"/>
+  <img src="static/images/logo.png" alt="Pitcher Perfect Logo" width="200"/>
   
   # Pitcher Perfect
   ### Your AI-Powered Baseball Companion
@@ -63,7 +63,7 @@ pitcher-perfect/ ├── database/ # Database configurations ├── dataset
 | `/` | Home dashboard | ![Home](static/images/home.png) |
 | `/` | Home dashboard translate| ![Home](static/images/translate.png) |
 | `/chat_dashboard` | Chat overview | ![Chat](static/images/Chat_dashboard.png) |
-| `/chat/<friend>` | Private messaging | ![DM](static/images/chat.png) |
+| `/chat/<friend>` | Private messaging | ![DM](static/images/Chat.png) |
 | `/group_chat/<group_id>` | Group discussions | ![Group](static/images/Group_chat.png) |
 | `/team_players` | Team builder | ![Builder](static/images/Built_your_team_1.png) |
 | `/team_players` | Team builder | ![Builder](static/images/Built_your_team_2.png) |
@@ -98,14 +98,14 @@ python app.py
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vishal-mishra-9b2a48208/)
 
 ---
-
+<div align="center">
 ### **🚀 Team: Suryaprabha**  
 <a href="https://www.linkedin.com/company/surya-prabha-india">
   <img src="static/images/Suryaprabha.png" alt="Suryaprabha Logo" style="width:150px; border: 4px solid black; border-radius: 10px; box-shadow: 8px 8px 0px black;">
 </a>  
 
 [🌐 Suryaprabha LinkedIn](https://www.linkedin.com/company/surya-prabha-india)
-
+</div>
 
 📄 License
 This project is licensed under the MIT License - see the LICENSE file for details.
