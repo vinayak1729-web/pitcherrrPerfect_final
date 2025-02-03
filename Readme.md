@@ -44,7 +44,8 @@ Pitcher Perfect revolutionizes how baseball fans experience the game through AI-
 - **Backend**: Flask, Json
 - **AI/ML**: Google Cloud AI, Gemini 2.0
 - **APIs**: MLB Stats API, Google Translate API
-- **Database**: Firebase Realtime Database
+- **Database**: JSON NO SQL
+  
 
 ## 📁 Project Structure
 
