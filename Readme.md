@@ -13,6 +13,10 @@
 
 Watch our project demo: [Pitcher Perfect Demo](https://youtu.be/-ELvMqja4uw?si=JhBT3p2oq5kUMwl9)
 
+Live link to our Project:  [Pitcher Perfect Live Website](https://pitcherrrperfect-final.onrender.com/)
+
+**Note**: Certain features like Team Compare and My team are Currently limited due to Computational resource constraints.A full version with optimized cloud hosting would run these features smoothly.And alternately if you want you run clone and run it on your own laptop or PC using the given instructions in the Readme.
+
 Pitcher Perfect revolutionizes how baseball fans experience the game through AI-powered personalization and real-time engagement. Built with cutting-edge technology, it delivers customized highlights, interactive features, and seamless multilingual support.
 
 <!-- <div align="center">
