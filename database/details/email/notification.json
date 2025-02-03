@@ -22,8 +22,29 @@
             {
                 "question_id": "favorite_teams",
                 "timestamp": "2025-02-01T16:05:21.323561"
+            },
+            {
+                "question_id": "favorite_teams",
+                "timestamp": "2025-02-02T17:37:18.594054"
             }
         ],
-        "last_sent_date": "2025-02-01T16:05:21.323561"
+        "last_sent_date": "2025-02-02T17:37:18.593051"
+    },
+    "Vinayak234": {
+        "notification_history": [
+            {
+                "question_id": "favorite_players",
+                "timestamp": "2025-02-02T10:51:26.086859"
+            },
+            {
+                "question_id": "favorite_teams",
+                "timestamp": "2025-01-02T17:37:25.549895"
+            },
+            {
+                "question_id": "favorite_match",
+                "timestamp": "2025-02-02T17:39:46.531932"
+            }
+        ],
+        "last_sent_date": "2025-02-02T17:39:46.529934"
     }
 }

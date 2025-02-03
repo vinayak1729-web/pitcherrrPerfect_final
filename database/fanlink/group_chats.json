@@ -10,5 +10,37 @@
     "8c9497bd-1a01-4049-bda7-f5c18c594edc": [],
     "7f14c873-c9a0-4488-8dea-c08d31b621a1": [],
     "1f01799c-ef2b-4367-af2e-7ec994e9e3a4": [],
-    "8a770676-6269-430c-b90d-776186b1931b": []
+    "8a770676-6269-430c-b90d-776186b1931b": [
+        {
+            "type": "system",
+            "message": "Vinayak234 joined the group",
+            "timestamp": "10:54 AM"
+        },
+        {
+            "type": "message",
+            "from": "Vinayak234",
+            "message": "HHii",
+            "timestamp": "10:54 AM"
+        },
+        {
+            "type": "message",
+            "from": "Vinayak234",
+            "message": "guyss",
+            "timestamp": "10:54 AM"
+        },
+        {
+            "type": "message",
+            "from": "Vinayak234",
+            "message": "i am in to dodgers clan",
+            "timestamp": "10:54 AM"
+        }
+    ],
+    "e4a838b2-7a63-4b28-8bbf-18467f04f1bc": [
+        {
+            "type": "message",
+            "from": "Vishal22",
+            "message": "yuppoo",
+            "timestamp": "10:57 AM"
+        }
+    ]
 }

@@ -13,7 +13,8 @@
         "email": "vishal213.mishra@gmail.com",
         "password": "123",
         "friends": [
-            "Vinayak1729"
+            "Vinayak1729",
+            "Vinayak234"
         ],
         "profile_pic": "/static/default.png"
     },
@@ -29,6 +30,15 @@
         "email": "shindevinayak233@gmail.com",
         "password": "Vinayak@1729",
         "friends": [],
+        "profile_pic": "/static/default.png"
+    },
+    "Vinayak234": {
+        "user_id": "fa491502-1f4c-435a-b744-09d985c0ec6b",
+        "email": "shindevinayak233@gmail.com",
+        "password": "12345678",
+        "friends": [
+            "Vishal22"
+        ],
         "profile_pic": "/static/default.png"
     }
 }
