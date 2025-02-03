@@ -48,8 +48,18 @@ Pitcher Perfect revolutionizes how baseball fans experience the game through AI-
 
 ## 📁 Project Structure
 
-README.md
-pitcher-perfect/ ├── database/ # Database configurations ├── dataset/ # MLB teams dataset ├── features/ # Custom Python modules ├── static/ │ └── images/ # Project images and assets ├── templates/ # HTML templates ├── app.py # Main application file ├── personalisedemailcontent.py └── requirements.txt
+```
+pitcher-perfect/
+├── database/              # Database configurations
+├── dataset/               # MLB teams dataset
+├── features/              # Custom Python modules
+├── static/                
+│   └── images/            # Project images and assets
+├── templates/             # HTML templates
+├── app.py                 # Main application file
+├── personalisedemailcontent.py  # Script for personalized email content
+└── requirements.txt       # Dependencies and requirements
+```
 
 
 ## 🔄 API Endpoints
