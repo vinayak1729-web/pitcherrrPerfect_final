@@ -5,17 +5,11 @@ import os
 from datetime import datetime, timedelta
 import secrets
 import uuid
-import pytz
 from bs4 import BeautifulSoup
-from googletrans import Translator
 import requests
-import csv 
 from features.send_signup_email import send_sign_up_email
 import statsapi
 import json
-import asyncio
-import aiohttp
-from functools import lru_cache
 from features.ovrCalculation import calculate_ovr
 from features.signupEmailBody import Sign_up_email_body_template
 import smtplib
@@ -1736,7 +1730,149 @@ def extract_highlights(game_pk):
 
 
 
-#TEAM COMPARE
+# #TEAM COMPARE
+# def initialize_stats():
+#     return {
+#         'batting': {'avg': 0, 'obp': 0, 'slg': 0, 'ops': 0, 'count': 0},
+#         'pitching': {'era': 0, 'whip': 0, 'k9': 0, 'baa': 0, 'count': 0},
+#         'fielding': {'fpct': 0, 'assists': 0, 'putouts': 0, 'count': 0},
+#         'catching': {'cs_pct': 0, 'pb': 0, 'fpct': 0, 'count': 0}
+#     }
+
+# async def fetch_stats_async(session, url):
+#     async with session.get(url) as response:
+#         return await response.json()
+
+# async def get_team_stats_async(team_id, season=2024):
+#     async with aiohttp.ClientSession() as session:
+#         roster_url = f'https://statsapi.mlb.com/api/v1/teams/{team_id}/roster?season={season}'
+#         roster_response = await fetch_stats_async(session, roster_url)
+        
+#         tasks = []
+#         for player in roster_response.get('roster', []):
+#             player_id = player['person']['id']
+#             stats_url = f'https://statsapi.mlb.com/api/v1/people/{player_id}/stats?stats=season&season={season}'
+#             tasks.append(fetch_stats_async(session, stats_url))
+        
+#         player_stats_responses = await asyncio.gather(*tasks)
+        
+#         stats = initialize_stats()
+#         for player_stats, player in zip(player_stats_responses, roster_response.get('roster', [])):
+#             process_player_stats(player_stats, player['position']['abbreviation'], stats)
+        
+#         return calculate_team_metrics(stats)
+
+# def process_player_stats(stats_data, position, team_stats):
+#     if not stats_data.get('stats'):
+#         return
+        
+#     if position == 'P':
+#         process_pitcher_stats(stats_data, team_stats)
+#     elif position == 'C':
+#         process_catcher_stats(stats_data, team_stats)
+#         process_fielder_stats(stats_data, team_stats)
+#     else:
+#         process_batter_stats(stats_data, team_stats)
+#         process_fielder_stats(stats_data, team_stats)
+
+# def process_batter_stats(stats_data, team_stats):
+#     hitting_stats = next((group for group in stats_data['stats'] 
+#                          if group['group']['displayName'] == 'hitting'), None)
+#     if hitting_stats and hitting_stats.get('splits'):
+#         stats = hitting_stats['splits'][0]['stat']
+#         team_stats['batting']['avg'] += float(stats.get('avg', 0))
+#         team_stats['batting']['obp'] += float(stats.get('obp', 0))
+#         team_stats['batting']['slg'] += float(stats.get('slg', 0))
+#         team_stats['batting']['ops'] += float(stats.get('ops', 0))
+#         team_stats['batting']['count'] += 1
+
+# def process_pitcher_stats(stats_data, team_stats):
+#     pitching_stats = next((group for group in stats_data['stats'] 
+#                           if group['group']['displayName'] == 'pitching'), None)
+#     if pitching_stats and pitching_stats.get('splits'):
+#         stats = pitching_stats['splits'][0]['stat']
+#         team_stats['pitching']['era'] += float(stats.get('era', 0))
+#         team_stats['pitching']['whip'] += float(stats.get('whip', 0))
+#         team_stats['pitching']['k9'] += float(stats.get('strikeoutsPer9Inn', 0))
+#         team_stats['pitching']['baa'] += float(stats.get('avg', 0))
+#         team_stats['pitching']['count'] += 1
+
+# def process_fielder_stats(stats_data, team_stats):
+#     fielding_stats = next((group for group in stats_data['stats'] 
+#                           if group['group']['displayName'] == 'fielding'), None)
+#     if fielding_stats and fielding_stats.get('splits'):
+#         stats = fielding_stats['splits'][0]['stat']
+#         team_stats['fielding']['fpct'] += float(stats.get('fielding', 0))
+#         team_stats['fielding']['assists'] += float(stats.get('assists', 0))
+#         team_stats['fielding']['putouts'] += float(stats.get('putOuts', 0))
+#         team_stats['fielding']['count'] += 1
+
+# def process_catcher_stats(stats_data, team_stats):
+#     catching_stats = next((group for group in stats_data['stats'] 
+#                           if group['group']['displayName'] == 'catching'), None)
+#     if catching_stats and catching_stats.get('splits'):
+#         stats = catching_stats['splits'][0]['stat']
+#         team_stats['catching']['cs_pct'] += float(stats.get('catcherCaughtStealing', 0))
+#         team_stats['catching']['pb'] += float(stats.get('passedBalls', 0))
+#         team_stats['catching']['fpct'] += float(stats.get('fielding', 0))
+#         team_stats['catching']['count'] += 1
+
+# def calculate_team_metrics(stats):
+#     metrics = {}
+    
+#     for category in stats:
+#         if stats[category]['count'] > 0:
+#             if category == 'batting':
+#                 metrics[category] = {
+#                     'value': (
+#                         (stats[category]['avg'] / stats[category]['count']) * 0.3 +
+#                         (stats[category]['obp'] / stats[category]['count']) * 0.35 +
+#                         (stats[category]['slg'] / stats[category]['count']) * 0.35
+#                     ) * 100
+#                 }
+#             elif category == 'pitching':
+#                 metrics[category] = {
+#                     'value': (
+#                         (1 - (stats[category]['era'] / stats[category]['count'])/5.0) * 0.4 +
+#                         (1 - (stats[category]['whip'] / stats[category]['count'])/1.5) * 0.3 +
+#                         ((stats[category]['k9'] / stats[category]['count'])/9.0) * 0.3
+#                     ) * 100
+#                 }
+#             elif category == 'fielding':
+#                 metrics[category] = {
+#                     'value': (stats[category]['fpct'] / stats[category]['count']) * 100
+#                 }
+#             else:  # catching
+#                 metrics[category] = {
+#                     'value': (stats[category]['cs_pct'] / stats[category]['count']) * 100
+#                 }
+#         else:
+#             metrics[category] = {'value': 0}
+    
+#     return metrics
+
+
+# @app.route('/compare', methods=['POST'])
+# async def compare_teams():
+#     home_team = request.form.get('home_team')
+#     away_team = request.form.get('away_team')
+    
+#     home_stats, away_stats = await asyncio.gather(
+#         get_team_stats_async(home_team),
+#         get_team_stats_async(away_team)
+#     )
+    
+#     return jsonify({
+#         'home': home_stats,
+#         'away': away_stats
+#     })
+
+# @app.route('/team_compare')
+# def teaam_compare():
+#     return render_template('teamcompare.html')
+import requests
+from flask import jsonify, render_template, request
+
 def initialize_stats():
     return {
         'batting': {'avg': 0, 'obp': 0, 'slg': 0, 'ops': 0, 'count': 0},
@@ -1745,28 +1881,23 @@ def initialize_stats():
         'catching': {'cs_pct': 0, 'pb': 0, 'fpct': 0, 'count': 0}
     }
 
-async def fetch_stats_async(session, url):
-    async with session.get(url) as response:
-        return await response.json()
+def fetch_stats(url):
+    response = requests.get(url)
+    return response.json()
 
-async def get_team_stats_async(team_id, season=2024):
-    async with aiohttp.ClientSession() as session:
-        roster_url = f'https://statsapi.mlb.com/api/v1/teams/{team_id}/roster?season={season}'
-        roster_response = await fetch_stats_async(session, roster_url)
-        
-        tasks = []
-        for player in roster_response.get('roster', []):
-            player_id = player['person']['id']
-            stats_url = f'https://statsapi.mlb.com/api/v1/people/{player_id}/stats?stats=season&season={season}'
-            tasks.append(fetch_stats_async(session, stats_url))
-        
-        player_stats_responses = await asyncio.gather(*tasks)
-        
-        stats = initialize_stats()
-        for player_stats, player in zip(player_stats_responses, roster_response.get('roster', [])):
-            process_player_stats(player_stats, player['position']['abbreviation'], stats)
-        
-        return calculate_team_metrics(stats)
+def get_team_stats(team_id, season=2024):
+    roster_url = f'https://statsapi.mlb.com/api/v1/teams/{team_id}/roster?season={season}'
+    roster_response = fetch_stats(roster_url)
+    
+    stats = initialize_stats()
+    
+    for player in roster_response.get('roster', []):
+        player_id = player['person']['id']
+        stats_url = f'https://statsapi.mlb.com/api/v1/people/{player_id}/stats?stats=season&season={season}'
+        player_stats = fetch_stats(stats_url)
+        process_player_stats(player_stats, player['position']['abbreviation'], stats)
+    
+    return calculate_team_metrics(stats)
 
 def process_player_stats(stats_data, position, team_stats):
     if not stats_data.get('stats'):
@@ -1857,16 +1988,13 @@ def calculate_team_metrics(stats):
     
     return metrics
 
-
 @app.route('/compare', methods=['POST'])
-async def compare_teams():
+def compare_teams():
     home_team = request.form.get('home_team')
     away_team = request.form.get('away_team')
     
-    home_stats, away_stats = await asyncio.gather(
-        get_team_stats_async(home_team),
-        get_team_stats_async(away_team)
-    )
+    home_stats = get_team_stats(home_team)
+    away_stats = get_team_stats(away_team)
     
     return jsonify({
         'home': home_stats,
@@ -1874,7 +2002,7 @@ async def compare_teams():
     })
 
 @app.route('/team_compare')
-def teaam_compare():
+def team_compare():
     return render_template('teamcompare.html')
 
 
@@ -2106,4 +2234,4 @@ def index():
                          profile_username=username)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
