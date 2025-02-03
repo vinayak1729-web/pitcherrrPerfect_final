@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="static/images/logo_r.png" alt="Pitcher Perfect Logo" width=""300/>
+  <img src="static/images/logo.png" alt="Pitcher Perfect Logo" width=""250/>
   
   # Pitcher Perfect
   ### Your AI-Powered Baseball Companion
