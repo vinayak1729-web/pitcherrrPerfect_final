@@ -65,8 +65,8 @@ pitcher-perfect/ ├── database/ # Database configurations ├── dataset
 | `/chat_dashboard` | Chat overview | ![Chat](static/images/Chat_dashboard.png) |
 | `/chat/<friend>` | Private messaging | ![DM](static/images/chat.png) |
 | `/group_chat/<group_id>` | Group discussions | ![Group](static/images/Group_chat.png) |
-| `/team_players` | Team builder | ![Builder](static/images/Build_your_team_1.png) |
-| `/team_players` | Team builder | ![Builder](static/images/Build_your_team_2.png) |
+| `/team_players` | Team builder | ![Builder](static/images/Built_your_team_1.png) |
+| `/team_players` | Team builder | ![Builder](static/images/Built_your_team_2.png) |
 | `/my_team` | User's team | ![MyTeam](static/images/my_team.png) |
 | `/team_compare` | Team comparison | ![Compare](static/images/team_compare.png) |
 | `/` | Home dashboard darkmode with news and chatbot | ![Home](static/images/home-with-news-&-chatbot.png) |
