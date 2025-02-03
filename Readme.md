@@ -98,14 +98,13 @@ python app.py
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vishal-mishra-9b2a48208/)
 
 ---
-<div align="center">
-    ### **🚀 Team: Suryaprabha**  
-      <a href="https://www.linkedin.com/company/surya-prabha-india">
+### **🚀 Team: Suryaprabha**  
+<a href="https://www.linkedin.com/company/surya-prabha-india">
       <img src="static/images/Suryaprabha.png" alt="Suryaprabha Logo" style="width:150px; border: 4px solid black; border-        radius: 10px; box-shadow: 8px 8px 0px black;">
         </a>  
 
   [🌐 Suryaprabha LinkedIn](https://www.linkedin.com/company/surya-prabha-india)
-</div>
+
 
 📄 License
 This project is licensed under the MIT License - see the LICENSE file for details.
