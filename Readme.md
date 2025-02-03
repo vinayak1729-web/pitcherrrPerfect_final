@@ -99,12 +99,12 @@ python app.py
 
 ---
 <div align="center">
-### **🚀 Team: Suryaprabha**  
-<a href="https://www.linkedin.com/company/surya-prabha-india">
-  <img src="static/images/Suryaprabha.png" alt="Suryaprabha Logo" style="width:150px; border: 4px solid black; border-radius: 10px; box-shadow: 8px 8px 0px black;">
-</a>  
+    ### **🚀 Team: Suryaprabha**  
+      <a href="https://www.linkedin.com/company/surya-prabha-india">
+      <img src="static/images/Suryaprabha.png" alt="Suryaprabha Logo" style="width:150px; border: 4px solid black; border-        radius: 10px; box-shadow: 8px 8px 0px black;">
+        </a>  
 
-[🌐 Suryaprabha LinkedIn](https://www.linkedin.com/company/surya-prabha-india)
+  [🌐 Suryaprabha LinkedIn](https://www.linkedin.com/company/surya-prabha-india)
 </div>
 
 📄 License
