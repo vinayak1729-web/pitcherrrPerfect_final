@@ -1,0 +1,52 @@
+{
+    "user_id": "-2910469093436577423",
+    "username": "aditya1",
+    "email": "",
+    "submission_date": "2025-02-03 17:23:04",
+    "questions": [
+        {
+            "id": "fan_duration",
+            "question": "For how long have you been a fan of MLB?",
+            "answer": "3"
+        },
+        {
+            "id": "favorite_teams",
+            "question": "Name 5 teams you like",
+            "answer": [
+                "New York Yankees",
+                "Tampa Bay Rays",
+                "Chicago White Sox",
+                "Texas Rangers",
+                "Washington Nationals"
+            ]
+        },
+        {
+            "id": "favorite_players",
+            "question": "Name 5 favorite players",
+            "answer": [
+                "r",
+                "r",
+                "r",
+                "r",
+                "r"
+            ]
+        },
+        {
+            "id": "selected_team",
+            "question": "Which team do you want to select?",
+            "answer": [
+                "New York Yankees"
+            ]
+        },
+        {
+            "id": "favorite_match",
+            "question": "Which match did you like the most?",
+            "answer": "yankes vs dodgers"
+        },
+        {
+            "id": "notifications",
+            "question": "Select notification frequency",
+            "answer": "daily"
+        }
+    ]
+}

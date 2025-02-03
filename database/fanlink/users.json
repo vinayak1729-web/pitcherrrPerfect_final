@@ -40,5 +40,12 @@
             "Vishal22"
         ],
         "profile_pic": "/static/default.png"
+    },
+    "aditya1": {
+        "user_id": "9e347b8e-31cf-46f4-96ec-f987d7a985fc",
+        "email": "jollybhaii12@gmail.com",
+        "password": "123",
+        "friends": [],
+        "profile_pic": "/static/default.png"
     }
 }
