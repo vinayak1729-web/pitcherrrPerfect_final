@@ -41,6 +41,17 @@
             "from": "Vishal22",
             "message": "yuppoo",
             "timestamp": "10:57 AM"
+        },
+        {
+            "type": "system",
+            "message": "Vinayak1729 joined the group",
+            "timestamp": "11:36 AM"
+        },
+        {
+            "type": "message",
+            "from": "Vinayak1729",
+            "message": "wsuuuppp!!",
+            "timestamp": "11:37 AM"
         }
     ]
 }
