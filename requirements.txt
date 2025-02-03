@@ -1,9 +1,7 @@
 beautifulsoup4==4.12.2
 Flask==2.3.3
-aiohttp==3.8.1 --no-build-isolation
 python-dotenv==1.0.0
 google-generativeai==0.8.4
 requests==2.31.0
-pytz==2023.3
 Werkzeug==2.3.7
 MLB-StatsAPI==1.5.1
