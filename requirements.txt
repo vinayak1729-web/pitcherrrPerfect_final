@@ -5,3 +5,4 @@ google-generativeai==0.8.4
 requests==2.31.0
 Werkzeug==2.3.7
 MLB-StatsAPI==1.5.1
+gunicorn==21.2.0
